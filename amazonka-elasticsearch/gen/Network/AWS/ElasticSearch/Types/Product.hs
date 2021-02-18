@@ -158,6 +158,173 @@ instance Hashable AdvancedOptionsStatus where
 
 instance NFData AdvancedOptionsStatus where
 
+-- | Specifies the advanced security configuration: whether advanced security is enabled, whether the internal database option is enabled.
+--
+--
+--
+-- /See:/ 'advancedSecurityOptions' smart constructor.
+data AdvancedSecurityOptions = AdvancedSecurityOptions'
+  { _asoEnabled                     :: !(Maybe Bool)
+  , _asoInternalUserDatabaseEnabled :: !(Maybe Bool)
+  , _asoSAMLOptions                 :: !(Maybe SAMLOptionsOutput)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'AdvancedSecurityOptions' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'asoEnabled' - True if advanced security is enabled.
+--
+-- * 'asoInternalUserDatabaseEnabled' - True if the internal user database is enabled.
+--
+-- * 'asoSAMLOptions' - Describes the SAML application configured for a domain.
+advancedSecurityOptions
+    :: AdvancedSecurityOptions
+advancedSecurityOptions =
+  AdvancedSecurityOptions'
+    { _asoEnabled = Nothing
+    , _asoInternalUserDatabaseEnabled = Nothing
+    , _asoSAMLOptions = Nothing
+    }
+
+
+-- | True if advanced security is enabled.
+asoEnabled :: Lens' AdvancedSecurityOptions (Maybe Bool)
+asoEnabled = lens _asoEnabled (\ s a -> s{_asoEnabled = a})
+
+-- | True if the internal user database is enabled.
+asoInternalUserDatabaseEnabled :: Lens' AdvancedSecurityOptions (Maybe Bool)
+asoInternalUserDatabaseEnabled = lens _asoInternalUserDatabaseEnabled (\ s a -> s{_asoInternalUserDatabaseEnabled = a})
+
+-- | Describes the SAML application configured for a domain.
+asoSAMLOptions :: Lens' AdvancedSecurityOptions (Maybe SAMLOptionsOutput)
+asoSAMLOptions = lens _asoSAMLOptions (\ s a -> s{_asoSAMLOptions = a})
+
+instance FromJSON AdvancedSecurityOptions where
+        parseJSON
+          = withObject "AdvancedSecurityOptions"
+              (\ x ->
+                 AdvancedSecurityOptions' <$>
+                   (x .:? "Enabled") <*>
+                     (x .:? "InternalUserDatabaseEnabled")
+                     <*> (x .:? "SAMLOptions"))
+
+instance Hashable AdvancedSecurityOptions where
+
+instance NFData AdvancedSecurityOptions where
+
+-- | Specifies the advanced security configuration: whether advanced security is enabled, whether the internal database option is enabled, master username and password (if internal database is enabled), and master user ARN (if IAM is enabled).
+--
+--
+--
+-- /See:/ 'advancedSecurityOptionsInput' smart constructor.
+data AdvancedSecurityOptionsInput = AdvancedSecurityOptionsInput'
+  { _asoiEnabled                     :: !(Maybe Bool)
+  , _asoiInternalUserDatabaseEnabled :: !(Maybe Bool)
+  , _asoiMasterUserOptions           :: !(Maybe MasterUserOptions)
+  , _asoiSAMLOptions                 :: !(Maybe SAMLOptionsInput)
+  } deriving (Eq, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'AdvancedSecurityOptionsInput' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'asoiEnabled' - True if advanced security is enabled.
+--
+-- * 'asoiInternalUserDatabaseEnabled' - True if the internal user database is enabled.
+--
+-- * 'asoiMasterUserOptions' - Credentials for the master user: username and password, ARN, or both.
+--
+-- * 'asoiSAMLOptions' - Specifies the SAML application configuration for the domain.
+advancedSecurityOptionsInput
+    :: AdvancedSecurityOptionsInput
+advancedSecurityOptionsInput =
+  AdvancedSecurityOptionsInput'
+    { _asoiEnabled = Nothing
+    , _asoiInternalUserDatabaseEnabled = Nothing
+    , _asoiMasterUserOptions = Nothing
+    , _asoiSAMLOptions = Nothing
+    }
+
+
+-- | True if advanced security is enabled.
+asoiEnabled :: Lens' AdvancedSecurityOptionsInput (Maybe Bool)
+asoiEnabled = lens _asoiEnabled (\ s a -> s{_asoiEnabled = a})
+
+-- | True if the internal user database is enabled.
+asoiInternalUserDatabaseEnabled :: Lens' AdvancedSecurityOptionsInput (Maybe Bool)
+asoiInternalUserDatabaseEnabled = lens _asoiInternalUserDatabaseEnabled (\ s a -> s{_asoiInternalUserDatabaseEnabled = a})
+
+-- | Credentials for the master user: username and password, ARN, or both.
+asoiMasterUserOptions :: Lens' AdvancedSecurityOptionsInput (Maybe MasterUserOptions)
+asoiMasterUserOptions = lens _asoiMasterUserOptions (\ s a -> s{_asoiMasterUserOptions = a})
+
+-- | Specifies the SAML application configuration for the domain.
+asoiSAMLOptions :: Lens' AdvancedSecurityOptionsInput (Maybe SAMLOptionsInput)
+asoiSAMLOptions = lens _asoiSAMLOptions (\ s a -> s{_asoiSAMLOptions = a})
+
+instance Hashable AdvancedSecurityOptionsInput where
+
+instance NFData AdvancedSecurityOptionsInput where
+
+instance ToJSON AdvancedSecurityOptionsInput where
+        toJSON AdvancedSecurityOptionsInput'{..}
+          = object
+              (catMaybes
+                 [("Enabled" .=) <$> _asoiEnabled,
+                  ("InternalUserDatabaseEnabled" .=) <$>
+                    _asoiInternalUserDatabaseEnabled,
+                  ("MasterUserOptions" .=) <$> _asoiMasterUserOptions,
+                  ("SAMLOptions" .=) <$> _asoiSAMLOptions])
+
+-- | Specifies the status of advanced security options for the specified Elasticsearch domain.
+--
+--
+--
+-- /See:/ 'advancedSecurityOptionsStatus' smart constructor.
+data AdvancedSecurityOptionsStatus = AdvancedSecurityOptionsStatus'
+  { _asosOptions :: !AdvancedSecurityOptions
+  , _asosStatus  :: !OptionStatus
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'AdvancedSecurityOptionsStatus' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'asosOptions' - Specifies advanced security options for the specified Elasticsearch domain.
+--
+-- * 'asosStatus' - Status of the advanced security options for the specified Elasticsearch domain.
+advancedSecurityOptionsStatus
+    :: AdvancedSecurityOptions -- ^ 'asosOptions'
+    -> OptionStatus -- ^ 'asosStatus'
+    -> AdvancedSecurityOptionsStatus
+advancedSecurityOptionsStatus pOptions_ pStatus_ =
+  AdvancedSecurityOptionsStatus'
+    {_asosOptions = pOptions_, _asosStatus = pStatus_}
+
+
+-- | Specifies advanced security options for the specified Elasticsearch domain.
+asosOptions :: Lens' AdvancedSecurityOptionsStatus AdvancedSecurityOptions
+asosOptions = lens _asosOptions (\ s a -> s{_asosOptions = a})
+
+-- | Status of the advanced security options for the specified Elasticsearch domain.
+asosStatus :: Lens' AdvancedSecurityOptionsStatus OptionStatus
+asosStatus = lens _asosStatus (\ s a -> s{_asosStatus = a})
+
+instance FromJSON AdvancedSecurityOptionsStatus where
+        parseJSON
+          = withObject "AdvancedSecurityOptionsStatus"
+              (\ x ->
+                 AdvancedSecurityOptionsStatus' <$>
+                   (x .: "Options") <*> (x .: "Status"))
+
+instance Hashable AdvancedSecurityOptionsStatus where
+
+instance NFData AdvancedSecurityOptionsStatus where
+
 -- | Options to specify the Cognito user and identity pools for Kibana authentication. For more information, see <http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html Amazon Cognito Authentication for Kibana> .
 --
 --
@@ -276,9 +443,229 @@ instance Hashable CognitoOptionsStatus where
 
 instance NFData CognitoOptionsStatus where
 
+-- | A map from an @'ElasticsearchVersion' @ to a list of compatible @'ElasticsearchVersion' @ s to which the domain can be upgraded.
+--
+--
+--
+-- /See:/ 'compatibleVersionsMap' smart constructor.
+data CompatibleVersionsMap = CompatibleVersionsMap'
+  { _cvmSourceVersion  :: !(Maybe Text)
+  , _cvmTargetVersions :: !(Maybe [Text])
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'CompatibleVersionsMap' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'cvmSourceVersion' - The current version of Elasticsearch on which a domain is.
+--
+-- * 'cvmTargetVersions' - Undocumented member.
+compatibleVersionsMap
+    :: CompatibleVersionsMap
+compatibleVersionsMap =
+  CompatibleVersionsMap'
+    {_cvmSourceVersion = Nothing, _cvmTargetVersions = Nothing}
+
+
+-- | The current version of Elasticsearch on which a domain is.
+cvmSourceVersion :: Lens' CompatibleVersionsMap (Maybe Text)
+cvmSourceVersion = lens _cvmSourceVersion (\ s a -> s{_cvmSourceVersion = a})
+
+-- | Undocumented member.
+cvmTargetVersions :: Lens' CompatibleVersionsMap [Text]
+cvmTargetVersions = lens _cvmTargetVersions (\ s a -> s{_cvmTargetVersions = a}) . _Default . _Coerce
+
+instance FromJSON CompatibleVersionsMap where
+        parseJSON
+          = withObject "CompatibleVersionsMap"
+              (\ x ->
+                 CompatibleVersionsMap' <$>
+                   (x .:? "SourceVersion") <*>
+                     (x .:? "TargetVersions" .!= mempty))
+
+instance Hashable CompatibleVersionsMap where
+
+instance NFData CompatibleVersionsMap where
+
+-- | Filter to apply in @DescribePackage@ response.
+--
+--
+--
+-- /See:/ 'describePackagesFilter' smart constructor.
+data DescribePackagesFilter = DescribePackagesFilter'
+  { _dpfValue :: !(Maybe [Text])
+  , _dpfName  :: !(Maybe DescribePackagesFilterName)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'DescribePackagesFilter' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'dpfValue' - A list of values for the specified field.
+--
+-- * 'dpfName' - Any field from @PackageDetails@ .
+describePackagesFilter
+    :: DescribePackagesFilter
+describePackagesFilter =
+  DescribePackagesFilter' {_dpfValue = Nothing, _dpfName = Nothing}
+
+
+-- | A list of values for the specified field.
+dpfValue :: Lens' DescribePackagesFilter [Text]
+dpfValue = lens _dpfValue (\ s a -> s{_dpfValue = a}) . _Default . _Coerce
+
+-- | Any field from @PackageDetails@ .
+dpfName :: Lens' DescribePackagesFilter (Maybe DescribePackagesFilterName)
+dpfName = lens _dpfName (\ s a -> s{_dpfName = a})
+
+instance Hashable DescribePackagesFilter where
+
+instance NFData DescribePackagesFilter where
+
+instance ToJSON DescribePackagesFilter where
+        toJSON DescribePackagesFilter'{..}
+          = object
+              (catMaybes
+                 [("Value" .=) <$> _dpfValue,
+                  ("Name" .=) <$> _dpfName])
+
+-- | Options to configure endpoint for the Elasticsearch domain.
+--
+--
+--
+-- /See:/ 'domainEndpointOptions' smart constructor.
+data DomainEndpointOptions = DomainEndpointOptions'
+  { _deoEnforceHTTPS                 :: !(Maybe Bool)
+  , _deoTLSSecurityPolicy            :: !(Maybe TLSSecurityPolicy)
+  , _deoCustomEndpointEnabled        :: !(Maybe Bool)
+  , _deoCustomEndpoint               :: !(Maybe Text)
+  , _deoCustomEndpointCertificateARN :: !(Maybe Text)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'DomainEndpointOptions' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'deoEnforceHTTPS' - Specify if only HTTPS endpoint should be enabled for the Elasticsearch domain.
+--
+-- * 'deoTLSSecurityPolicy' - Specify the TLS security policy that needs to be applied to the HTTPS endpoint of Elasticsearch domain.  It can be one of the following values:     * __Policy-Min-TLS-1-0-2019-07: __ TLS security policy which supports TLSv1.0 and higher.    * __Policy-Min-TLS-1-2-2019-07: __ TLS security policy which supports only TLSv1.2
+--
+-- * 'deoCustomEndpointEnabled' - Specify if custom endpoint should be enabled for the Elasticsearch domain.
+--
+-- * 'deoCustomEndpoint' - Specify the fully qualified domain for your custom endpoint.
+--
+-- * 'deoCustomEndpointCertificateARN' - Specify ACM certificate ARN for your custom endpoint.
+domainEndpointOptions
+    :: DomainEndpointOptions
+domainEndpointOptions =
+  DomainEndpointOptions'
+    { _deoEnforceHTTPS = Nothing
+    , _deoTLSSecurityPolicy = Nothing
+    , _deoCustomEndpointEnabled = Nothing
+    , _deoCustomEndpoint = Nothing
+    , _deoCustomEndpointCertificateARN = Nothing
+    }
+
+
+-- | Specify if only HTTPS endpoint should be enabled for the Elasticsearch domain.
+deoEnforceHTTPS :: Lens' DomainEndpointOptions (Maybe Bool)
+deoEnforceHTTPS = lens _deoEnforceHTTPS (\ s a -> s{_deoEnforceHTTPS = a})
+
+-- | Specify the TLS security policy that needs to be applied to the HTTPS endpoint of Elasticsearch domain.  It can be one of the following values:     * __Policy-Min-TLS-1-0-2019-07: __ TLS security policy which supports TLSv1.0 and higher.    * __Policy-Min-TLS-1-2-2019-07: __ TLS security policy which supports only TLSv1.2
+deoTLSSecurityPolicy :: Lens' DomainEndpointOptions (Maybe TLSSecurityPolicy)
+deoTLSSecurityPolicy = lens _deoTLSSecurityPolicy (\ s a -> s{_deoTLSSecurityPolicy = a})
+
+-- | Specify if custom endpoint should be enabled for the Elasticsearch domain.
+deoCustomEndpointEnabled :: Lens' DomainEndpointOptions (Maybe Bool)
+deoCustomEndpointEnabled = lens _deoCustomEndpointEnabled (\ s a -> s{_deoCustomEndpointEnabled = a})
+
+-- | Specify the fully qualified domain for your custom endpoint.
+deoCustomEndpoint :: Lens' DomainEndpointOptions (Maybe Text)
+deoCustomEndpoint = lens _deoCustomEndpoint (\ s a -> s{_deoCustomEndpoint = a})
+
+-- | Specify ACM certificate ARN for your custom endpoint.
+deoCustomEndpointCertificateARN :: Lens' DomainEndpointOptions (Maybe Text)
+deoCustomEndpointCertificateARN = lens _deoCustomEndpointCertificateARN (\ s a -> s{_deoCustomEndpointCertificateARN = a})
+
+instance FromJSON DomainEndpointOptions where
+        parseJSON
+          = withObject "DomainEndpointOptions"
+              (\ x ->
+                 DomainEndpointOptions' <$>
+                   (x .:? "EnforceHTTPS") <*>
+                     (x .:? "TLSSecurityPolicy")
+                     <*> (x .:? "CustomEndpointEnabled")
+                     <*> (x .:? "CustomEndpoint")
+                     <*> (x .:? "CustomEndpointCertificateArn"))
+
+instance Hashable DomainEndpointOptions where
+
+instance NFData DomainEndpointOptions where
+
+instance ToJSON DomainEndpointOptions where
+        toJSON DomainEndpointOptions'{..}
+          = object
+              (catMaybes
+                 [("EnforceHTTPS" .=) <$> _deoEnforceHTTPS,
+                  ("TLSSecurityPolicy" .=) <$> _deoTLSSecurityPolicy,
+                  ("CustomEndpointEnabled" .=) <$>
+                    _deoCustomEndpointEnabled,
+                  ("CustomEndpoint" .=) <$> _deoCustomEndpoint,
+                  ("CustomEndpointCertificateArn" .=) <$>
+                    _deoCustomEndpointCertificateARN])
+
+-- | The configured endpoint options for the domain and their current status.
+--
+--
+--
+-- /See:/ 'domainEndpointOptionsStatus' smart constructor.
+data DomainEndpointOptionsStatus = DomainEndpointOptionsStatus'
+  { _deosOptions :: !DomainEndpointOptions
+  , _deosStatus  :: !OptionStatus
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'DomainEndpointOptionsStatus' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'deosOptions' - Options to configure endpoint for the Elasticsearch domain.
+--
+-- * 'deosStatus' - The status of the endpoint options for the Elasticsearch domain. See @OptionStatus@ for the status information that's included.
+domainEndpointOptionsStatus
+    :: DomainEndpointOptions -- ^ 'deosOptions'
+    -> OptionStatus -- ^ 'deosStatus'
+    -> DomainEndpointOptionsStatus
+domainEndpointOptionsStatus pOptions_ pStatus_ =
+  DomainEndpointOptionsStatus'
+    {_deosOptions = pOptions_, _deosStatus = pStatus_}
+
+
+-- | Options to configure endpoint for the Elasticsearch domain.
+deosOptions :: Lens' DomainEndpointOptionsStatus DomainEndpointOptions
+deosOptions = lens _deosOptions (\ s a -> s{_deosOptions = a})
+
+-- | The status of the endpoint options for the Elasticsearch domain. See @OptionStatus@ for the status information that's included.
+deosStatus :: Lens' DomainEndpointOptionsStatus OptionStatus
+deosStatus = lens _deosStatus (\ s a -> s{_deosStatus = a})
+
+instance FromJSON DomainEndpointOptionsStatus where
+        parseJSON
+          = withObject "DomainEndpointOptionsStatus"
+              (\ x ->
+                 DomainEndpointOptionsStatus' <$>
+                   (x .: "Options") <*> (x .: "Status"))
+
+instance Hashable DomainEndpointOptionsStatus where
+
+instance NFData DomainEndpointOptionsStatus where
+
 -- | /See:/ 'domainInfo' smart constructor.
 newtype DomainInfo = DomainInfo'
-  { _diDomainName :: Maybe Text
+  { _dDomainName :: Maybe Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -286,15 +673,15 @@ newtype DomainInfo = DomainInfo'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'diDomainName' - Specifies the @DomainName@ .
+-- * 'dDomainName' - Specifies the @DomainName@ .
 domainInfo
     :: DomainInfo
-domainInfo = DomainInfo' {_diDomainName = Nothing}
+domainInfo = DomainInfo' {_dDomainName = Nothing}
 
 
 -- | Specifies the @DomainName@ .
-diDomainName :: Lens' DomainInfo (Maybe Text)
-diDomainName = lens _diDomainName (\ s a -> s{_diDomainName = a})
+dDomainName :: Lens' DomainInfo (Maybe Text)
+dDomainName = lens _dDomainName (\ s a -> s{_dDomainName = a})
 
 instance FromJSON DomainInfo where
         parseJSON
@@ -304,6 +691,172 @@ instance FromJSON DomainInfo where
 instance Hashable DomainInfo where
 
 instance NFData DomainInfo where
+
+-- | /See:/ 'domainInformation' smart constructor.
+data DomainInformation = DomainInformation'
+  { _diOwnerId    :: !(Maybe Text)
+  , _diRegion     :: !(Maybe Text)
+  , _diDomainName :: !Text
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'DomainInformation' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'diOwnerId' - Undocumented member.
+--
+-- * 'diRegion' - Undocumented member.
+--
+-- * 'diDomainName' - Undocumented member.
+domainInformation
+    :: Text -- ^ 'diDomainName'
+    -> DomainInformation
+domainInformation pDomainName_ =
+  DomainInformation'
+    {_diOwnerId = Nothing, _diRegion = Nothing, _diDomainName = pDomainName_}
+
+
+-- | Undocumented member.
+diOwnerId :: Lens' DomainInformation (Maybe Text)
+diOwnerId = lens _diOwnerId (\ s a -> s{_diOwnerId = a})
+
+-- | Undocumented member.
+diRegion :: Lens' DomainInformation (Maybe Text)
+diRegion = lens _diRegion (\ s a -> s{_diRegion = a})
+
+-- | Undocumented member.
+diDomainName :: Lens' DomainInformation Text
+diDomainName = lens _diDomainName (\ s a -> s{_diDomainName = a})
+
+instance FromJSON DomainInformation where
+        parseJSON
+          = withObject "DomainInformation"
+              (\ x ->
+                 DomainInformation' <$>
+                   (x .:? "OwnerId") <*> (x .:? "Region") <*>
+                     (x .: "DomainName"))
+
+instance Hashable DomainInformation where
+
+instance NFData DomainInformation where
+
+instance ToJSON DomainInformation where
+        toJSON DomainInformation'{..}
+          = object
+              (catMaybes
+                 [("OwnerId" .=) <$> _diOwnerId,
+                  ("Region" .=) <$> _diRegion,
+                  Just ("DomainName" .= _diDomainName)])
+
+-- | Information on a package that is associated with a domain.
+--
+--
+--
+-- /See:/ 'domainPackageDetails' smart constructor.
+data DomainPackageDetails = DomainPackageDetails'
+  { _dpdLastUpdated         :: !(Maybe POSIX)
+  , _dpdPackageId           :: !(Maybe Text)
+  , _dpdPackageType         :: !(Maybe PackageType)
+  , _dpdPackageName         :: !(Maybe Text)
+  , _dpdPackageVersion      :: !(Maybe Text)
+  , _dpdDomainPackageStatus :: !(Maybe DomainPackageStatus)
+  , _dpdDomainName          :: !(Maybe Text)
+  , _dpdErrorDetails        :: !(Maybe ErrorDetails)
+  , _dpdReferencePath       :: !(Maybe Text)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'DomainPackageDetails' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'dpdLastUpdated' - Timestamp of the most-recent update to the association status.
+--
+-- * 'dpdPackageId' - Internal ID of the package.
+--
+-- * 'dpdPackageType' - Currently supports only TXT-DICTIONARY.
+--
+-- * 'dpdPackageName' - User specified name of the package.
+--
+-- * 'dpdPackageVersion' - Undocumented member.
+--
+-- * 'dpdDomainPackageStatus' - State of the association. Values are ASSOCIATING/ASSOCIATION_FAILED/ACTIVE/DISSOCIATING/DISSOCIATION_FAILED.
+--
+-- * 'dpdDomainName' - Name of the domain you've associated a package with.
+--
+-- * 'dpdErrorDetails' - Additional information if the package is in an error state. Null otherwise.
+--
+-- * 'dpdReferencePath' - The relative path on Amazon ES nodes, which can be used as synonym_path when the package is synonym file.
+domainPackageDetails
+    :: DomainPackageDetails
+domainPackageDetails =
+  DomainPackageDetails'
+    { _dpdLastUpdated = Nothing
+    , _dpdPackageId = Nothing
+    , _dpdPackageType = Nothing
+    , _dpdPackageName = Nothing
+    , _dpdPackageVersion = Nothing
+    , _dpdDomainPackageStatus = Nothing
+    , _dpdDomainName = Nothing
+    , _dpdErrorDetails = Nothing
+    , _dpdReferencePath = Nothing
+    }
+
+
+-- | Timestamp of the most-recent update to the association status.
+dpdLastUpdated :: Lens' DomainPackageDetails (Maybe UTCTime)
+dpdLastUpdated = lens _dpdLastUpdated (\ s a -> s{_dpdLastUpdated = a}) . mapping _Time
+
+-- | Internal ID of the package.
+dpdPackageId :: Lens' DomainPackageDetails (Maybe Text)
+dpdPackageId = lens _dpdPackageId (\ s a -> s{_dpdPackageId = a})
+
+-- | Currently supports only TXT-DICTIONARY.
+dpdPackageType :: Lens' DomainPackageDetails (Maybe PackageType)
+dpdPackageType = lens _dpdPackageType (\ s a -> s{_dpdPackageType = a})
+
+-- | User specified name of the package.
+dpdPackageName :: Lens' DomainPackageDetails (Maybe Text)
+dpdPackageName = lens _dpdPackageName (\ s a -> s{_dpdPackageName = a})
+
+-- | Undocumented member.
+dpdPackageVersion :: Lens' DomainPackageDetails (Maybe Text)
+dpdPackageVersion = lens _dpdPackageVersion (\ s a -> s{_dpdPackageVersion = a})
+
+-- | State of the association. Values are ASSOCIATING/ASSOCIATION_FAILED/ACTIVE/DISSOCIATING/DISSOCIATION_FAILED.
+dpdDomainPackageStatus :: Lens' DomainPackageDetails (Maybe DomainPackageStatus)
+dpdDomainPackageStatus = lens _dpdDomainPackageStatus (\ s a -> s{_dpdDomainPackageStatus = a})
+
+-- | Name of the domain you've associated a package with.
+dpdDomainName :: Lens' DomainPackageDetails (Maybe Text)
+dpdDomainName = lens _dpdDomainName (\ s a -> s{_dpdDomainName = a})
+
+-- | Additional information if the package is in an error state. Null otherwise.
+dpdErrorDetails :: Lens' DomainPackageDetails (Maybe ErrorDetails)
+dpdErrorDetails = lens _dpdErrorDetails (\ s a -> s{_dpdErrorDetails = a})
+
+-- | The relative path on Amazon ES nodes, which can be used as synonym_path when the package is synonym file.
+dpdReferencePath :: Lens' DomainPackageDetails (Maybe Text)
+dpdReferencePath = lens _dpdReferencePath (\ s a -> s{_dpdReferencePath = a})
+
+instance FromJSON DomainPackageDetails where
+        parseJSON
+          = withObject "DomainPackageDetails"
+              (\ x ->
+                 DomainPackageDetails' <$>
+                   (x .:? "LastUpdated") <*> (x .:? "PackageID") <*>
+                     (x .:? "PackageType")
+                     <*> (x .:? "PackageName")
+                     <*> (x .:? "PackageVersion")
+                     <*> (x .:? "DomainPackageStatus")
+                     <*> (x .:? "DomainName")
+                     <*> (x .:? "ErrorDetails")
+                     <*> (x .:? "ReferencePath"))
+
+instance Hashable DomainPackageDetails where
+
+instance NFData DomainPackageDetails where
 
 -- | Options to enable, disable, and specify the properties of EBS storage volumes. For more information, see <http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-ebs Configuring EBS-based Storage> .
 --
@@ -435,6 +988,10 @@ data ElasticsearchClusterConfig = ElasticsearchClusterConfig'
   , _eccInstanceCount          :: !(Maybe Int)
   , _eccZoneAwarenessEnabled   :: !(Maybe Bool)
   , _eccInstanceType           :: !(Maybe ESPartitionInstanceType)
+  , _eccWarmEnabled            :: !(Maybe Bool)
+  , _eccZoneAwarenessConfig    :: !(Maybe ZoneAwarenessConfig)
+  , _eccWarmCount              :: !(Maybe Int)
+  , _eccWarmType               :: !(Maybe ESWarmPartitionInstanceType)
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -452,7 +1009,15 @@ data ElasticsearchClusterConfig = ElasticsearchClusterConfig'
 --
 -- * 'eccZoneAwarenessEnabled' - A boolean value to indicate whether zone awareness is enabled. See <http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-zoneawareness About Zone Awareness> for more information.
 --
--- * 'eccInstanceType' - The instance type for an Elasticsearch cluster.
+-- * 'eccInstanceType' - The instance type for an Elasticsearch cluster. UltraWarm instance types are not supported for data instances.
+--
+-- * 'eccWarmEnabled' - True to enable warm storage.
+--
+-- * 'eccZoneAwarenessConfig' - Specifies the zone awareness configuration for a domain when zone awareness is enabled.
+--
+-- * 'eccWarmCount' - The number of warm nodes in the cluster.
+--
+-- * 'eccWarmType' - The instance type for the Elasticsearch cluster's warm nodes.
 elasticsearchClusterConfig
     :: ElasticsearchClusterConfig
 elasticsearchClusterConfig =
@@ -463,6 +1028,10 @@ elasticsearchClusterConfig =
     , _eccInstanceCount = Nothing
     , _eccZoneAwarenessEnabled = Nothing
     , _eccInstanceType = Nothing
+    , _eccWarmEnabled = Nothing
+    , _eccZoneAwarenessConfig = Nothing
+    , _eccWarmCount = Nothing
+    , _eccWarmType = Nothing
     }
 
 
@@ -486,9 +1055,25 @@ eccInstanceCount = lens _eccInstanceCount (\ s a -> s{_eccInstanceCount = a})
 eccZoneAwarenessEnabled :: Lens' ElasticsearchClusterConfig (Maybe Bool)
 eccZoneAwarenessEnabled = lens _eccZoneAwarenessEnabled (\ s a -> s{_eccZoneAwarenessEnabled = a})
 
--- | The instance type for an Elasticsearch cluster.
+-- | The instance type for an Elasticsearch cluster. UltraWarm instance types are not supported for data instances.
 eccInstanceType :: Lens' ElasticsearchClusterConfig (Maybe ESPartitionInstanceType)
 eccInstanceType = lens _eccInstanceType (\ s a -> s{_eccInstanceType = a})
+
+-- | True to enable warm storage.
+eccWarmEnabled :: Lens' ElasticsearchClusterConfig (Maybe Bool)
+eccWarmEnabled = lens _eccWarmEnabled (\ s a -> s{_eccWarmEnabled = a})
+
+-- | Specifies the zone awareness configuration for a domain when zone awareness is enabled.
+eccZoneAwarenessConfig :: Lens' ElasticsearchClusterConfig (Maybe ZoneAwarenessConfig)
+eccZoneAwarenessConfig = lens _eccZoneAwarenessConfig (\ s a -> s{_eccZoneAwarenessConfig = a})
+
+-- | The number of warm nodes in the cluster.
+eccWarmCount :: Lens' ElasticsearchClusterConfig (Maybe Int)
+eccWarmCount = lens _eccWarmCount (\ s a -> s{_eccWarmCount = a})
+
+-- | The instance type for the Elasticsearch cluster's warm nodes.
+eccWarmType :: Lens' ElasticsearchClusterConfig (Maybe ESWarmPartitionInstanceType)
+eccWarmType = lens _eccWarmType (\ s a -> s{_eccWarmType = a})
 
 instance FromJSON ElasticsearchClusterConfig where
         parseJSON
@@ -500,7 +1085,11 @@ instance FromJSON ElasticsearchClusterConfig where
                      <*> (x .:? "DedicatedMasterEnabled")
                      <*> (x .:? "InstanceCount")
                      <*> (x .:? "ZoneAwarenessEnabled")
-                     <*> (x .:? "InstanceType"))
+                     <*> (x .:? "InstanceType")
+                     <*> (x .:? "WarmEnabled")
+                     <*> (x .:? "ZoneAwarenessConfig")
+                     <*> (x .:? "WarmCount")
+                     <*> (x .:? "WarmType"))
 
 instance Hashable ElasticsearchClusterConfig where
 
@@ -519,7 +1108,12 @@ instance ToJSON ElasticsearchClusterConfig where
                   ("InstanceCount" .=) <$> _eccInstanceCount,
                   ("ZoneAwarenessEnabled" .=) <$>
                     _eccZoneAwarenessEnabled,
-                  ("InstanceType" .=) <$> _eccInstanceType])
+                  ("InstanceType" .=) <$> _eccInstanceType,
+                  ("WarmEnabled" .=) <$> _eccWarmEnabled,
+                  ("ZoneAwarenessConfig" .=) <$>
+                    _eccZoneAwarenessConfig,
+                  ("WarmCount" .=) <$> _eccWarmCount,
+                  ("WarmType" .=) <$> _eccWarmType])
 
 -- | Specifies the configuration status for the specified Elasticsearch domain.
 --
@@ -576,16 +1170,19 @@ instance NFData ElasticsearchClusterConfigStatus
 --
 -- /See:/ 'elasticsearchDomainConfig' smart constructor.
 data ElasticsearchDomainConfig = ElasticsearchDomainConfig'
-  { _edcEBSOptions                 :: !(Maybe EBSOptionsStatus)
-  , _edcAccessPolicies             :: !(Maybe AccessPoliciesStatus)
-  , _edcLogPublishingOptions       :: !(Maybe LogPublishingOptionsStatus)
+  { _edcEBSOptions :: !(Maybe EBSOptionsStatus)
+  , _edcNodeToNodeEncryptionOptions :: !(Maybe NodeToNodeEncryptionOptionsStatus)
+  , _edcAccessPolicies :: !(Maybe AccessPoliciesStatus)
+  , _edcLogPublishingOptions :: !(Maybe LogPublishingOptionsStatus)
+  , _edcAdvancedSecurityOptions :: !(Maybe AdvancedSecurityOptionsStatus)
   , _edcElasticsearchClusterConfig :: !(Maybe ElasticsearchClusterConfigStatus)
-  , _edcSnapshotOptions            :: !(Maybe SnapshotOptionsStatus)
-  , _edcCognitoOptions             :: !(Maybe CognitoOptionsStatus)
-  , _edcEncryptionAtRestOptions    :: !(Maybe EncryptionAtRestOptionsStatus)
-  , _edcVPCOptions                 :: !(Maybe VPCDerivedInfoStatus)
-  , _edcAdvancedOptions            :: !(Maybe AdvancedOptionsStatus)
-  , _edcElasticsearchVersion       :: !(Maybe ElasticsearchVersionStatus)
+  , _edcSnapshotOptions :: !(Maybe SnapshotOptionsStatus)
+  , _edcCognitoOptions :: !(Maybe CognitoOptionsStatus)
+  , _edcEncryptionAtRestOptions :: !(Maybe EncryptionAtRestOptionsStatus)
+  , _edcVPCOptions :: !(Maybe VPCDerivedInfoStatus)
+  , _edcDomainEndpointOptions :: !(Maybe DomainEndpointOptionsStatus)
+  , _edcAdvancedOptions :: !(Maybe AdvancedOptionsStatus)
+  , _edcElasticsearchVersion :: !(Maybe ElasticsearchVersionStatus)
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -595,9 +1192,13 @@ data ElasticsearchDomainConfig = ElasticsearchDomainConfig'
 --
 -- * 'edcEBSOptions' - Specifies the @EBSOptions@ for the Elasticsearch domain.
 --
+-- * 'edcNodeToNodeEncryptionOptions' - Specifies the @NodeToNodeEncryptionOptions@ for the Elasticsearch domain.
+--
 -- * 'edcAccessPolicies' - IAM access policy as a JSON-formatted string.
 --
 -- * 'edcLogPublishingOptions' - Log publishing options for the given domain.
+--
+-- * 'edcAdvancedSecurityOptions' - Specifies @AdvancedSecurityOptions@ for the domain.
 --
 -- * 'edcElasticsearchClusterConfig' - Specifies the @ElasticsearchClusterConfig@ for the Elasticsearch domain.
 --
@@ -609,6 +1210,8 @@ data ElasticsearchDomainConfig = ElasticsearchDomainConfig'
 --
 -- * 'edcVPCOptions' - The @VPCOptions@ for the specified domain. For more information, see <http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html VPC Endpoints for Amazon Elasticsearch Service Domains> .
 --
+-- * 'edcDomainEndpointOptions' - Specifies the @DomainEndpointOptions@ for the Elasticsearch domain.
+--
 -- * 'edcAdvancedOptions' - Specifies the @AdvancedOptions@ for the domain. See <http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-advanced-options Configuring Advanced Options> for more information.
 --
 -- * 'edcElasticsearchVersion' - String of format X.Y to specify version for the Elasticsearch domain.
@@ -617,13 +1220,16 @@ elasticsearchDomainConfig
 elasticsearchDomainConfig =
   ElasticsearchDomainConfig'
     { _edcEBSOptions = Nothing
+    , _edcNodeToNodeEncryptionOptions = Nothing
     , _edcAccessPolicies = Nothing
     , _edcLogPublishingOptions = Nothing
+    , _edcAdvancedSecurityOptions = Nothing
     , _edcElasticsearchClusterConfig = Nothing
     , _edcSnapshotOptions = Nothing
     , _edcCognitoOptions = Nothing
     , _edcEncryptionAtRestOptions = Nothing
     , _edcVPCOptions = Nothing
+    , _edcDomainEndpointOptions = Nothing
     , _edcAdvancedOptions = Nothing
     , _edcElasticsearchVersion = Nothing
     }
@@ -633,6 +1239,10 @@ elasticsearchDomainConfig =
 edcEBSOptions :: Lens' ElasticsearchDomainConfig (Maybe EBSOptionsStatus)
 edcEBSOptions = lens _edcEBSOptions (\ s a -> s{_edcEBSOptions = a})
 
+-- | Specifies the @NodeToNodeEncryptionOptions@ for the Elasticsearch domain.
+edcNodeToNodeEncryptionOptions :: Lens' ElasticsearchDomainConfig (Maybe NodeToNodeEncryptionOptionsStatus)
+edcNodeToNodeEncryptionOptions = lens _edcNodeToNodeEncryptionOptions (\ s a -> s{_edcNodeToNodeEncryptionOptions = a})
+
 -- | IAM access policy as a JSON-formatted string.
 edcAccessPolicies :: Lens' ElasticsearchDomainConfig (Maybe AccessPoliciesStatus)
 edcAccessPolicies = lens _edcAccessPolicies (\ s a -> s{_edcAccessPolicies = a})
@@ -640,6 +1250,10 @@ edcAccessPolicies = lens _edcAccessPolicies (\ s a -> s{_edcAccessPolicies = a})
 -- | Log publishing options for the given domain.
 edcLogPublishingOptions :: Lens' ElasticsearchDomainConfig (Maybe LogPublishingOptionsStatus)
 edcLogPublishingOptions = lens _edcLogPublishingOptions (\ s a -> s{_edcLogPublishingOptions = a})
+
+-- | Specifies @AdvancedSecurityOptions@ for the domain.
+edcAdvancedSecurityOptions :: Lens' ElasticsearchDomainConfig (Maybe AdvancedSecurityOptionsStatus)
+edcAdvancedSecurityOptions = lens _edcAdvancedSecurityOptions (\ s a -> s{_edcAdvancedSecurityOptions = a})
 
 -- | Specifies the @ElasticsearchClusterConfig@ for the Elasticsearch domain.
 edcElasticsearchClusterConfig :: Lens' ElasticsearchDomainConfig (Maybe ElasticsearchClusterConfigStatus)
@@ -661,6 +1275,10 @@ edcEncryptionAtRestOptions = lens _edcEncryptionAtRestOptions (\ s a -> s{_edcEn
 edcVPCOptions :: Lens' ElasticsearchDomainConfig (Maybe VPCDerivedInfoStatus)
 edcVPCOptions = lens _edcVPCOptions (\ s a -> s{_edcVPCOptions = a})
 
+-- | Specifies the @DomainEndpointOptions@ for the Elasticsearch domain.
+edcDomainEndpointOptions :: Lens' ElasticsearchDomainConfig (Maybe DomainEndpointOptionsStatus)
+edcDomainEndpointOptions = lens _edcDomainEndpointOptions (\ s a -> s{_edcDomainEndpointOptions = a})
+
 -- | Specifies the @AdvancedOptions@ for the domain. See <http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-advanced-options Configuring Advanced Options> for more information.
 edcAdvancedOptions :: Lens' ElasticsearchDomainConfig (Maybe AdvancedOptionsStatus)
 edcAdvancedOptions = lens _edcAdvancedOptions (\ s a -> s{_edcAdvancedOptions = a})
@@ -674,13 +1292,17 @@ instance FromJSON ElasticsearchDomainConfig where
           = withObject "ElasticsearchDomainConfig"
               (\ x ->
                  ElasticsearchDomainConfig' <$>
-                   (x .:? "EBSOptions") <*> (x .:? "AccessPolicies") <*>
-                     (x .:? "LogPublishingOptions")
+                   (x .:? "EBSOptions") <*>
+                     (x .:? "NodeToNodeEncryptionOptions")
+                     <*> (x .:? "AccessPolicies")
+                     <*> (x .:? "LogPublishingOptions")
+                     <*> (x .:? "AdvancedSecurityOptions")
                      <*> (x .:? "ElasticsearchClusterConfig")
                      <*> (x .:? "SnapshotOptions")
                      <*> (x .:? "CognitoOptions")
                      <*> (x .:? "EncryptionAtRestOptions")
                      <*> (x .:? "VPCOptions")
+                     <*> (x .:? "DomainEndpointOptions")
                      <*> (x .:? "AdvancedOptions")
                      <*> (x .:? "ElasticsearchVersion"))
 
@@ -694,23 +1316,28 @@ instance NFData ElasticsearchDomainConfig where
 --
 -- /See:/ 'elasticsearchDomainStatus' smart constructor.
 data ElasticsearchDomainStatus = ElasticsearchDomainStatus'
-  { _edsEBSOptions                 :: !(Maybe EBSOptions)
-  , _edsAccessPolicies             :: !(Maybe Text)
-  , _edsLogPublishingOptions       :: !(Maybe (Map LogType LogPublishingOption))
-  , _edsCreated                    :: !(Maybe Bool)
-  , _edsSnapshotOptions            :: !(Maybe SnapshotOptions)
-  , _edsCognitoOptions             :: !(Maybe CognitoOptions)
-  , _edsEncryptionAtRestOptions    :: !(Maybe EncryptionAtRestOptions)
-  , _edsDeleted                    :: !(Maybe Bool)
-  , _edsVPCOptions                 :: !(Maybe VPCDerivedInfo)
-  , _edsEndpoints                  :: !(Maybe (Map Text Text))
-  , _edsProcessing                 :: !(Maybe Bool)
-  , _edsEndpoint                   :: !(Maybe Text)
-  , _edsAdvancedOptions            :: !(Maybe (Map Text Text))
-  , _edsElasticsearchVersion       :: !(Maybe Text)
-  , _edsDomainId                   :: !Text
-  , _edsDomainName                 :: !Text
-  , _edsARN                        :: !Text
+  { _edsEBSOptions :: !(Maybe EBSOptions)
+  , _edsNodeToNodeEncryptionOptions :: !(Maybe NodeToNodeEncryptionOptions)
+  , _edsAccessPolicies :: !(Maybe Text)
+  , _edsServiceSoftwareOptions :: !(Maybe ServiceSoftwareOptions)
+  , _edsLogPublishingOptions :: !(Maybe (Map LogType LogPublishingOption))
+  , _edsAdvancedSecurityOptions :: !(Maybe AdvancedSecurityOptions)
+  , _edsCreated :: !(Maybe Bool)
+  , _edsSnapshotOptions :: !(Maybe SnapshotOptions)
+  , _edsCognitoOptions :: !(Maybe CognitoOptions)
+  , _edsEncryptionAtRestOptions :: !(Maybe EncryptionAtRestOptions)
+  , _edsDeleted :: !(Maybe Bool)
+  , _edsVPCOptions :: !(Maybe VPCDerivedInfo)
+  , _edsEndpoints :: !(Maybe (Map Text Text))
+  , _edsDomainEndpointOptions :: !(Maybe DomainEndpointOptions)
+  , _edsProcessing :: !(Maybe Bool)
+  , _edsEndpoint :: !(Maybe Text)
+  , _edsUpgradeProcessing :: !(Maybe Bool)
+  , _edsAdvancedOptions :: !(Maybe (Map Text Text))
+  , _edsElasticsearchVersion :: !(Maybe Text)
+  , _edsDomainId :: !Text
+  , _edsDomainName :: !Text
+  , _edsARN :: !Text
   , _edsElasticsearchClusterConfig :: !ElasticsearchClusterConfig
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
@@ -721,9 +1348,15 @@ data ElasticsearchDomainStatus = ElasticsearchDomainStatus'
 --
 -- * 'edsEBSOptions' - The @EBSOptions@ for the specified domain. See <http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-ebs Configuring EBS-based Storage> for more information.
 --
+-- * 'edsNodeToNodeEncryptionOptions' - Specifies the status of the @NodeToNodeEncryptionOptions@ .
+--
 -- * 'edsAccessPolicies' - IAM access policy as a JSON-formatted string.
 --
+-- * 'edsServiceSoftwareOptions' - The current status of the Elasticsearch domain's service software.
+--
 -- * 'edsLogPublishingOptions' - Log publishing options for the given domain.
+--
+-- * 'edsAdvancedSecurityOptions' - The current status of the Elasticsearch domain's advanced security options.
 --
 -- * 'edsCreated' - The domain creation status. @True@ if the creation of an Elasticsearch domain is complete. @False@ if domain creation is still in progress.
 --
@@ -739,9 +1372,13 @@ data ElasticsearchDomainStatus = ElasticsearchDomainStatus'
 --
 -- * 'edsEndpoints' - Map containing the Elasticsearch domain endpoints used to submit index and search requests. Example @key, value@ : @'vpc','vpc-endpoint-h2dsd34efgyghrtguk5gt6j2foh4.us-east-1.es.amazonaws.com'@ .
 --
+-- * 'edsDomainEndpointOptions' - The current status of the Elasticsearch domain's endpoint options.
+--
 -- * 'edsProcessing' - The status of the Elasticsearch domain configuration. @True@ if Amazon Elasticsearch Service is processing configuration changes. @False@ if the configuration is active.
 --
 -- * 'edsEndpoint' - The Elasticsearch domain endpoint that you use to submit index and search requests.
+--
+-- * 'edsUpgradeProcessing' - The status of an Elasticsearch domain version upgrade. @True@ if Amazon Elasticsearch Service is undergoing a version upgrade. @False@ if the configuration is active.
 --
 -- * 'edsAdvancedOptions' - Specifies the status of the @AdvancedOptions@
 --
@@ -763,8 +1400,11 @@ elasticsearchDomainStatus
 elasticsearchDomainStatus pDomainId_ pDomainName_ pARN_ pElasticsearchClusterConfig_ =
   ElasticsearchDomainStatus'
     { _edsEBSOptions = Nothing
+    , _edsNodeToNodeEncryptionOptions = Nothing
     , _edsAccessPolicies = Nothing
+    , _edsServiceSoftwareOptions = Nothing
     , _edsLogPublishingOptions = Nothing
+    , _edsAdvancedSecurityOptions = Nothing
     , _edsCreated = Nothing
     , _edsSnapshotOptions = Nothing
     , _edsCognitoOptions = Nothing
@@ -772,8 +1412,10 @@ elasticsearchDomainStatus pDomainId_ pDomainName_ pARN_ pElasticsearchClusterCon
     , _edsDeleted = Nothing
     , _edsVPCOptions = Nothing
     , _edsEndpoints = Nothing
+    , _edsDomainEndpointOptions = Nothing
     , _edsProcessing = Nothing
     , _edsEndpoint = Nothing
+    , _edsUpgradeProcessing = Nothing
     , _edsAdvancedOptions = Nothing
     , _edsElasticsearchVersion = Nothing
     , _edsDomainId = pDomainId_
@@ -787,13 +1429,25 @@ elasticsearchDomainStatus pDomainId_ pDomainName_ pARN_ pElasticsearchClusterCon
 edsEBSOptions :: Lens' ElasticsearchDomainStatus (Maybe EBSOptions)
 edsEBSOptions = lens _edsEBSOptions (\ s a -> s{_edsEBSOptions = a})
 
+-- | Specifies the status of the @NodeToNodeEncryptionOptions@ .
+edsNodeToNodeEncryptionOptions :: Lens' ElasticsearchDomainStatus (Maybe NodeToNodeEncryptionOptions)
+edsNodeToNodeEncryptionOptions = lens _edsNodeToNodeEncryptionOptions (\ s a -> s{_edsNodeToNodeEncryptionOptions = a})
+
 -- | IAM access policy as a JSON-formatted string.
 edsAccessPolicies :: Lens' ElasticsearchDomainStatus (Maybe Text)
 edsAccessPolicies = lens _edsAccessPolicies (\ s a -> s{_edsAccessPolicies = a})
 
+-- | The current status of the Elasticsearch domain's service software.
+edsServiceSoftwareOptions :: Lens' ElasticsearchDomainStatus (Maybe ServiceSoftwareOptions)
+edsServiceSoftwareOptions = lens _edsServiceSoftwareOptions (\ s a -> s{_edsServiceSoftwareOptions = a})
+
 -- | Log publishing options for the given domain.
 edsLogPublishingOptions :: Lens' ElasticsearchDomainStatus (HashMap LogType LogPublishingOption)
 edsLogPublishingOptions = lens _edsLogPublishingOptions (\ s a -> s{_edsLogPublishingOptions = a}) . _Default . _Map
+
+-- | The current status of the Elasticsearch domain's advanced security options.
+edsAdvancedSecurityOptions :: Lens' ElasticsearchDomainStatus (Maybe AdvancedSecurityOptions)
+edsAdvancedSecurityOptions = lens _edsAdvancedSecurityOptions (\ s a -> s{_edsAdvancedSecurityOptions = a})
 
 -- | The domain creation status. @True@ if the creation of an Elasticsearch domain is complete. @False@ if domain creation is still in progress.
 edsCreated :: Lens' ElasticsearchDomainStatus (Maybe Bool)
@@ -823,6 +1477,10 @@ edsVPCOptions = lens _edsVPCOptions (\ s a -> s{_edsVPCOptions = a})
 edsEndpoints :: Lens' ElasticsearchDomainStatus (HashMap Text Text)
 edsEndpoints = lens _edsEndpoints (\ s a -> s{_edsEndpoints = a}) . _Default . _Map
 
+-- | The current status of the Elasticsearch domain's endpoint options.
+edsDomainEndpointOptions :: Lens' ElasticsearchDomainStatus (Maybe DomainEndpointOptions)
+edsDomainEndpointOptions = lens _edsDomainEndpointOptions (\ s a -> s{_edsDomainEndpointOptions = a})
+
 -- | The status of the Elasticsearch domain configuration. @True@ if Amazon Elasticsearch Service is processing configuration changes. @False@ if the configuration is active.
 edsProcessing :: Lens' ElasticsearchDomainStatus (Maybe Bool)
 edsProcessing = lens _edsProcessing (\ s a -> s{_edsProcessing = a})
@@ -830,6 +1488,10 @@ edsProcessing = lens _edsProcessing (\ s a -> s{_edsProcessing = a})
 -- | The Elasticsearch domain endpoint that you use to submit index and search requests.
 edsEndpoint :: Lens' ElasticsearchDomainStatus (Maybe Text)
 edsEndpoint = lens _edsEndpoint (\ s a -> s{_edsEndpoint = a})
+
+-- | The status of an Elasticsearch domain version upgrade. @True@ if Amazon Elasticsearch Service is undergoing a version upgrade. @False@ if the configuration is active.
+edsUpgradeProcessing :: Lens' ElasticsearchDomainStatus (Maybe Bool)
+edsUpgradeProcessing = lens _edsUpgradeProcessing (\ s a -> s{_edsUpgradeProcessing = a})
 
 -- | Specifies the status of the @AdvancedOptions@
 edsAdvancedOptions :: Lens' ElasticsearchDomainStatus (HashMap Text Text)
@@ -860,8 +1522,12 @@ instance FromJSON ElasticsearchDomainStatus where
           = withObject "ElasticsearchDomainStatus"
               (\ x ->
                  ElasticsearchDomainStatus' <$>
-                   (x .:? "EBSOptions") <*> (x .:? "AccessPolicies") <*>
-                     (x .:? "LogPublishingOptions" .!= mempty)
+                   (x .:? "EBSOptions") <*>
+                     (x .:? "NodeToNodeEncryptionOptions")
+                     <*> (x .:? "AccessPolicies")
+                     <*> (x .:? "ServiceSoftwareOptions")
+                     <*> (x .:? "LogPublishingOptions" .!= mempty)
+                     <*> (x .:? "AdvancedSecurityOptions")
                      <*> (x .:? "Created")
                      <*> (x .:? "SnapshotOptions")
                      <*> (x .:? "CognitoOptions")
@@ -869,8 +1535,10 @@ instance FromJSON ElasticsearchDomainStatus where
                      <*> (x .:? "Deleted")
                      <*> (x .:? "VPCOptions")
                      <*> (x .:? "Endpoints" .!= mempty)
+                     <*> (x .:? "DomainEndpointOptions")
                      <*> (x .:? "Processing")
                      <*> (x .:? "Endpoint")
+                     <*> (x .:? "UpgradeProcessing")
                      <*> (x .:? "AdvancedOptions" .!= mempty)
                      <*> (x .:? "ElasticsearchVersion")
                      <*> (x .: "DomainId")
@@ -1022,6 +1690,204 @@ instance FromJSON EncryptionAtRestOptionsStatus where
 instance Hashable EncryptionAtRestOptionsStatus where
 
 instance NFData EncryptionAtRestOptionsStatus where
+
+-- | /See:/ 'errorDetails' smart constructor.
+data ErrorDetails = ErrorDetails'
+  { _edErrorType    :: !(Maybe Text)
+  , _edErrorMessage :: !(Maybe Text)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'ErrorDetails' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'edErrorType' - Undocumented member.
+--
+-- * 'edErrorMessage' - Undocumented member.
+errorDetails
+    :: ErrorDetails
+errorDetails = ErrorDetails' {_edErrorType = Nothing, _edErrorMessage = Nothing}
+
+
+-- | Undocumented member.
+edErrorType :: Lens' ErrorDetails (Maybe Text)
+edErrorType = lens _edErrorType (\ s a -> s{_edErrorType = a})
+
+-- | Undocumented member.
+edErrorMessage :: Lens' ErrorDetails (Maybe Text)
+edErrorMessage = lens _edErrorMessage (\ s a -> s{_edErrorMessage = a})
+
+instance FromJSON ErrorDetails where
+        parseJSON
+          = withObject "ErrorDetails"
+              (\ x ->
+                 ErrorDetails' <$>
+                   (x .:? "ErrorType") <*> (x .:? "ErrorMessage"))
+
+instance Hashable ErrorDetails where
+
+instance NFData ErrorDetails where
+
+-- | A filter used to limit results when describing inbound or outbound cross-cluster search connections. Multiple values can be specified per filter. A cross-cluster search connection must match at least one of the specified values for it to be returned from an operation.
+--
+--
+--
+-- /See:/ 'filter'' smart constructor.
+data Filter = Filter'
+  { _fValues :: !(Maybe (List1 Text))
+  , _fName   :: !(Maybe Text)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'Filter' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'fValues' - Contains one or more values for the filter.
+--
+-- * 'fName' - Specifies the name of the filter.
+filter'
+    :: Filter
+filter' = Filter' {_fValues = Nothing, _fName = Nothing}
+
+
+-- | Contains one or more values for the filter.
+fValues :: Lens' Filter (Maybe (NonEmpty Text))
+fValues = lens _fValues (\ s a -> s{_fValues = a}) . mapping _List1
+
+-- | Specifies the name of the filter.
+fName :: Lens' Filter (Maybe Text)
+fName = lens _fName (\ s a -> s{_fName = a})
+
+instance Hashable Filter where
+
+instance NFData Filter where
+
+instance ToJSON Filter where
+        toJSON Filter'{..}
+          = object
+              (catMaybes
+                 [("Values" .=) <$> _fValues, ("Name" .=) <$> _fName])
+
+-- | Specifies details of an inbound connection.
+--
+--
+--
+-- /See:/ 'inboundCrossClusterSearchConnection' smart constructor.
+data InboundCrossClusterSearchConnection = InboundCrossClusterSearchConnection'
+  { _iccscDestinationDomainInfo :: !(Maybe DomainInformation)
+  , _iccscCrossClusterSearchConnectionId :: !(Maybe Text)
+  , _iccscConnectionStatus :: !(Maybe InboundCrossClusterSearchConnectionStatus)
+  , _iccscSourceDomainInfo :: !(Maybe DomainInformation)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'InboundCrossClusterSearchConnection' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'iccscDestinationDomainInfo' - Specifies the @'DomainInformation' @ for the destination Elasticsearch domain.
+--
+-- * 'iccscCrossClusterSearchConnectionId' - Specifies the connection id for the inbound cross-cluster search connection.
+--
+-- * 'iccscConnectionStatus' - Specifies the @'InboundCrossClusterSearchConnectionStatus' @ for the outbound connection.
+--
+-- * 'iccscSourceDomainInfo' - Specifies the @'DomainInformation' @ for the source Elasticsearch domain.
+inboundCrossClusterSearchConnection
+    :: InboundCrossClusterSearchConnection
+inboundCrossClusterSearchConnection =
+  InboundCrossClusterSearchConnection'
+    { _iccscDestinationDomainInfo = Nothing
+    , _iccscCrossClusterSearchConnectionId = Nothing
+    , _iccscConnectionStatus = Nothing
+    , _iccscSourceDomainInfo = Nothing
+    }
+
+
+-- | Specifies the @'DomainInformation' @ for the destination Elasticsearch domain.
+iccscDestinationDomainInfo :: Lens' InboundCrossClusterSearchConnection (Maybe DomainInformation)
+iccscDestinationDomainInfo = lens _iccscDestinationDomainInfo (\ s a -> s{_iccscDestinationDomainInfo = a})
+
+-- | Specifies the connection id for the inbound cross-cluster search connection.
+iccscCrossClusterSearchConnectionId :: Lens' InboundCrossClusterSearchConnection (Maybe Text)
+iccscCrossClusterSearchConnectionId = lens _iccscCrossClusterSearchConnectionId (\ s a -> s{_iccscCrossClusterSearchConnectionId = a})
+
+-- | Specifies the @'InboundCrossClusterSearchConnectionStatus' @ for the outbound connection.
+iccscConnectionStatus :: Lens' InboundCrossClusterSearchConnection (Maybe InboundCrossClusterSearchConnectionStatus)
+iccscConnectionStatus = lens _iccscConnectionStatus (\ s a -> s{_iccscConnectionStatus = a})
+
+-- | Specifies the @'DomainInformation' @ for the source Elasticsearch domain.
+iccscSourceDomainInfo :: Lens' InboundCrossClusterSearchConnection (Maybe DomainInformation)
+iccscSourceDomainInfo = lens _iccscSourceDomainInfo (\ s a -> s{_iccscSourceDomainInfo = a})
+
+instance FromJSON InboundCrossClusterSearchConnection
+         where
+        parseJSON
+          = withObject "InboundCrossClusterSearchConnection"
+              (\ x ->
+                 InboundCrossClusterSearchConnection' <$>
+                   (x .:? "DestinationDomainInfo") <*>
+                     (x .:? "CrossClusterSearchConnectionId")
+                     <*> (x .:? "ConnectionStatus")
+                     <*> (x .:? "SourceDomainInfo"))
+
+instance Hashable InboundCrossClusterSearchConnection
+         where
+
+instance NFData InboundCrossClusterSearchConnection
+         where
+
+-- | Specifies the coonection status of an inbound cross-cluster search connection.
+--
+--
+--
+-- /See:/ 'inboundCrossClusterSearchConnectionStatus' smart constructor.
+data InboundCrossClusterSearchConnectionStatus = InboundCrossClusterSearchConnectionStatus'
+  { _iccscsMessage    :: !(Maybe Text)
+  , _iccscsStatusCode :: !(Maybe InboundCrossClusterSearchConnectionStatusCode)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'InboundCrossClusterSearchConnectionStatus' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'iccscsMessage' - Specifies verbose information for the inbound connection status.
+--
+-- * 'iccscsStatusCode' - The state code for inbound connection. This can be one of the following:     * PENDING_ACCEPTANCE: Inbound connection is not yet accepted by destination domain owner.    * APPROVED: Inbound connection is pending acceptance by destination domain owner.    * REJECTING: Inbound connection rejection is in process.    * REJECTED: Inbound connection is rejected.    * DELETING: Inbound connection deletion is in progress.    * DELETED: Inbound connection is deleted and cannot be used further.
+inboundCrossClusterSearchConnectionStatus
+    :: InboundCrossClusterSearchConnectionStatus
+inboundCrossClusterSearchConnectionStatus =
+  InboundCrossClusterSearchConnectionStatus'
+    {_iccscsMessage = Nothing, _iccscsStatusCode = Nothing}
+
+
+-- | Specifies verbose information for the inbound connection status.
+iccscsMessage :: Lens' InboundCrossClusterSearchConnectionStatus (Maybe Text)
+iccscsMessage = lens _iccscsMessage (\ s a -> s{_iccscsMessage = a})
+
+-- | The state code for inbound connection. This can be one of the following:     * PENDING_ACCEPTANCE: Inbound connection is not yet accepted by destination domain owner.    * APPROVED: Inbound connection is pending acceptance by destination domain owner.    * REJECTING: Inbound connection rejection is in process.    * REJECTED: Inbound connection is rejected.    * DELETING: Inbound connection deletion is in progress.    * DELETED: Inbound connection is deleted and cannot be used further.
+iccscsStatusCode :: Lens' InboundCrossClusterSearchConnectionStatus (Maybe InboundCrossClusterSearchConnectionStatusCode)
+iccscsStatusCode = lens _iccscsStatusCode (\ s a -> s{_iccscsStatusCode = a})
+
+instance FromJSON
+           InboundCrossClusterSearchConnectionStatus
+         where
+        parseJSON
+          = withObject
+              "InboundCrossClusterSearchConnectionStatus"
+              (\ x ->
+                 InboundCrossClusterSearchConnectionStatus' <$>
+                   (x .:? "Message") <*> (x .:? "StatusCode"))
+
+instance Hashable
+           InboundCrossClusterSearchConnectionStatus
+         where
+
+instance NFData
+           InboundCrossClusterSearchConnectionStatus
+         where
 
 -- | InstanceCountLimits represents the limits on number of instances that be created in Amazon Elasticsearch for given InstanceType.
 --
@@ -1258,6 +2124,151 @@ instance Hashable LogPublishingOptionsStatus where
 
 instance NFData LogPublishingOptionsStatus where
 
+-- | Credentials for the master user: username and password, ARN, or both.
+--
+--
+--
+-- /See:/ 'masterUserOptions' smart constructor.
+data MasterUserOptions = MasterUserOptions'
+  { _muoMasterUserPassword :: !(Maybe (Sensitive Text))
+  , _muoMasterUserName     :: !(Maybe (Sensitive Text))
+  , _muoMasterUserARN      :: !(Maybe Text)
+  } deriving (Eq, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'MasterUserOptions' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'muoMasterUserPassword' - The master user's password, which is stored in the Amazon Elasticsearch Service domain's internal database.
+--
+-- * 'muoMasterUserName' - The master user's username, which is stored in the Amazon Elasticsearch Service domain's internal database.
+--
+-- * 'muoMasterUserARN' - ARN for the master user (if IAM is enabled).
+masterUserOptions
+    :: MasterUserOptions
+masterUserOptions =
+  MasterUserOptions'
+    { _muoMasterUserPassword = Nothing
+    , _muoMasterUserName = Nothing
+    , _muoMasterUserARN = Nothing
+    }
+
+
+-- | The master user's password, which is stored in the Amazon Elasticsearch Service domain's internal database.
+muoMasterUserPassword :: Lens' MasterUserOptions (Maybe Text)
+muoMasterUserPassword = lens _muoMasterUserPassword (\ s a -> s{_muoMasterUserPassword = a}) . mapping _Sensitive
+
+-- | The master user's username, which is stored in the Amazon Elasticsearch Service domain's internal database.
+muoMasterUserName :: Lens' MasterUserOptions (Maybe Text)
+muoMasterUserName = lens _muoMasterUserName (\ s a -> s{_muoMasterUserName = a}) . mapping _Sensitive
+
+-- | ARN for the master user (if IAM is enabled).
+muoMasterUserARN :: Lens' MasterUserOptions (Maybe Text)
+muoMasterUserARN = lens _muoMasterUserARN (\ s a -> s{_muoMasterUserARN = a})
+
+instance Hashable MasterUserOptions where
+
+instance NFData MasterUserOptions where
+
+instance ToJSON MasterUserOptions where
+        toJSON MasterUserOptions'{..}
+          = object
+              (catMaybes
+                 [("MasterUserPassword" .=) <$>
+                    _muoMasterUserPassword,
+                  ("MasterUserName" .=) <$> _muoMasterUserName,
+                  ("MasterUserARN" .=) <$> _muoMasterUserARN])
+
+-- | Specifies the node-to-node encryption options.
+--
+--
+--
+-- /See:/ 'nodeToNodeEncryptionOptions' smart constructor.
+newtype NodeToNodeEncryptionOptions = NodeToNodeEncryptionOptions'
+  { _ntneoEnabled :: Maybe Bool
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'NodeToNodeEncryptionOptions' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'ntneoEnabled' - Specify true to enable node-to-node encryption.
+nodeToNodeEncryptionOptions
+    :: NodeToNodeEncryptionOptions
+nodeToNodeEncryptionOptions =
+  NodeToNodeEncryptionOptions' {_ntneoEnabled = Nothing}
+
+
+-- | Specify true to enable node-to-node encryption.
+ntneoEnabled :: Lens' NodeToNodeEncryptionOptions (Maybe Bool)
+ntneoEnabled = lens _ntneoEnabled (\ s a -> s{_ntneoEnabled = a})
+
+instance FromJSON NodeToNodeEncryptionOptions where
+        parseJSON
+          = withObject "NodeToNodeEncryptionOptions"
+              (\ x ->
+                 NodeToNodeEncryptionOptions' <$> (x .:? "Enabled"))
+
+instance Hashable NodeToNodeEncryptionOptions where
+
+instance NFData NodeToNodeEncryptionOptions where
+
+instance ToJSON NodeToNodeEncryptionOptions where
+        toJSON NodeToNodeEncryptionOptions'{..}
+          = object
+              (catMaybes [("Enabled" .=) <$> _ntneoEnabled])
+
+-- | Status of the node-to-node encryption options for the specified Elasticsearch domain.
+--
+--
+--
+-- /See:/ 'nodeToNodeEncryptionOptionsStatus' smart constructor.
+data NodeToNodeEncryptionOptionsStatus = NodeToNodeEncryptionOptionsStatus'
+  { _ntneosOptions :: !NodeToNodeEncryptionOptions
+  , _ntneosStatus  :: !OptionStatus
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'NodeToNodeEncryptionOptionsStatus' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'ntneosOptions' - Specifies the node-to-node encryption options for the specified Elasticsearch domain.
+--
+-- * 'ntneosStatus' - Specifies the status of the node-to-node encryption options for the specified Elasticsearch domain.
+nodeToNodeEncryptionOptionsStatus
+    :: NodeToNodeEncryptionOptions -- ^ 'ntneosOptions'
+    -> OptionStatus -- ^ 'ntneosStatus'
+    -> NodeToNodeEncryptionOptionsStatus
+nodeToNodeEncryptionOptionsStatus pOptions_ pStatus_ =
+  NodeToNodeEncryptionOptionsStatus'
+    {_ntneosOptions = pOptions_, _ntneosStatus = pStatus_}
+
+
+-- | Specifies the node-to-node encryption options for the specified Elasticsearch domain.
+ntneosOptions :: Lens' NodeToNodeEncryptionOptionsStatus NodeToNodeEncryptionOptions
+ntneosOptions = lens _ntneosOptions (\ s a -> s{_ntneosOptions = a})
+
+-- | Specifies the status of the node-to-node encryption options for the specified Elasticsearch domain.
+ntneosStatus :: Lens' NodeToNodeEncryptionOptionsStatus OptionStatus
+ntneosStatus = lens _ntneosStatus (\ s a -> s{_ntneosStatus = a})
+
+instance FromJSON NodeToNodeEncryptionOptionsStatus
+         where
+        parseJSON
+          = withObject "NodeToNodeEncryptionOptionsStatus"
+              (\ x ->
+                 NodeToNodeEncryptionOptionsStatus' <$>
+                   (x .: "Options") <*> (x .: "Status"))
+
+instance Hashable NodeToNodeEncryptionOptionsStatus
+         where
+
+instance NFData NodeToNodeEncryptionOptionsStatus
+         where
+
 -- | Provides the current status of the entity.
 --
 --
@@ -1333,6 +2344,342 @@ instance FromJSON OptionStatus where
 instance Hashable OptionStatus where
 
 instance NFData OptionStatus where
+
+-- | Specifies details of an outbound connection.
+--
+--
+--
+-- /See:/ 'outboundCrossClusterSearchConnection' smart constructor.
+data OutboundCrossClusterSearchConnection = OutboundCrossClusterSearchConnection'
+  { _occscDestinationDomainInfo :: !(Maybe DomainInformation)
+  , _occscConnectionAlias :: !(Maybe Text)
+  , _occscCrossClusterSearchConnectionId :: !(Maybe Text)
+  , _occscConnectionStatus :: !(Maybe OutboundCrossClusterSearchConnectionStatus)
+  , _occscSourceDomainInfo :: !(Maybe DomainInformation)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'OutboundCrossClusterSearchConnection' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'occscDestinationDomainInfo' - Specifies the @'DomainInformation' @ for the destination Elasticsearch domain.
+--
+-- * 'occscConnectionAlias' - Specifies the connection alias for the outbound cross-cluster search connection.
+--
+-- * 'occscCrossClusterSearchConnectionId' - Specifies the connection id for the outbound cross-cluster search connection.
+--
+-- * 'occscConnectionStatus' - Specifies the @'OutboundCrossClusterSearchConnectionStatus' @ for the outbound connection.
+--
+-- * 'occscSourceDomainInfo' - Specifies the @'DomainInformation' @ for the source Elasticsearch domain.
+outboundCrossClusterSearchConnection
+    :: OutboundCrossClusterSearchConnection
+outboundCrossClusterSearchConnection =
+  OutboundCrossClusterSearchConnection'
+    { _occscDestinationDomainInfo = Nothing
+    , _occscConnectionAlias = Nothing
+    , _occscCrossClusterSearchConnectionId = Nothing
+    , _occscConnectionStatus = Nothing
+    , _occscSourceDomainInfo = Nothing
+    }
+
+
+-- | Specifies the @'DomainInformation' @ for the destination Elasticsearch domain.
+occscDestinationDomainInfo :: Lens' OutboundCrossClusterSearchConnection (Maybe DomainInformation)
+occscDestinationDomainInfo = lens _occscDestinationDomainInfo (\ s a -> s{_occscDestinationDomainInfo = a})
+
+-- | Specifies the connection alias for the outbound cross-cluster search connection.
+occscConnectionAlias :: Lens' OutboundCrossClusterSearchConnection (Maybe Text)
+occscConnectionAlias = lens _occscConnectionAlias (\ s a -> s{_occscConnectionAlias = a})
+
+-- | Specifies the connection id for the outbound cross-cluster search connection.
+occscCrossClusterSearchConnectionId :: Lens' OutboundCrossClusterSearchConnection (Maybe Text)
+occscCrossClusterSearchConnectionId = lens _occscCrossClusterSearchConnectionId (\ s a -> s{_occscCrossClusterSearchConnectionId = a})
+
+-- | Specifies the @'OutboundCrossClusterSearchConnectionStatus' @ for the outbound connection.
+occscConnectionStatus :: Lens' OutboundCrossClusterSearchConnection (Maybe OutboundCrossClusterSearchConnectionStatus)
+occscConnectionStatus = lens _occscConnectionStatus (\ s a -> s{_occscConnectionStatus = a})
+
+-- | Specifies the @'DomainInformation' @ for the source Elasticsearch domain.
+occscSourceDomainInfo :: Lens' OutboundCrossClusterSearchConnection (Maybe DomainInformation)
+occscSourceDomainInfo = lens _occscSourceDomainInfo (\ s a -> s{_occscSourceDomainInfo = a})
+
+instance FromJSON
+           OutboundCrossClusterSearchConnection
+         where
+        parseJSON
+          = withObject "OutboundCrossClusterSearchConnection"
+              (\ x ->
+                 OutboundCrossClusterSearchConnection' <$>
+                   (x .:? "DestinationDomainInfo") <*>
+                     (x .:? "ConnectionAlias")
+                     <*> (x .:? "CrossClusterSearchConnectionId")
+                     <*> (x .:? "ConnectionStatus")
+                     <*> (x .:? "SourceDomainInfo"))
+
+instance Hashable
+           OutboundCrossClusterSearchConnection
+         where
+
+instance NFData OutboundCrossClusterSearchConnection
+         where
+
+-- | Specifies the connection status of an outbound cross-cluster search connection.
+--
+--
+--
+-- /See:/ 'outboundCrossClusterSearchConnectionStatus' smart constructor.
+data OutboundCrossClusterSearchConnectionStatus = OutboundCrossClusterSearchConnectionStatus'
+  { _occscsMessage    :: !(Maybe Text)
+  , _occscsStatusCode :: !(Maybe OutboundCrossClusterSearchConnectionStatusCode)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'OutboundCrossClusterSearchConnectionStatus' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'occscsMessage' - Specifies verbose information for the outbound connection status.
+--
+-- * 'occscsStatusCode' - The state code for outbound connection. This can be one of the following:     * VALIDATING: The outbound connection request is being validated.    * VALIDATION_FAILED: Validation failed for the connection request.    * PENDING_ACCEPTANCE: Outbound connection request is validated and is not yet accepted by destination domain owner.    * PROVISIONING: Outbound connection request is in process.    * ACTIVE: Outbound connection is active and ready to use.    * REJECTED: Outbound connection request is rejected by destination domain owner.    * DELETING: Outbound connection deletion is in progress.    * DELETED: Outbound connection is deleted and cannot be used further.
+outboundCrossClusterSearchConnectionStatus
+    :: OutboundCrossClusterSearchConnectionStatus
+outboundCrossClusterSearchConnectionStatus =
+  OutboundCrossClusterSearchConnectionStatus'
+    {_occscsMessage = Nothing, _occscsStatusCode = Nothing}
+
+
+-- | Specifies verbose information for the outbound connection status.
+occscsMessage :: Lens' OutboundCrossClusterSearchConnectionStatus (Maybe Text)
+occscsMessage = lens _occscsMessage (\ s a -> s{_occscsMessage = a})
+
+-- | The state code for outbound connection. This can be one of the following:     * VALIDATING: The outbound connection request is being validated.    * VALIDATION_FAILED: Validation failed for the connection request.    * PENDING_ACCEPTANCE: Outbound connection request is validated and is not yet accepted by destination domain owner.    * PROVISIONING: Outbound connection request is in process.    * ACTIVE: Outbound connection is active and ready to use.    * REJECTED: Outbound connection request is rejected by destination domain owner.    * DELETING: Outbound connection deletion is in progress.    * DELETED: Outbound connection is deleted and cannot be used further.
+occscsStatusCode :: Lens' OutboundCrossClusterSearchConnectionStatus (Maybe OutboundCrossClusterSearchConnectionStatusCode)
+occscsStatusCode = lens _occscsStatusCode (\ s a -> s{_occscsStatusCode = a})
+
+instance FromJSON
+           OutboundCrossClusterSearchConnectionStatus
+         where
+        parseJSON
+          = withObject
+              "OutboundCrossClusterSearchConnectionStatus"
+              (\ x ->
+                 OutboundCrossClusterSearchConnectionStatus' <$>
+                   (x .:? "Message") <*> (x .:? "StatusCode"))
+
+instance Hashable
+           OutboundCrossClusterSearchConnectionStatus
+         where
+
+instance NFData
+           OutboundCrossClusterSearchConnectionStatus
+         where
+
+-- | Basic information about a package.
+--
+--
+--
+-- /See:/ 'packageDetails' smart constructor.
+data PackageDetails = PackageDetails'
+  { _pdPackageId               :: !(Maybe Text)
+  , _pdPackageType             :: !(Maybe PackageType)
+  , _pdLastUpdatedAt           :: !(Maybe POSIX)
+  , _pdCreatedAt               :: !(Maybe POSIX)
+  , _pdPackageName             :: !(Maybe Text)
+  , _pdPackageStatus           :: !(Maybe PackageStatus)
+  , _pdPackageDescription      :: !(Maybe Text)
+  , _pdErrorDetails            :: !(Maybe ErrorDetails)
+  , _pdAvailablePackageVersion :: !(Maybe Text)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'PackageDetails' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'pdPackageId' - Internal ID of the package.
+--
+-- * 'pdPackageType' - Currently supports only TXT-DICTIONARY.
+--
+-- * 'pdLastUpdatedAt' - Undocumented member.
+--
+-- * 'pdCreatedAt' - Timestamp which tells creation date of the package.
+--
+-- * 'pdPackageName' - User specified name of the package.
+--
+-- * 'pdPackageStatus' - Current state of the package. Values are COPYING/COPY_FAILED/AVAILABLE/DELETING/DELETE_FAILED
+--
+-- * 'pdPackageDescription' - User-specified description of the package.
+--
+-- * 'pdErrorDetails' - Additional information if the package is in an error state. Null otherwise.
+--
+-- * 'pdAvailablePackageVersion' - Undocumented member.
+packageDetails
+    :: PackageDetails
+packageDetails =
+  PackageDetails'
+    { _pdPackageId = Nothing
+    , _pdPackageType = Nothing
+    , _pdLastUpdatedAt = Nothing
+    , _pdCreatedAt = Nothing
+    , _pdPackageName = Nothing
+    , _pdPackageStatus = Nothing
+    , _pdPackageDescription = Nothing
+    , _pdErrorDetails = Nothing
+    , _pdAvailablePackageVersion = Nothing
+    }
+
+
+-- | Internal ID of the package.
+pdPackageId :: Lens' PackageDetails (Maybe Text)
+pdPackageId = lens _pdPackageId (\ s a -> s{_pdPackageId = a})
+
+-- | Currently supports only TXT-DICTIONARY.
+pdPackageType :: Lens' PackageDetails (Maybe PackageType)
+pdPackageType = lens _pdPackageType (\ s a -> s{_pdPackageType = a})
+
+-- | Undocumented member.
+pdLastUpdatedAt :: Lens' PackageDetails (Maybe UTCTime)
+pdLastUpdatedAt = lens _pdLastUpdatedAt (\ s a -> s{_pdLastUpdatedAt = a}) . mapping _Time
+
+-- | Timestamp which tells creation date of the package.
+pdCreatedAt :: Lens' PackageDetails (Maybe UTCTime)
+pdCreatedAt = lens _pdCreatedAt (\ s a -> s{_pdCreatedAt = a}) . mapping _Time
+
+-- | User specified name of the package.
+pdPackageName :: Lens' PackageDetails (Maybe Text)
+pdPackageName = lens _pdPackageName (\ s a -> s{_pdPackageName = a})
+
+-- | Current state of the package. Values are COPYING/COPY_FAILED/AVAILABLE/DELETING/DELETE_FAILED
+pdPackageStatus :: Lens' PackageDetails (Maybe PackageStatus)
+pdPackageStatus = lens _pdPackageStatus (\ s a -> s{_pdPackageStatus = a})
+
+-- | User-specified description of the package.
+pdPackageDescription :: Lens' PackageDetails (Maybe Text)
+pdPackageDescription = lens _pdPackageDescription (\ s a -> s{_pdPackageDescription = a})
+
+-- | Additional information if the package is in an error state. Null otherwise.
+pdErrorDetails :: Lens' PackageDetails (Maybe ErrorDetails)
+pdErrorDetails = lens _pdErrorDetails (\ s a -> s{_pdErrorDetails = a})
+
+-- | Undocumented member.
+pdAvailablePackageVersion :: Lens' PackageDetails (Maybe Text)
+pdAvailablePackageVersion = lens _pdAvailablePackageVersion (\ s a -> s{_pdAvailablePackageVersion = a})
+
+instance FromJSON PackageDetails where
+        parseJSON
+          = withObject "PackageDetails"
+              (\ x ->
+                 PackageDetails' <$>
+                   (x .:? "PackageID") <*> (x .:? "PackageType") <*>
+                     (x .:? "LastUpdatedAt")
+                     <*> (x .:? "CreatedAt")
+                     <*> (x .:? "PackageName")
+                     <*> (x .:? "PackageStatus")
+                     <*> (x .:? "PackageDescription")
+                     <*> (x .:? "ErrorDetails")
+                     <*> (x .:? "AvailablePackageVersion"))
+
+instance Hashable PackageDetails where
+
+instance NFData PackageDetails where
+
+-- | The S3 location for importing the package specified as @S3BucketName@ and @S3Key@
+--
+--
+--
+-- /See:/ 'packageSource' smart constructor.
+data PackageSource = PackageSource'
+  { _psS3Key        :: !(Maybe Text)
+  , _psS3BucketName :: !(Maybe Text)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'PackageSource' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'psS3Key' - Key (file name) of the package.
+--
+-- * 'psS3BucketName' - Name of the bucket containing the package.
+packageSource
+    :: PackageSource
+packageSource = PackageSource' {_psS3Key = Nothing, _psS3BucketName = Nothing}
+
+
+-- | Key (file name) of the package.
+psS3Key :: Lens' PackageSource (Maybe Text)
+psS3Key = lens _psS3Key (\ s a -> s{_psS3Key = a})
+
+-- | Name of the bucket containing the package.
+psS3BucketName :: Lens' PackageSource (Maybe Text)
+psS3BucketName = lens _psS3BucketName (\ s a -> s{_psS3BucketName = a})
+
+instance Hashable PackageSource where
+
+instance NFData PackageSource where
+
+instance ToJSON PackageSource where
+        toJSON PackageSource'{..}
+          = object
+              (catMaybes
+                 [("S3Key" .=) <$> _psS3Key,
+                  ("S3BucketName" .=) <$> _psS3BucketName])
+
+-- | Details of a package version.
+--
+--
+--
+-- /See:/ 'packageVersionHistory' smart constructor.
+data PackageVersionHistory = PackageVersionHistory'
+  { _pvhCreatedAt      :: !(Maybe POSIX)
+  , _pvhPackageVersion :: !(Maybe Text)
+  , _pvhCommitMessage  :: !(Maybe Text)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'PackageVersionHistory' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'pvhCreatedAt' - Timestamp which tells creation time of the package version.
+--
+-- * 'pvhPackageVersion' - Version of the package.
+--
+-- * 'pvhCommitMessage' - A message associated with the version.
+packageVersionHistory
+    :: PackageVersionHistory
+packageVersionHistory =
+  PackageVersionHistory'
+    { _pvhCreatedAt = Nothing
+    , _pvhPackageVersion = Nothing
+    , _pvhCommitMessage = Nothing
+    }
+
+
+-- | Timestamp which tells creation time of the package version.
+pvhCreatedAt :: Lens' PackageVersionHistory (Maybe UTCTime)
+pvhCreatedAt = lens _pvhCreatedAt (\ s a -> s{_pvhCreatedAt = a}) . mapping _Time
+
+-- | Version of the package.
+pvhPackageVersion :: Lens' PackageVersionHistory (Maybe Text)
+pvhPackageVersion = lens _pvhPackageVersion (\ s a -> s{_pvhPackageVersion = a})
+
+-- | A message associated with the version.
+pvhCommitMessage :: Lens' PackageVersionHistory (Maybe Text)
+pvhCommitMessage = lens _pvhCommitMessage (\ s a -> s{_pvhCommitMessage = a})
+
+instance FromJSON PackageVersionHistory where
+        parseJSON
+          = withObject "PackageVersionHistory"
+              (\ x ->
+                 PackageVersionHistory' <$>
+                   (x .:? "CreatedAt") <*> (x .:? "PackageVersion") <*>
+                     (x .:? "CommitMessage"))
+
+instance Hashable PackageVersionHistory where
+
+instance NFData PackageVersionHistory where
 
 -- | Contains the specific price and frequency of a recurring charges for a reserved Elasticsearch instance, or for a reserved Elasticsearch instance offering.
 --
@@ -1630,6 +2977,326 @@ instance Hashable
 instance NFData ReservedElasticsearchInstanceOffering
          where
 
+-- | Specifies the SAML Identity Provider's information.
+--
+--
+--
+-- /See:/ 'sAMLIdp' smart constructor.
+data SAMLIdp = SAMLIdp'
+  { _samliMetadataContent :: !Text
+  , _samliEntityId        :: !Text
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'SAMLIdp' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'samliMetadataContent' - The Metadata of the SAML application in xml format.
+--
+-- * 'samliEntityId' - The unique Entity ID of the application in SAML Identity Provider.
+sAMLIdp
+    :: Text -- ^ 'samliMetadataContent'
+    -> Text -- ^ 'samliEntityId'
+    -> SAMLIdp
+sAMLIdp pMetadataContent_ pEntityId_ =
+  SAMLIdp'
+    {_samliMetadataContent = pMetadataContent_, _samliEntityId = pEntityId_}
+
+
+-- | The Metadata of the SAML application in xml format.
+samliMetadataContent :: Lens' SAMLIdp Text
+samliMetadataContent = lens _samliMetadataContent (\ s a -> s{_samliMetadataContent = a})
+
+-- | The unique Entity ID of the application in SAML Identity Provider.
+samliEntityId :: Lens' SAMLIdp Text
+samliEntityId = lens _samliEntityId (\ s a -> s{_samliEntityId = a})
+
+instance FromJSON SAMLIdp where
+        parseJSON
+          = withObject "SAMLIdp"
+              (\ x ->
+                 SAMLIdp' <$>
+                   (x .: "MetadataContent") <*> (x .: "EntityId"))
+
+instance Hashable SAMLIdp where
+
+instance NFData SAMLIdp where
+
+instance ToJSON SAMLIdp where
+        toJSON SAMLIdp'{..}
+          = object
+              (catMaybes
+                 [Just ("MetadataContent" .= _samliMetadataContent),
+                  Just ("EntityId" .= _samliEntityId)])
+
+-- | Specifies the SAML application configuration for the domain.
+--
+--
+--
+-- /See:/ 'sAMLOptionsInput' smart constructor.
+data SAMLOptionsInput = SAMLOptionsInput'
+  { _samloiMasterUserName        :: !(Maybe (Sensitive Text))
+  , _samloiEnabled               :: !(Maybe Bool)
+  , _samloiIdp                   :: !(Maybe SAMLIdp)
+  , _samloiRolesKey              :: !(Maybe Text)
+  , _samloiMasterBackendRole     :: !(Maybe Text)
+  , _samloiSessionTimeoutMinutes :: !(Maybe Int)
+  , _samloiSubjectKey            :: !(Maybe Text)
+  } deriving (Eq, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'SAMLOptionsInput' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'samloiMasterUserName' - The SAML master username, which is stored in the Amazon Elasticsearch Service domain's internal database.
+--
+-- * 'samloiEnabled' - True if SAML is enabled.
+--
+-- * 'samloiIdp' - Specifies the SAML Identity Provider's information.
+--
+-- * 'samloiRolesKey' - The key to use for matching the SAML Roles attribute.
+--
+-- * 'samloiMasterBackendRole' - The backend role to which the SAML master user is mapped to.
+--
+-- * 'samloiSessionTimeoutMinutes' - The duration, in minutes, after which a user session becomes inactive. Acceptable values are between 1 and 1440, and the default value is 60.
+--
+-- * 'samloiSubjectKey' - The key to use for matching the SAML Subject attribute.
+sAMLOptionsInput
+    :: SAMLOptionsInput
+sAMLOptionsInput =
+  SAMLOptionsInput'
+    { _samloiMasterUserName = Nothing
+    , _samloiEnabled = Nothing
+    , _samloiIdp = Nothing
+    , _samloiRolesKey = Nothing
+    , _samloiMasterBackendRole = Nothing
+    , _samloiSessionTimeoutMinutes = Nothing
+    , _samloiSubjectKey = Nothing
+    }
+
+
+-- | The SAML master username, which is stored in the Amazon Elasticsearch Service domain's internal database.
+samloiMasterUserName :: Lens' SAMLOptionsInput (Maybe Text)
+samloiMasterUserName = lens _samloiMasterUserName (\ s a -> s{_samloiMasterUserName = a}) . mapping _Sensitive
+
+-- | True if SAML is enabled.
+samloiEnabled :: Lens' SAMLOptionsInput (Maybe Bool)
+samloiEnabled = lens _samloiEnabled (\ s a -> s{_samloiEnabled = a})
+
+-- | Specifies the SAML Identity Provider's information.
+samloiIdp :: Lens' SAMLOptionsInput (Maybe SAMLIdp)
+samloiIdp = lens _samloiIdp (\ s a -> s{_samloiIdp = a})
+
+-- | The key to use for matching the SAML Roles attribute.
+samloiRolesKey :: Lens' SAMLOptionsInput (Maybe Text)
+samloiRolesKey = lens _samloiRolesKey (\ s a -> s{_samloiRolesKey = a})
+
+-- | The backend role to which the SAML master user is mapped to.
+samloiMasterBackendRole :: Lens' SAMLOptionsInput (Maybe Text)
+samloiMasterBackendRole = lens _samloiMasterBackendRole (\ s a -> s{_samloiMasterBackendRole = a})
+
+-- | The duration, in minutes, after which a user session becomes inactive. Acceptable values are between 1 and 1440, and the default value is 60.
+samloiSessionTimeoutMinutes :: Lens' SAMLOptionsInput (Maybe Int)
+samloiSessionTimeoutMinutes = lens _samloiSessionTimeoutMinutes (\ s a -> s{_samloiSessionTimeoutMinutes = a})
+
+-- | The key to use for matching the SAML Subject attribute.
+samloiSubjectKey :: Lens' SAMLOptionsInput (Maybe Text)
+samloiSubjectKey = lens _samloiSubjectKey (\ s a -> s{_samloiSubjectKey = a})
+
+instance Hashable SAMLOptionsInput where
+
+instance NFData SAMLOptionsInput where
+
+instance ToJSON SAMLOptionsInput where
+        toJSON SAMLOptionsInput'{..}
+          = object
+              (catMaybes
+                 [("MasterUserName" .=) <$> _samloiMasterUserName,
+                  ("Enabled" .=) <$> _samloiEnabled,
+                  ("Idp" .=) <$> _samloiIdp,
+                  ("RolesKey" .=) <$> _samloiRolesKey,
+                  ("MasterBackendRole" .=) <$>
+                    _samloiMasterBackendRole,
+                  ("SessionTimeoutMinutes" .=) <$>
+                    _samloiSessionTimeoutMinutes,
+                  ("SubjectKey" .=) <$> _samloiSubjectKey])
+
+-- | Describes the SAML application configured for the domain.
+--
+--
+--
+-- /See:/ 'sAMLOptionsOutput' smart constructor.
+data SAMLOptionsOutput = SAMLOptionsOutput'
+  { _samlooEnabled               :: !(Maybe Bool)
+  , _samlooIdp                   :: !(Maybe SAMLIdp)
+  , _samlooRolesKey              :: !(Maybe Text)
+  , _samlooSessionTimeoutMinutes :: !(Maybe Int)
+  , _samlooSubjectKey            :: !(Maybe Text)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'SAMLOptionsOutput' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'samlooEnabled' - True if SAML is enabled.
+--
+-- * 'samlooIdp' - Describes the SAML Identity Provider's information.
+--
+-- * 'samlooRolesKey' - The key used for matching the SAML Roles attribute.
+--
+-- * 'samlooSessionTimeoutMinutes' - The duration, in minutes, after which a user session becomes inactive.
+--
+-- * 'samlooSubjectKey' - The key used for matching the SAML Subject attribute.
+sAMLOptionsOutput
+    :: SAMLOptionsOutput
+sAMLOptionsOutput =
+  SAMLOptionsOutput'
+    { _samlooEnabled = Nothing
+    , _samlooIdp = Nothing
+    , _samlooRolesKey = Nothing
+    , _samlooSessionTimeoutMinutes = Nothing
+    , _samlooSubjectKey = Nothing
+    }
+
+
+-- | True if SAML is enabled.
+samlooEnabled :: Lens' SAMLOptionsOutput (Maybe Bool)
+samlooEnabled = lens _samlooEnabled (\ s a -> s{_samlooEnabled = a})
+
+-- | Describes the SAML Identity Provider's information.
+samlooIdp :: Lens' SAMLOptionsOutput (Maybe SAMLIdp)
+samlooIdp = lens _samlooIdp (\ s a -> s{_samlooIdp = a})
+
+-- | The key used for matching the SAML Roles attribute.
+samlooRolesKey :: Lens' SAMLOptionsOutput (Maybe Text)
+samlooRolesKey = lens _samlooRolesKey (\ s a -> s{_samlooRolesKey = a})
+
+-- | The duration, in minutes, after which a user session becomes inactive.
+samlooSessionTimeoutMinutes :: Lens' SAMLOptionsOutput (Maybe Int)
+samlooSessionTimeoutMinutes = lens _samlooSessionTimeoutMinutes (\ s a -> s{_samlooSessionTimeoutMinutes = a})
+
+-- | The key used for matching the SAML Subject attribute.
+samlooSubjectKey :: Lens' SAMLOptionsOutput (Maybe Text)
+samlooSubjectKey = lens _samlooSubjectKey (\ s a -> s{_samlooSubjectKey = a})
+
+instance FromJSON SAMLOptionsOutput where
+        parseJSON
+          = withObject "SAMLOptionsOutput"
+              (\ x ->
+                 SAMLOptionsOutput' <$>
+                   (x .:? "Enabled") <*> (x .:? "Idp") <*>
+                     (x .:? "RolesKey")
+                     <*> (x .:? "SessionTimeoutMinutes")
+                     <*> (x .:? "SubjectKey"))
+
+instance Hashable SAMLOptionsOutput where
+
+instance NFData SAMLOptionsOutput where
+
+-- | The current options of an Elasticsearch domain service software options.
+--
+--
+--
+-- /See:/ 'serviceSoftwareOptions' smart constructor.
+data ServiceSoftwareOptions = ServiceSoftwareOptions'
+  { _ssoAutomatedUpdateDate :: !(Maybe POSIX)
+  , _ssoCurrentVersion      :: !(Maybe Text)
+  , _ssoOptionalDeployment  :: !(Maybe Bool)
+  , _ssoUpdateStatus        :: !(Maybe DeploymentStatus)
+  , _ssoCancellable         :: !(Maybe Bool)
+  , _ssoUpdateAvailable     :: !(Maybe Bool)
+  , _ssoDescription         :: !(Maybe Text)
+  , _ssoNewVersion          :: !(Maybe Text)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'ServiceSoftwareOptions' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'ssoAutomatedUpdateDate' - Timestamp, in Epoch time, until which you can manually request a service software update. After this date, we automatically update your service software.
+--
+-- * 'ssoCurrentVersion' - The current service software version that is present on the domain.
+--
+-- * 'ssoOptionalDeployment' - @True@ if a service software is never automatically updated. @False@ if a service software is automatically updated after @AutomatedUpdateDate@ .
+--
+-- * 'ssoUpdateStatus' - The status of your service software update. This field can take the following values: @ELIGIBLE@ , @PENDING_UPDATE@ , @IN_PROGRESS@ , @COMPLETED@ , and @NOT_ELIGIBLE@ .
+--
+-- * 'ssoCancellable' - @True@ if you are able to cancel your service software version update. @False@ if you are not able to cancel your service software version.
+--
+-- * 'ssoUpdateAvailable' - @True@ if you are able to update you service software version. @False@ if you are not able to update your service software version.
+--
+-- * 'ssoDescription' - The description of the @UpdateStatus@ .
+--
+-- * 'ssoNewVersion' - The new service software version if one is available.
+serviceSoftwareOptions
+    :: ServiceSoftwareOptions
+serviceSoftwareOptions =
+  ServiceSoftwareOptions'
+    { _ssoAutomatedUpdateDate = Nothing
+    , _ssoCurrentVersion = Nothing
+    , _ssoOptionalDeployment = Nothing
+    , _ssoUpdateStatus = Nothing
+    , _ssoCancellable = Nothing
+    , _ssoUpdateAvailable = Nothing
+    , _ssoDescription = Nothing
+    , _ssoNewVersion = Nothing
+    }
+
+
+-- | Timestamp, in Epoch time, until which you can manually request a service software update. After this date, we automatically update your service software.
+ssoAutomatedUpdateDate :: Lens' ServiceSoftwareOptions (Maybe UTCTime)
+ssoAutomatedUpdateDate = lens _ssoAutomatedUpdateDate (\ s a -> s{_ssoAutomatedUpdateDate = a}) . mapping _Time
+
+-- | The current service software version that is present on the domain.
+ssoCurrentVersion :: Lens' ServiceSoftwareOptions (Maybe Text)
+ssoCurrentVersion = lens _ssoCurrentVersion (\ s a -> s{_ssoCurrentVersion = a})
+
+-- | @True@ if a service software is never automatically updated. @False@ if a service software is automatically updated after @AutomatedUpdateDate@ .
+ssoOptionalDeployment :: Lens' ServiceSoftwareOptions (Maybe Bool)
+ssoOptionalDeployment = lens _ssoOptionalDeployment (\ s a -> s{_ssoOptionalDeployment = a})
+
+-- | The status of your service software update. This field can take the following values: @ELIGIBLE@ , @PENDING_UPDATE@ , @IN_PROGRESS@ , @COMPLETED@ , and @NOT_ELIGIBLE@ .
+ssoUpdateStatus :: Lens' ServiceSoftwareOptions (Maybe DeploymentStatus)
+ssoUpdateStatus = lens _ssoUpdateStatus (\ s a -> s{_ssoUpdateStatus = a})
+
+-- | @True@ if you are able to cancel your service software version update. @False@ if you are not able to cancel your service software version.
+ssoCancellable :: Lens' ServiceSoftwareOptions (Maybe Bool)
+ssoCancellable = lens _ssoCancellable (\ s a -> s{_ssoCancellable = a})
+
+-- | @True@ if you are able to update you service software version. @False@ if you are not able to update your service software version.
+ssoUpdateAvailable :: Lens' ServiceSoftwareOptions (Maybe Bool)
+ssoUpdateAvailable = lens _ssoUpdateAvailable (\ s a -> s{_ssoUpdateAvailable = a})
+
+-- | The description of the @UpdateStatus@ .
+ssoDescription :: Lens' ServiceSoftwareOptions (Maybe Text)
+ssoDescription = lens _ssoDescription (\ s a -> s{_ssoDescription = a})
+
+-- | The new service software version if one is available.
+ssoNewVersion :: Lens' ServiceSoftwareOptions (Maybe Text)
+ssoNewVersion = lens _ssoNewVersion (\ s a -> s{_ssoNewVersion = a})
+
+instance FromJSON ServiceSoftwareOptions where
+        parseJSON
+          = withObject "ServiceSoftwareOptions"
+              (\ x ->
+                 ServiceSoftwareOptions' <$>
+                   (x .:? "AutomatedUpdateDate") <*>
+                     (x .:? "CurrentVersion")
+                     <*> (x .:? "OptionalDeployment")
+                     <*> (x .:? "UpdateStatus")
+                     <*> (x .:? "Cancellable")
+                     <*> (x .:? "UpdateAvailable")
+                     <*> (x .:? "Description")
+                     <*> (x .:? "NewVersion"))
+
+instance Hashable ServiceSoftwareOptions where
+
+instance NFData ServiceSoftwareOptions where
+
 -- | Specifies the time, in UTC format, when the service takes a daily automated snapshot of the specified Elasticsearch domain. Default value is @0@ hours.
 --
 --
@@ -1866,6 +3533,136 @@ instance ToJSON Tag where
                  [Just ("Key" .= _tagKey),
                   Just ("Value" .= _tagValue)])
 
+-- | History of the last 10 Upgrades and Upgrade Eligibility Checks.
+--
+--
+--
+-- /See:/ 'upgradeHistory' smart constructor.
+data UpgradeHistory = UpgradeHistory'
+  { _uhUpgradeStatus  :: !(Maybe UpgradeStatus)
+  , _uhStepsList      :: !(Maybe [UpgradeStepItem])
+  , _uhUpgradeName    :: !(Maybe Text)
+  , _uhStartTimestamp :: !(Maybe POSIX)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'UpgradeHistory' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'uhUpgradeStatus' - The overall status of the update. The status can take one of the following values:     * In Progress    * Succeeded    * Succeeded with Issues    * Failed
+--
+-- * 'uhStepsList' - A list of @'UpgradeStepItem' @ s representing information about each step performed as pard of a specific Upgrade or Upgrade Eligibility Check.
+--
+-- * 'uhUpgradeName' - A string that describes the update briefly
+--
+-- * 'uhStartTimestamp' - UTC Timestamp at which the Upgrade API call was made in "yyyy-MM-ddTHH:mm:ssZ" format.
+upgradeHistory
+    :: UpgradeHistory
+upgradeHistory =
+  UpgradeHistory'
+    { _uhUpgradeStatus = Nothing
+    , _uhStepsList = Nothing
+    , _uhUpgradeName = Nothing
+    , _uhStartTimestamp = Nothing
+    }
+
+
+-- | The overall status of the update. The status can take one of the following values:     * In Progress    * Succeeded    * Succeeded with Issues    * Failed
+uhUpgradeStatus :: Lens' UpgradeHistory (Maybe UpgradeStatus)
+uhUpgradeStatus = lens _uhUpgradeStatus (\ s a -> s{_uhUpgradeStatus = a})
+
+-- | A list of @'UpgradeStepItem' @ s representing information about each step performed as pard of a specific Upgrade or Upgrade Eligibility Check.
+uhStepsList :: Lens' UpgradeHistory [UpgradeStepItem]
+uhStepsList = lens _uhStepsList (\ s a -> s{_uhStepsList = a}) . _Default . _Coerce
+
+-- | A string that describes the update briefly
+uhUpgradeName :: Lens' UpgradeHistory (Maybe Text)
+uhUpgradeName = lens _uhUpgradeName (\ s a -> s{_uhUpgradeName = a})
+
+-- | UTC Timestamp at which the Upgrade API call was made in "yyyy-MM-ddTHH:mm:ssZ" format.
+uhStartTimestamp :: Lens' UpgradeHistory (Maybe UTCTime)
+uhStartTimestamp = lens _uhStartTimestamp (\ s a -> s{_uhStartTimestamp = a}) . mapping _Time
+
+instance FromJSON UpgradeHistory where
+        parseJSON
+          = withObject "UpgradeHistory"
+              (\ x ->
+                 UpgradeHistory' <$>
+                   (x .:? "UpgradeStatus") <*>
+                     (x .:? "StepsList" .!= mempty)
+                     <*> (x .:? "UpgradeName")
+                     <*> (x .:? "StartTimestamp"))
+
+instance Hashable UpgradeHistory where
+
+instance NFData UpgradeHistory where
+
+-- | Represents a single step of the Upgrade or Upgrade Eligibility Check workflow.
+--
+--
+--
+-- /See:/ 'upgradeStepItem' smart constructor.
+data UpgradeStepItem = UpgradeStepItem'
+  { _usiUpgradeStepStatus :: !(Maybe UpgradeStatus)
+  , _usiProgressPercent   :: !(Maybe Double)
+  , _usiIssues            :: !(Maybe [Text])
+  , _usiUpgradeStep       :: !(Maybe UpgradeStep)
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'UpgradeStepItem' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'usiUpgradeStepStatus' - The status of a particular step during an upgrade. The status can take one of the following values:     * In Progress    * Succeeded    * Succeeded with Issues    * Failed
+--
+-- * 'usiProgressPercent' - The Floating point value representing progress percentage of a particular step.
+--
+-- * 'usiIssues' - A list of strings containing detailed information about the errors encountered in a particular step.
+--
+-- * 'usiUpgradeStep' - Represents one of 3 steps that an Upgrade or Upgrade Eligibility Check does through:     * PreUpgradeCheck    * Snapshot    * Upgrade
+upgradeStepItem
+    :: UpgradeStepItem
+upgradeStepItem =
+  UpgradeStepItem'
+    { _usiUpgradeStepStatus = Nothing
+    , _usiProgressPercent = Nothing
+    , _usiIssues = Nothing
+    , _usiUpgradeStep = Nothing
+    }
+
+
+-- | The status of a particular step during an upgrade. The status can take one of the following values:     * In Progress    * Succeeded    * Succeeded with Issues    * Failed
+usiUpgradeStepStatus :: Lens' UpgradeStepItem (Maybe UpgradeStatus)
+usiUpgradeStepStatus = lens _usiUpgradeStepStatus (\ s a -> s{_usiUpgradeStepStatus = a})
+
+-- | The Floating point value representing progress percentage of a particular step.
+usiProgressPercent :: Lens' UpgradeStepItem (Maybe Double)
+usiProgressPercent = lens _usiProgressPercent (\ s a -> s{_usiProgressPercent = a})
+
+-- | A list of strings containing detailed information about the errors encountered in a particular step.
+usiIssues :: Lens' UpgradeStepItem [Text]
+usiIssues = lens _usiIssues (\ s a -> s{_usiIssues = a}) . _Default . _Coerce
+
+-- | Represents one of 3 steps that an Upgrade or Upgrade Eligibility Check does through:     * PreUpgradeCheck    * Snapshot    * Upgrade
+usiUpgradeStep :: Lens' UpgradeStepItem (Maybe UpgradeStep)
+usiUpgradeStep = lens _usiUpgradeStep (\ s a -> s{_usiUpgradeStep = a})
+
+instance FromJSON UpgradeStepItem where
+        parseJSON
+          = withObject "UpgradeStepItem"
+              (\ x ->
+                 UpgradeStepItem' <$>
+                   (x .:? "UpgradeStepStatus") <*>
+                     (x .:? "ProgressPercent")
+                     <*> (x .:? "Issues" .!= mempty)
+                     <*> (x .:? "UpgradeStep"))
+
+instance Hashable UpgradeStepItem where
+
+instance NFData UpgradeStepItem where
+
 -- | Options to specify the subnets and security groups for VPC endpoint. For more information, see <http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html VPC Endpoints for Amazon Elasticsearch Service Domains> .
 --
 --
@@ -2017,3 +3814,45 @@ instance ToJSON VPCOptions where
               (catMaybes
                  [("SecurityGroupIds" .=) <$> _voSecurityGroupIds,
                   ("SubnetIds" .=) <$> _voSubnetIds])
+
+-- | Specifies the zone awareness configuration for the domain cluster, such as the number of availability zones.
+--
+--
+--
+-- /See:/ 'zoneAwarenessConfig' smart constructor.
+newtype ZoneAwarenessConfig = ZoneAwarenessConfig'
+  { _zacAvailabilityZoneCount :: Maybe Int
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+
+
+-- | Creates a value of 'ZoneAwarenessConfig' with the minimum fields required to make a request.
+--
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'zacAvailabilityZoneCount' - An integer value to indicate the number of availability zones for a domain when zone awareness is enabled. This should be equal to number of subnets if VPC endpoints is enabled
+zoneAwarenessConfig
+    :: ZoneAwarenessConfig
+zoneAwarenessConfig = ZoneAwarenessConfig' {_zacAvailabilityZoneCount = Nothing}
+
+
+-- | An integer value to indicate the number of availability zones for a domain when zone awareness is enabled. This should be equal to number of subnets if VPC endpoints is enabled
+zacAvailabilityZoneCount :: Lens' ZoneAwarenessConfig (Maybe Int)
+zacAvailabilityZoneCount = lens _zacAvailabilityZoneCount (\ s a -> s{_zacAvailabilityZoneCount = a})
+
+instance FromJSON ZoneAwarenessConfig where
+        parseJSON
+          = withObject "ZoneAwarenessConfig"
+              (\ x ->
+                 ZoneAwarenessConfig' <$>
+                   (x .:? "AvailabilityZoneCount"))
+
+instance Hashable ZoneAwarenessConfig where
+
+instance NFData ZoneAwarenessConfig where
+
+instance ToJSON ZoneAwarenessConfig where
+        toJSON ZoneAwarenessConfig'{..}
+          = object
+              (catMaybes
+                 [("AvailabilityZoneCount" .=) <$>
+                    _zacAvailabilityZoneCount])

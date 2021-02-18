@@ -17,16 +17,34 @@ module Network.AWS.ElasticSearch.Types
 
     -- * Errors
     , _ValidationException
+    , _AccessDeniedException
     , _ResourceAlreadyExistsException
+    , _ConflictException
     , _BaseException
     , _DisabledOperationException
     , _InternalException
     , _InvalidTypeException
     , _ResourceNotFoundException
+    , _InvalidPaginationTokenException
     , _LimitExceededException
+
+    -- * DeploymentStatus
+    , DeploymentStatus (..)
+
+    -- * DescribePackagesFilterName
+    , DescribePackagesFilterName (..)
+
+    -- * DomainPackageStatus
+    , DomainPackageStatus (..)
 
     -- * ESPartitionInstanceType
     , ESPartitionInstanceType (..)
+
+    -- * ESWarmPartitionInstanceType
+    , ESWarmPartitionInstanceType (..)
+
+    -- * InboundCrossClusterSearchConnectionStatusCode
+    , InboundCrossClusterSearchConnectionStatusCode (..)
 
     -- * LogType
     , LogType (..)
@@ -34,8 +52,26 @@ module Network.AWS.ElasticSearch.Types
     -- * OptionState
     , OptionState (..)
 
+    -- * OutboundCrossClusterSearchConnectionStatusCode
+    , OutboundCrossClusterSearchConnectionStatusCode (..)
+
+    -- * PackageStatus
+    , PackageStatus (..)
+
+    -- * PackageType
+    , PackageType (..)
+
     -- * ReservedElasticsearchInstancePaymentOption
     , ReservedElasticsearchInstancePaymentOption (..)
+
+    -- * TLSSecurityPolicy
+    , TLSSecurityPolicy (..)
+
+    -- * UpgradeStatus
+    , UpgradeStatus (..)
+
+    -- * UpgradeStep
+    , UpgradeStep (..)
 
     -- * VolumeType
     , VolumeType (..)
@@ -58,6 +94,27 @@ module Network.AWS.ElasticSearch.Types
     , aosOptions
     , aosStatus
 
+    -- * AdvancedSecurityOptions
+    , AdvancedSecurityOptions
+    , advancedSecurityOptions
+    , asoEnabled
+    , asoInternalUserDatabaseEnabled
+    , asoSAMLOptions
+
+    -- * AdvancedSecurityOptionsInput
+    , AdvancedSecurityOptionsInput
+    , advancedSecurityOptionsInput
+    , asoiEnabled
+    , asoiInternalUserDatabaseEnabled
+    , asoiMasterUserOptions
+    , asoiSAMLOptions
+
+    -- * AdvancedSecurityOptionsStatus
+    , AdvancedSecurityOptionsStatus
+    , advancedSecurityOptionsStatus
+    , asosOptions
+    , asosStatus
+
     -- * CognitoOptions
     , CognitoOptions
     , cognitoOptions
@@ -72,10 +129,57 @@ module Network.AWS.ElasticSearch.Types
     , cosOptions
     , cosStatus
 
+    -- * CompatibleVersionsMap
+    , CompatibleVersionsMap
+    , compatibleVersionsMap
+    , cvmSourceVersion
+    , cvmTargetVersions
+
+    -- * DescribePackagesFilter
+    , DescribePackagesFilter
+    , describePackagesFilter
+    , dpfValue
+    , dpfName
+
+    -- * DomainEndpointOptions
+    , DomainEndpointOptions
+    , domainEndpointOptions
+    , deoEnforceHTTPS
+    , deoTLSSecurityPolicy
+    , deoCustomEndpointEnabled
+    , deoCustomEndpoint
+    , deoCustomEndpointCertificateARN
+
+    -- * DomainEndpointOptionsStatus
+    , DomainEndpointOptionsStatus
+    , domainEndpointOptionsStatus
+    , deosOptions
+    , deosStatus
+
     -- * DomainInfo
     , DomainInfo
     , domainInfo
+    , dDomainName
+
+    -- * DomainInformation
+    , DomainInformation
+    , domainInformation
+    , diOwnerId
+    , diRegion
     , diDomainName
+
+    -- * DomainPackageDetails
+    , DomainPackageDetails
+    , domainPackageDetails
+    , dpdLastUpdated
+    , dpdPackageId
+    , dpdPackageType
+    , dpdPackageName
+    , dpdPackageVersion
+    , dpdDomainPackageStatus
+    , dpdDomainName
+    , dpdErrorDetails
+    , dpdReferencePath
 
     -- * EBSOptions
     , EBSOptions
@@ -100,6 +204,10 @@ module Network.AWS.ElasticSearch.Types
     , eccInstanceCount
     , eccZoneAwarenessEnabled
     , eccInstanceType
+    , eccWarmEnabled
+    , eccZoneAwarenessConfig
+    , eccWarmCount
+    , eccWarmType
 
     -- * ElasticsearchClusterConfigStatus
     , ElasticsearchClusterConfigStatus
@@ -111,13 +219,16 @@ module Network.AWS.ElasticSearch.Types
     , ElasticsearchDomainConfig
     , elasticsearchDomainConfig
     , edcEBSOptions
+    , edcNodeToNodeEncryptionOptions
     , edcAccessPolicies
     , edcLogPublishingOptions
+    , edcAdvancedSecurityOptions
     , edcElasticsearchClusterConfig
     , edcSnapshotOptions
     , edcCognitoOptions
     , edcEncryptionAtRestOptions
     , edcVPCOptions
+    , edcDomainEndpointOptions
     , edcAdvancedOptions
     , edcElasticsearchVersion
 
@@ -125,8 +236,11 @@ module Network.AWS.ElasticSearch.Types
     , ElasticsearchDomainStatus
     , elasticsearchDomainStatus
     , edsEBSOptions
+    , edsNodeToNodeEncryptionOptions
     , edsAccessPolicies
+    , edsServiceSoftwareOptions
     , edsLogPublishingOptions
+    , edsAdvancedSecurityOptions
     , edsCreated
     , edsSnapshotOptions
     , edsCognitoOptions
@@ -134,8 +248,10 @@ module Network.AWS.ElasticSearch.Types
     , edsDeleted
     , edsVPCOptions
     , edsEndpoints
+    , edsDomainEndpointOptions
     , edsProcessing
     , edsEndpoint
+    , edsUpgradeProcessing
     , edsAdvancedOptions
     , edsElasticsearchVersion
     , edsDomainId
@@ -160,6 +276,32 @@ module Network.AWS.ElasticSearch.Types
     , encryptionAtRestOptionsStatus
     , earosOptions
     , earosStatus
+
+    -- * ErrorDetails
+    , ErrorDetails
+    , errorDetails
+    , edErrorType
+    , edErrorMessage
+
+    -- * Filter
+    , Filter
+    , filter'
+    , fValues
+    , fName
+
+    -- * InboundCrossClusterSearchConnection
+    , InboundCrossClusterSearchConnection
+    , inboundCrossClusterSearchConnection
+    , iccscDestinationDomainInfo
+    , iccscCrossClusterSearchConnectionId
+    , iccscConnectionStatus
+    , iccscSourceDomainInfo
+
+    -- * InboundCrossClusterSearchConnectionStatus
+    , InboundCrossClusterSearchConnectionStatus
+    , inboundCrossClusterSearchConnectionStatus
+    , iccscsMessage
+    , iccscsStatusCode
 
     -- * InstanceCountLimits
     , InstanceCountLimits
@@ -191,6 +333,24 @@ module Network.AWS.ElasticSearch.Types
     , lposStatus
     , lposOptions
 
+    -- * MasterUserOptions
+    , MasterUserOptions
+    , masterUserOptions
+    , muoMasterUserPassword
+    , muoMasterUserName
+    , muoMasterUserARN
+
+    -- * NodeToNodeEncryptionOptions
+    , NodeToNodeEncryptionOptions
+    , nodeToNodeEncryptionOptions
+    , ntneoEnabled
+
+    -- * NodeToNodeEncryptionOptionsStatus
+    , NodeToNodeEncryptionOptionsStatus
+    , nodeToNodeEncryptionOptionsStatus
+    , ntneosOptions
+    , ntneosStatus
+
     -- * OptionStatus
     , OptionStatus
     , optionStatus
@@ -199,6 +359,47 @@ module Network.AWS.ElasticSearch.Types
     , osCreationDate
     , osUpdateDate
     , osState
+
+    -- * OutboundCrossClusterSearchConnection
+    , OutboundCrossClusterSearchConnection
+    , outboundCrossClusterSearchConnection
+    , occscDestinationDomainInfo
+    , occscConnectionAlias
+    , occscCrossClusterSearchConnectionId
+    , occscConnectionStatus
+    , occscSourceDomainInfo
+
+    -- * OutboundCrossClusterSearchConnectionStatus
+    , OutboundCrossClusterSearchConnectionStatus
+    , outboundCrossClusterSearchConnectionStatus
+    , occscsMessage
+    , occscsStatusCode
+
+    -- * PackageDetails
+    , PackageDetails
+    , packageDetails
+    , pdPackageId
+    , pdPackageType
+    , pdLastUpdatedAt
+    , pdCreatedAt
+    , pdPackageName
+    , pdPackageStatus
+    , pdPackageDescription
+    , pdErrorDetails
+    , pdAvailablePackageVersion
+
+    -- * PackageSource
+    , PackageSource
+    , packageSource
+    , psS3Key
+    , psS3BucketName
+
+    -- * PackageVersionHistory
+    , PackageVersionHistory
+    , packageVersionHistory
+    , pvhCreatedAt
+    , pvhPackageVersion
+    , pvhCommitMessage
 
     -- * RecurringCharge
     , RecurringCharge
@@ -235,6 +436,44 @@ module Network.AWS.ElasticSearch.Types
     , reioDuration
     , reioPaymentOption
 
+    -- * SAMLIdp
+    , SAMLIdp
+    , sAMLIdp
+    , samliMetadataContent
+    , samliEntityId
+
+    -- * SAMLOptionsInput
+    , SAMLOptionsInput
+    , sAMLOptionsInput
+    , samloiMasterUserName
+    , samloiEnabled
+    , samloiIdp
+    , samloiRolesKey
+    , samloiMasterBackendRole
+    , samloiSessionTimeoutMinutes
+    , samloiSubjectKey
+
+    -- * SAMLOptionsOutput
+    , SAMLOptionsOutput
+    , sAMLOptionsOutput
+    , samlooEnabled
+    , samlooIdp
+    , samlooRolesKey
+    , samlooSessionTimeoutMinutes
+    , samlooSubjectKey
+
+    -- * ServiceSoftwareOptions
+    , ServiceSoftwareOptions
+    , serviceSoftwareOptions
+    , ssoAutomatedUpdateDate
+    , ssoCurrentVersion
+    , ssoOptionalDeployment
+    , ssoUpdateStatus
+    , ssoCancellable
+    , ssoUpdateAvailable
+    , ssoDescription
+    , ssoNewVersion
+
     -- * SnapshotOptions
     , SnapshotOptions
     , snapshotOptions
@@ -265,6 +504,22 @@ module Network.AWS.ElasticSearch.Types
     , tagKey
     , tagValue
 
+    -- * UpgradeHistory
+    , UpgradeHistory
+    , upgradeHistory
+    , uhUpgradeStatus
+    , uhStepsList
+    , uhUpgradeName
+    , uhStartTimestamp
+
+    -- * UpgradeStepItem
+    , UpgradeStepItem
+    , upgradeStepItem
+    , usiUpgradeStepStatus
+    , usiProgressPercent
+    , usiIssues
+    , usiUpgradeStep
+
     -- * VPCDerivedInfo
     , VPCDerivedInfo
     , vpcDerivedInfo
@@ -284,6 +539,11 @@ module Network.AWS.ElasticSearch.Types
     , vpcOptions
     , voSecurityGroupIds
     , voSubnetIds
+
+    -- * ZoneAwarenessConfig
+    , ZoneAwarenessConfig
+    , zoneAwarenessConfig
+    , zacAvailabilityZoneCount
     ) where
 
 import Network.AWS.ElasticSearch.Types.Product
@@ -339,6 +599,14 @@ _ValidationException =
   _MatchServiceError elasticSearch "ValidationException" . hasStatus 400
 
 
+-- | An error occurred because user does not have permissions to access the resource. Returns HTTP status code 403.
+--
+--
+_AccessDeniedException :: AsError a => Getting (First ServiceError) a ServiceError
+_AccessDeniedException =
+  _MatchServiceError elasticSearch "AccessDeniedException" . hasStatus 403
+
+
 -- | An exception for creating a resource that already exists. Gives http status code of 400.
 --
 --
@@ -346,6 +614,14 @@ _ResourceAlreadyExistsException :: AsError a => Getting (First ServiceError) a S
 _ResourceAlreadyExistsException =
   _MatchServiceError elasticSearch "ResourceAlreadyExistsException" .
   hasStatus 409
+
+
+-- | An error occurred because the client attempts to remove a resource that is currently in use. Returns HTTP status code 409.
+--
+--
+_ConflictException :: AsError a => Getting (First ServiceError) a ServiceError
+_ConflictException =
+  _MatchServiceError elasticSearch "ConflictException" . hasStatus 409
 
 
 -- | An error occurred while processing the request.
@@ -385,6 +661,15 @@ _InvalidTypeException =
 _ResourceNotFoundException :: AsError a => Getting (First ServiceError) a ServiceError
 _ResourceNotFoundException =
   _MatchServiceError elasticSearch "ResourceNotFoundException" . hasStatus 409
+
+
+-- | The request processing has failed because of invalid pagination token provided by customer. Returns an HTTP status code of 400.
+--
+--
+_InvalidPaginationTokenException :: AsError a => Getting (First ServiceError) a ServiceError
+_InvalidPaginationTokenException =
+  _MatchServiceError elasticSearch "InvalidPaginationTokenException" .
+  hasStatus 400
 
 
 -- | An exception for trying to create more than allowed resources or sub-resources. Gives http status code of 409.

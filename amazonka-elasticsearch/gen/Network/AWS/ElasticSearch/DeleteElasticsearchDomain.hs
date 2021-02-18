@@ -27,14 +27,14 @@ module Network.AWS.ElasticSearch.DeleteElasticsearchDomain
       deleteElasticsearchDomain
     , DeleteElasticsearchDomain
     -- * Request Lenses
-    , dDomainName
+    , delDomainName
 
     -- * Destructuring the Response
     , deleteElasticsearchDomainResponse
     , DeleteElasticsearchDomainResponse
     -- * Response Lenses
-    , delrsDomainStatus
-    , delrsResponseStatus
+    , dedersDomainStatus
+    , dedersResponseStatus
     ) where
 
 import Network.AWS.ElasticSearch.Types
@@ -50,7 +50,7 @@ import Network.AWS.Response
 --
 -- /See:/ 'deleteElasticsearchDomain' smart constructor.
 newtype DeleteElasticsearchDomain = DeleteElasticsearchDomain'
-  { _dDomainName :: Text
+  { _delDomainName :: Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -58,17 +58,17 @@ newtype DeleteElasticsearchDomain = DeleteElasticsearchDomain'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dDomainName' - The name of the Elasticsearch domain that you want to permanently delete.
+-- * 'delDomainName' - The name of the Elasticsearch domain that you want to permanently delete.
 deleteElasticsearchDomain
-    :: Text -- ^ 'dDomainName'
+    :: Text -- ^ 'delDomainName'
     -> DeleteElasticsearchDomain
 deleteElasticsearchDomain pDomainName_ =
-  DeleteElasticsearchDomain' {_dDomainName = pDomainName_}
+  DeleteElasticsearchDomain' {_delDomainName = pDomainName_}
 
 
 -- | The name of the Elasticsearch domain that you want to permanently delete.
-dDomainName :: Lens' DeleteElasticsearchDomain Text
-dDomainName = lens _dDomainName (\ s a -> s{_dDomainName = a})
+delDomainName :: Lens' DeleteElasticsearchDomain Text
+delDomainName = lens _delDomainName (\ s a -> s{_delDomainName = a})
 
 instance AWSRequest DeleteElasticsearchDomain where
         type Rs DeleteElasticsearchDomain =
@@ -90,7 +90,7 @@ instance ToHeaders DeleteElasticsearchDomain where
 instance ToPath DeleteElasticsearchDomain where
         toPath DeleteElasticsearchDomain'{..}
           = mconcat
-              ["/2015-01-01/es/domain/", toBS _dDomainName]
+              ["/2015-01-01/es/domain/", toBS _delDomainName]
 
 instance ToQuery DeleteElasticsearchDomain where
         toQuery = const mempty
@@ -101,8 +101,8 @@ instance ToQuery DeleteElasticsearchDomain where
 --
 -- /See:/ 'deleteElasticsearchDomainResponse' smart constructor.
 data DeleteElasticsearchDomainResponse = DeleteElasticsearchDomainResponse'
-  { _delrsDomainStatus   :: !(Maybe ElasticsearchDomainStatus)
-  , _delrsResponseStatus :: !Int
+  { _dedersDomainStatus   :: !(Maybe ElasticsearchDomainStatus)
+  , _dedersResponseStatus :: !Int
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -110,24 +110,24 @@ data DeleteElasticsearchDomainResponse = DeleteElasticsearchDomainResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'delrsDomainStatus' - The status of the Elasticsearch domain being deleted.
+-- * 'dedersDomainStatus' - The status of the Elasticsearch domain being deleted.
 --
--- * 'delrsResponseStatus' - -- | The response status code.
+-- * 'dedersResponseStatus' - -- | The response status code.
 deleteElasticsearchDomainResponse
-    :: Int -- ^ 'delrsResponseStatus'
+    :: Int -- ^ 'dedersResponseStatus'
     -> DeleteElasticsearchDomainResponse
 deleteElasticsearchDomainResponse pResponseStatus_ =
   DeleteElasticsearchDomainResponse'
-    {_delrsDomainStatus = Nothing, _delrsResponseStatus = pResponseStatus_}
+    {_dedersDomainStatus = Nothing, _dedersResponseStatus = pResponseStatus_}
 
 
 -- | The status of the Elasticsearch domain being deleted.
-delrsDomainStatus :: Lens' DeleteElasticsearchDomainResponse (Maybe ElasticsearchDomainStatus)
-delrsDomainStatus = lens _delrsDomainStatus (\ s a -> s{_delrsDomainStatus = a})
+dedersDomainStatus :: Lens' DeleteElasticsearchDomainResponse (Maybe ElasticsearchDomainStatus)
+dedersDomainStatus = lens _dedersDomainStatus (\ s a -> s{_dedersDomainStatus = a})
 
 -- | -- | The response status code.
-delrsResponseStatus :: Lens' DeleteElasticsearchDomainResponse Int
-delrsResponseStatus = lens _delrsResponseStatus (\ s a -> s{_delrsResponseStatus = a})
+dedersResponseStatus :: Lens' DeleteElasticsearchDomainResponse Int
+dedersResponseStatus = lens _dedersResponseStatus (\ s a -> s{_dedersResponseStatus = a})
 
 instance NFData DeleteElasticsearchDomainResponse
          where

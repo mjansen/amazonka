@@ -33,8 +33,8 @@ module Network.AWS.ElasticSearch.DescribeElasticsearchDomains
     , describeElasticsearchDomainsResponse
     , DescribeElasticsearchDomainsResponse
     -- * Response Lenses
-    , drsResponseStatus
-    , drsDomainStatusList
+    , dedsrsResponseStatus
+    , dedsrsDomainStatusList
     ) where
 
 import Network.AWS.ElasticSearch.Types
@@ -105,8 +105,8 @@ instance ToQuery DescribeElasticsearchDomains where
 --
 -- /See:/ 'describeElasticsearchDomainsResponse' smart constructor.
 data DescribeElasticsearchDomainsResponse = DescribeElasticsearchDomainsResponse'
-  { _drsResponseStatus   :: !Int
-  , _drsDomainStatusList :: ![ElasticsearchDomainStatus]
+  { _dedsrsResponseStatus   :: !Int
+  , _dedsrsDomainStatusList :: ![ElasticsearchDomainStatus]
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -114,24 +114,24 @@ data DescribeElasticsearchDomainsResponse = DescribeElasticsearchDomainsResponse
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'drsResponseStatus' - -- | The response status code.
+-- * 'dedsrsResponseStatus' - -- | The response status code.
 --
--- * 'drsDomainStatusList' - The status of the domains requested in the @DescribeElasticsearchDomains@ request.
+-- * 'dedsrsDomainStatusList' - The status of the domains requested in the @DescribeElasticsearchDomains@ request.
 describeElasticsearchDomainsResponse
-    :: Int -- ^ 'drsResponseStatus'
+    :: Int -- ^ 'dedsrsResponseStatus'
     -> DescribeElasticsearchDomainsResponse
 describeElasticsearchDomainsResponse pResponseStatus_ =
   DescribeElasticsearchDomainsResponse'
-    {_drsResponseStatus = pResponseStatus_, _drsDomainStatusList = mempty}
+    {_dedsrsResponseStatus = pResponseStatus_, _dedsrsDomainStatusList = mempty}
 
 
 -- | -- | The response status code.
-drsResponseStatus :: Lens' DescribeElasticsearchDomainsResponse Int
-drsResponseStatus = lens _drsResponseStatus (\ s a -> s{_drsResponseStatus = a})
+dedsrsResponseStatus :: Lens' DescribeElasticsearchDomainsResponse Int
+dedsrsResponseStatus = lens _dedsrsResponseStatus (\ s a -> s{_dedsrsResponseStatus = a})
 
 -- | The status of the domains requested in the @DescribeElasticsearchDomains@ request.
-drsDomainStatusList :: Lens' DescribeElasticsearchDomainsResponse [ElasticsearchDomainStatus]
-drsDomainStatusList = lens _drsDomainStatusList (\ s a -> s{_drsDomainStatusList = a}) . _Coerce
+dedsrsDomainStatusList :: Lens' DescribeElasticsearchDomainsResponse [ElasticsearchDomainStatus]
+dedsrsDomainStatusList = lens _dedsrsDomainStatusList (\ s a -> s{_dedsrsDomainStatusList = a}) . _Coerce
 
 instance NFData DescribeElasticsearchDomainsResponse
          where
