@@ -2,11 +2,13 @@ SERVICES  ?= $(wildcard amazonka-*)
 LIBRARIES ?= core amazonka test $(SERVICES)
 FORWARD   := upload upload-docs
 
+STACK  := stack --system-ghc
+
 build:
-	stack build --fast
+	$(STACK) build --fast
 
 clean:
-	stack clean
+	$(STACK) clean
 
 define forward
 $1: $$(addprefix $1-,$$(LIBRARIES))
@@ -22,10 +24,10 @@ $(foreach c,$(FORWARD),$(eval $(call forward, $c)))
 .PHONY: $(LIBRARIES)
 
 amazonka:
-	stack build --fast amazonka
+	$(STACK) build --fast amazonka
 
 core:
-	stack build --fast amazonka-core
+	$(STACK) build --fast amazonka-core
 
 $(SERVICES):
-	stack build --fast $@
+	$(STACK) build --fast $@

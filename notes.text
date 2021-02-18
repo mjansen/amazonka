@@ -1,0 +1,4 @@
+nix-shell -p "haskell.compiler.ghc822Binary"
+stack --system-ghc build
+nix-shell -p "haskell.compiler.ghc822Binary" -p zlib -p icu -p gcc -p stylish-haskell
+export LD_LIBRARY_PATH=/nix/store/z39zr65hrbimzh40mxmdbpz64ma4b5vy-zlib-1.2.11/lib:/nix/store/yka9h73v6n9g8s66j8vlsysiybqmrlpf-icu4c-67.1/lib:/nix/store/z39zr65hrbimzh40mxmdbpz64ma4b5vy-zlib-1.2.11/lib:/nix/store/yka9h73v6n9g8s66j8vlsysiybqmrlpf-icu4c-67.1/lib
