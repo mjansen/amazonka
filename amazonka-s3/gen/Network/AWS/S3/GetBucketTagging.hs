@@ -19,12 +19,35 @@
 -- Portability : non-portable (GHC extensions)
 --
 -- Returns the tag set associated with the bucket.
+--
+--
+-- To use this operation, you must have permission to perform the @s3:GetBucketTagging@ action. By default, the bucket owner has this permission and can grant this permission to others.
+--
+-- @GetBucketTagging@ has the following special error:
+--
+--     * Error code: @NoSuchTagSetError@
+--
+--     * Description: There is no tag set associated with the bucket.
+--
+--
+--
+--
+--
+-- The following operations are related to @GetBucketTagging@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html PutBucketTagging>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketTagging.html DeleteBucketTagging>
+--
+--
+--
 module Network.AWS.S3.GetBucketTagging
     (
     -- * Creating a Request
       getBucketTagging
     , GetBucketTagging
     -- * Request Lenses
+    , gbtExpectedBucketOwner
     , gbtBucket
 
     -- * Destructuring the Response
@@ -43,8 +66,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'getBucketTagging' smart constructor.
-newtype GetBucketTagging = GetBucketTagging'
-  { _gbtBucket :: BucketName
+data GetBucketTagging = GetBucketTagging'
+  { _gbtExpectedBucketOwner :: !(Maybe Text)
+  , _gbtBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -52,14 +76,21 @@ newtype GetBucketTagging = GetBucketTagging'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'gbtBucket' - Undocumented member.
+-- * 'gbtExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'gbtBucket' - The name of the bucket for which to get the tagging information.
 getBucketTagging
     :: BucketName -- ^ 'gbtBucket'
     -> GetBucketTagging
-getBucketTagging pBucket_ = GetBucketTagging' {_gbtBucket = pBucket_}
+getBucketTagging pBucket_ =
+  GetBucketTagging' {_gbtExpectedBucketOwner = Nothing, _gbtBucket = pBucket_}
 
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+gbtExpectedBucketOwner :: Lens' GetBucketTagging (Maybe Text)
+gbtExpectedBucketOwner = lens _gbtExpectedBucketOwner (\ s a -> s{_gbtExpectedBucketOwner = a})
+
+-- | The name of the bucket for which to get the tagging information.
 gbtBucket :: Lens' GetBucketTagging BucketName
 gbtBucket = lens _gbtBucket (\ s a -> s{_gbtBucket = a})
 
@@ -78,7 +109,10 @@ instance Hashable GetBucketTagging where
 instance NFData GetBucketTagging where
 
 instance ToHeaders GetBucketTagging where
-        toHeaders = const mempty
+        toHeaders GetBucketTagging'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _gbtExpectedBucketOwner]
 
 instance ToPath GetBucketTagging where
         toPath GetBucketTagging'{..}
@@ -100,7 +134,7 @@ data GetBucketTaggingResponse = GetBucketTaggingResponse'
 --
 -- * 'gbtrsResponseStatus' - -- | The response status code.
 --
--- * 'gbtrsTagSet' - Undocumented member.
+-- * 'gbtrsTagSet' - Contains the tag set.
 getBucketTaggingResponse
     :: Int -- ^ 'gbtrsResponseStatus'
     -> GetBucketTaggingResponse
@@ -113,7 +147,7 @@ getBucketTaggingResponse pResponseStatus_ =
 gbtrsResponseStatus :: Lens' GetBucketTaggingResponse Int
 gbtrsResponseStatus = lens _gbtrsResponseStatus (\ s a -> s{_gbtrsResponseStatus = a})
 
--- | Undocumented member.
+-- | Contains the tag set.
 gbtrsTagSet :: Lens' GetBucketTaggingResponse [Tag]
 gbtrsTagSet = lens _gbtrsTagSet (\ s a -> s{_gbtrsTagSet = a}) . _Coerce
 

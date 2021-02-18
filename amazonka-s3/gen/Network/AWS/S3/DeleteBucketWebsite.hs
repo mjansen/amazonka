@@ -18,13 +18,28 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- This operation removes the website configuration from the bucket.
+-- This operation removes the website configuration for a bucket. Amazon S3 returns a @200 OK@ response upon successfully deleting a website configuration on the specified bucket. You will get a @200 OK@ response if the website configuration you are trying to delete does not exist on the bucket. Amazon S3 returns a @404@ response if the bucket specified in the request does not exist.
+--
+--
+-- This DELETE operation requires the @S3:DeleteBucketWebsite@ permission. By default, only the bucket owner can delete the website configuration attached to a bucket. However, bucket owners can grant other users permission to delete the website configuration by writing a bucket policy granting them the @S3:DeleteBucketWebsite@ permission.
+--
+-- For more information about hosting websites, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html Hosting Websites on Amazon S3> .
+--
+-- The following operations are related to @DeleteBucketWebsite@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketWebsite.html GetBucketWebsite>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketWebsite.html PutBucketWebsite>
+--
+--
+--
 module Network.AWS.S3.DeleteBucketWebsite
     (
     -- * Creating a Request
       deleteBucketWebsite
     , DeleteBucketWebsite
     -- * Request Lenses
+    , dbwExpectedBucketOwner
     , dbwBucket
 
     -- * Destructuring the Response
@@ -40,8 +55,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'deleteBucketWebsite' smart constructor.
-newtype DeleteBucketWebsite = DeleteBucketWebsite'
-  { _dbwBucket :: BucketName
+data DeleteBucketWebsite = DeleteBucketWebsite'
+  { _dbwExpectedBucketOwner :: !(Maybe Text)
+  , _dbwBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -49,14 +65,22 @@ newtype DeleteBucketWebsite = DeleteBucketWebsite'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dbwBucket' - Undocumented member.
+-- * 'dbwExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'dbwBucket' - The bucket name for which you want to remove the website configuration.
 deleteBucketWebsite
     :: BucketName -- ^ 'dbwBucket'
     -> DeleteBucketWebsite
-deleteBucketWebsite pBucket_ = DeleteBucketWebsite' {_dbwBucket = pBucket_}
+deleteBucketWebsite pBucket_ =
+  DeleteBucketWebsite'
+    {_dbwExpectedBucketOwner = Nothing, _dbwBucket = pBucket_}
 
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+dbwExpectedBucketOwner :: Lens' DeleteBucketWebsite (Maybe Text)
+dbwExpectedBucketOwner = lens _dbwExpectedBucketOwner (\ s a -> s{_dbwExpectedBucketOwner = a})
+
+-- | The bucket name for which you want to remove the website configuration.
 dbwBucket :: Lens' DeleteBucketWebsite BucketName
 dbwBucket = lens _dbwBucket (\ s a -> s{_dbwBucket = a})
 
@@ -71,7 +95,10 @@ instance Hashable DeleteBucketWebsite where
 instance NFData DeleteBucketWebsite where
 
 instance ToHeaders DeleteBucketWebsite where
-        toHeaders = const mempty
+        toHeaders DeleteBucketWebsite'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _dbwExpectedBucketOwner]
 
 instance ToPath DeleteBucketWebsite where
         toPath DeleteBucketWebsite'{..}

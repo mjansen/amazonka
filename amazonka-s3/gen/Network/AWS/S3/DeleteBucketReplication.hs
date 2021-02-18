@@ -19,12 +19,27 @@
 -- Portability : non-portable (GHC extensions)
 --
 -- Deletes the replication configuration from the bucket.
+--
+--
+-- To use this operation, you must have permissions to perform the @s3:PutReplicationConfiguration@ action. The bucket owner has these permissions by default and can grant it to others. For more information about permissions, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources Permissions Related to Bucket Subresource Operations> and <https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html Managing Access Permissions to Your Amazon S3 Resources> .
+--
+-- For information about replication configuration, see < https://docs.aws.amazon.com/AmazonS3/latest/dev/replication.html Replication> in the /Amazon S3 Developer Guide/ .
+--
+-- The following operations are related to @DeleteBucketReplication@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketReplication.html PutBucketReplication>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketReplication.html GetBucketReplication>
+--
+--
+--
 module Network.AWS.S3.DeleteBucketReplication
     (
     -- * Creating a Request
       deleteBucketReplication
     , DeleteBucketReplication
     -- * Request Lenses
+    , dbrExpectedBucketOwner
     , dbrBucket
 
     -- * Destructuring the Response
@@ -40,8 +55,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'deleteBucketReplication' smart constructor.
-newtype DeleteBucketReplication = DeleteBucketReplication'
-  { _dbrBucket :: BucketName
+data DeleteBucketReplication = DeleteBucketReplication'
+  { _dbrExpectedBucketOwner :: !(Maybe Text)
+  , _dbrBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -49,15 +65,22 @@ newtype DeleteBucketReplication = DeleteBucketReplication'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dbrBucket' - Undocumented member.
+-- * 'dbrExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'dbrBucket' - The bucket name.
 deleteBucketReplication
     :: BucketName -- ^ 'dbrBucket'
     -> DeleteBucketReplication
 deleteBucketReplication pBucket_ =
-  DeleteBucketReplication' {_dbrBucket = pBucket_}
+  DeleteBucketReplication'
+    {_dbrExpectedBucketOwner = Nothing, _dbrBucket = pBucket_}
 
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+dbrExpectedBucketOwner :: Lens' DeleteBucketReplication (Maybe Text)
+dbrExpectedBucketOwner = lens _dbrExpectedBucketOwner (\ s a -> s{_dbrExpectedBucketOwner = a})
+
+-- | The bucket name.
 dbrBucket :: Lens' DeleteBucketReplication BucketName
 dbrBucket = lens _dbrBucket (\ s a -> s{_dbrBucket = a})
 
@@ -73,7 +96,10 @@ instance Hashable DeleteBucketReplication where
 instance NFData DeleteBucketReplication where
 
 instance ToHeaders DeleteBucketReplication where
-        toHeaders = const mempty
+        toHeaders DeleteBucketReplication'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _dbrExpectedBucketOwner]
 
 instance ToPath DeleteBucketReplication where
         toPath DeleteBucketReplication'{..}

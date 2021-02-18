@@ -19,6 +19,8 @@
 -- Portability : non-portable (GHC extensions)
 --
 -- Returns a list of all buckets owned by the authenticated sender of the request.
+--
+--
 module Network.AWS.S3.ListBuckets
     (
     -- * Creating a Request
@@ -91,9 +93,9 @@ data ListBucketsResponse = ListBucketsResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'lbrsBuckets' - Undocumented member.
+-- * 'lbrsBuckets' - The list of buckets owned by the requestor.
 --
--- * 'lbrsOwner' - Undocumented member.
+-- * 'lbrsOwner' - The owner of the buckets listed.
 --
 -- * 'lbrsResponseStatus' - -- | The response status code.
 listBucketsResponse
@@ -107,11 +109,11 @@ listBucketsResponse pResponseStatus_ =
     }
 
 
--- | Undocumented member.
+-- | The list of buckets owned by the requestor.
 lbrsBuckets :: Lens' ListBucketsResponse [Bucket]
 lbrsBuckets = lens _lbrsBuckets (\ s a -> s{_lbrsBuckets = a}) . _Default . _Coerce
 
--- | Undocumented member.
+-- | The owner of the buckets listed.
 lbrsOwner :: Lens' ListBucketsResponse (Maybe Owner)
 lbrsOwner = lens _lbrsOwner (\ s a -> s{_lbrsOwner = a})
 

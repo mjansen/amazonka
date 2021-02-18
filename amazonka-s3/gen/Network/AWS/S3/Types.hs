@@ -23,12 +23,16 @@ module Network.AWS.S3.Types
     , _NoSuchUpload
     , _NoSuchBucket
     , _NoSuchKey
+    , _InvalidObjectState
 
     -- * Re-exported Types
     , module Network.AWS.S3.Internal
 
     -- * AnalyticsS3ExportFileFormat
     , AnalyticsS3ExportFileFormat (..)
+
+    -- * ArchiveStatus
+    , ArchiveStatus (..)
 
     -- * BucketAccelerateStatus
     , BucketAccelerateStatus (..)
@@ -45,11 +49,17 @@ module Network.AWS.S3.Types
     -- * CompressionType
     , CompressionType (..)
 
+    -- * DeleteMarkerReplicationStatus
+    , DeleteMarkerReplicationStatus (..)
+
     -- * EncodingType
     , EncodingType (..)
 
     -- * Event
     , Event (..)
+
+    -- * ExistingObjectReplicationStatus
+    , ExistingObjectReplicationStatus (..)
 
     -- * ExpirationStatus
     , ExpirationStatus (..)
@@ -62,6 +72,12 @@ module Network.AWS.S3.Types
 
     -- * FilterRuleName
     , FilterRuleName (..)
+
+    -- * IntelligentTieringAccessTier
+    , IntelligentTieringAccessTier (..)
+
+    -- * IntelligentTieringStatus
+    , IntelligentTieringStatus (..)
 
     -- * InventoryFormat
     , InventoryFormat (..)
@@ -87,8 +103,26 @@ module Network.AWS.S3.Types
     -- * MetadataDirective
     , MetadataDirective (..)
 
+    -- * MetricsStatus
+    , MetricsStatus (..)
+
     -- * ObjectCannedACL
     , ObjectCannedACL (..)
+
+    -- * ObjectLockEnabled
+    , ObjectLockEnabled (..)
+
+    -- * ObjectLockLegalHoldStatus
+    , ObjectLockLegalHoldStatus (..)
+
+    -- * ObjectLockMode
+    , ObjectLockMode (..)
+
+    -- * ObjectLockRetentionMode
+    , ObjectLockRetentionMode (..)
+
+    -- * ObjectOwnership
+    , ObjectOwnership (..)
 
     -- * ObjectStorageClass
     , ObjectStorageClass (..)
@@ -111,11 +145,17 @@ module Network.AWS.S3.Types
     -- * QuoteFields
     , QuoteFields (..)
 
+    -- * ReplicaModificationsStatus
+    , ReplicaModificationsStatus (..)
+
     -- * ReplicationRuleStatus
     , ReplicationRuleStatus (..)
 
     -- * ReplicationStatus
     , ReplicationStatus (..)
+
+    -- * ReplicationTimeStatus
+    , ReplicationTimeStatus (..)
 
     -- * RequestCharged
     , RequestCharged (..)
@@ -239,6 +279,7 @@ module Network.AWS.S3.Types
     , csvInput
     , ciQuoteCharacter
     , ciRecordDelimiter
+    , ciAllowQuotedRecordDelimiter
     , ciFileHeaderInfo
     , ciQuoteEscapeCharacter
     , ciComments
@@ -296,6 +337,13 @@ module Network.AWS.S3.Types
     , createBucketConfiguration
     , cbcLocationConstraint
 
+    -- * DefaultRetention
+    , DefaultRetention
+    , defaultRetention
+    , drDays
+    , drMode
+    , drYears
+
     -- * Delete
     , Delete
     , delete'
@@ -311,6 +359,11 @@ module Network.AWS.S3.Types
     , dmeKey
     , dmeLastModified
 
+    -- * DeleteMarkerReplication
+    , DeleteMarkerReplication
+    , deleteMarkerReplication
+    , dmrStatus
+
     -- * DeletedObject
     , DeletedObject
     , deletedObject
@@ -322,10 +375,12 @@ module Network.AWS.S3.Types
     -- * Destination
     , Destination
     , destination
+    , dMetrics
     , dAccessControlTranslation
     , dAccount
     , dStorageClass
     , dEncryptionConfiguration
+    , dReplicationTime
     , dBucket
 
     -- * Encryption
@@ -348,6 +403,11 @@ module Network.AWS.S3.Types
     , ErrorDocument
     , errorDocument
     , edKey
+
+    -- * ExistingObjectReplication
+    , ExistingObjectReplication
+    , existingObjectReplication
+    , eorStatus
 
     -- * FilterRule
     , FilterRule
@@ -391,7 +451,29 @@ module Network.AWS.S3.Types
     , inputSerialization
     , isJSON
     , isCSV
+    , isParquet
     , isCompressionType
+
+    -- * IntelligentTieringAndOperator
+    , IntelligentTieringAndOperator
+    , intelligentTieringAndOperator
+    , itaoPrefix
+    , itaoTags
+
+    -- * IntelligentTieringConfiguration
+    , IntelligentTieringConfiguration
+    , intelligentTieringConfiguration
+    , itcFilter
+    , itcId
+    , itcStatus
+    , itcTierings
+
+    -- * IntelligentTieringFilter
+    , IntelligentTieringFilter
+    , intelligentTieringFilter
+    , itfTag
+    , itfPrefix
+    , itfAnd
 
     -- * InventoryConfiguration
     , InventoryConfiguration
@@ -498,6 +580,12 @@ module Network.AWS.S3.Types
     , meValue
     , meName
 
+    -- * Metrics
+    , Metrics
+    , metrics
+    , mEventThreshold
+    , mStatus
+
     -- * MetricsAndOperator
     , MetricsAndOperator
     , metricsAndOperator
@@ -566,6 +654,28 @@ module Network.AWS.S3.Types
     , oiVersionId
     , oiKey
 
+    -- * ObjectLockConfiguration
+    , ObjectLockConfiguration
+    , objectLockConfiguration
+    , olcObjectLockEnabled
+    , olcRule
+
+    -- * ObjectLockLegalHold
+    , ObjectLockLegalHold
+    , objectLockLegalHold
+    , ollhStatus
+
+    -- * ObjectLockRetention
+    , ObjectLockRetention
+    , objectLockRetention
+    , olrMode
+    , olrRetainUntilDate
+
+    -- * ObjectLockRule
+    , ObjectLockRule
+    , objectLockRule
+    , olrDefaultRetention
+
     -- * ObjectVersion
     , ObjectVersion
     , objectVersion
@@ -595,6 +705,20 @@ module Network.AWS.S3.Types
     , oDisplayName
     , oId
 
+    -- * OwnershipControls
+    , OwnershipControls
+    , ownershipControls
+    , ocRules
+
+    -- * OwnershipControlsRule
+    , OwnershipControlsRule
+    , ownershipControlsRule
+    , ocrObjectOwnership
+
+    -- * ParquetInput
+    , ParquetInput
+    , parquetInput
+
     -- * Part
     , Part
     , part
@@ -602,6 +726,11 @@ module Network.AWS.S3.Types
     , pSize
     , pPartNumber
     , pLastModified
+
+    -- * PolicyStatus
+    , PolicyStatus
+    , policyStatus
+    , psIsPublic
 
     -- * Progress
     , Progress
@@ -614,6 +743,14 @@ module Network.AWS.S3.Types
     , ProgressEvent
     , progressEvent
     , peDetails
+
+    -- * PublicAccessBlockConfiguration
+    , PublicAccessBlockConfiguration
+    , publicAccessBlockConfiguration
+    , pabcIgnorePublicACLs
+    , pabcBlockPublicACLs
+    , pabcRestrictPublicBuckets
+    , pabcBlockPublicPolicy
 
     -- * QueueConfiguration
     , QueueConfiguration
@@ -643,6 +780,11 @@ module Network.AWS.S3.Types
     , rartProtocol
     , rartHostName
 
+    -- * ReplicaModifications
+    , ReplicaModifications
+    , replicaModifications
+    , rmStatus
+
     -- * ReplicationConfiguration
     , ReplicationConfiguration
     , replicationConfiguration
@@ -652,11 +794,39 @@ module Network.AWS.S3.Types
     -- * ReplicationRule
     , ReplicationRule
     , replicationRule
-    , rrId
-    , rrSourceSelectionCriteria
+    , rrDeleteMarkerReplication
+    , rrPriority
     , rrPrefix
+    , rrExistingObjectReplication
+    , rrId
+    , rrFilter
+    , rrSourceSelectionCriteria
     , rrStatus
     , rrDestination
+
+    -- * ReplicationRuleAndOperator
+    , ReplicationRuleAndOperator
+    , replicationRuleAndOperator
+    , rraoPrefix
+    , rraoTags
+
+    -- * ReplicationRuleFilter
+    , ReplicationRuleFilter
+    , replicationRuleFilter
+    , rrfTag
+    , rrfPrefix
+    , rrfAnd
+
+    -- * ReplicationTime
+    , ReplicationTime
+    , replicationTime
+    , rtStatus
+    , rtTime
+
+    -- * ReplicationTimeValue
+    , ReplicationTimeValue
+    , replicationTimeValue
+    , rtvMinutes
 
     -- * RequestPaymentConfiguration
     , RequestPaymentConfiguration
@@ -719,6 +889,12 @@ module Network.AWS.S3.Types
     , SSES3
     , sSES3
 
+    -- * ScanRange
+    , ScanRange
+    , scanRange
+    , srStart
+    , srEnd
+
     -- * SelectObjectContentEventStream
     , SelectObjectContentEventStream
     , selectObjectContentEventStream
@@ -751,10 +927,12 @@ module Network.AWS.S3.Types
     , ServerSideEncryptionRule
     , serverSideEncryptionRule
     , sserApplyServerSideEncryptionByDefault
+    , sserBucketKeyEnabled
 
     -- * SourceSelectionCriteria
     , SourceSelectionCriteria
     , sourceSelectionCriteria
+    , sscReplicaModifications
     , sscSseKMSEncryptedObjects
 
     -- * SseKMSEncryptedObjects
@@ -802,6 +980,12 @@ module Network.AWS.S3.Types
     , tgPermission
     , tgGrantee
 
+    -- * Tiering
+    , Tiering
+    , tiering
+    , tDays
+    , tAccessTier
+
     -- * TopicConfiguration
     , TopicConfiguration
     , topicConfiguration
@@ -813,9 +997,9 @@ module Network.AWS.S3.Types
     -- * Transition
     , Transition
     , transition
-    , tDays
-    , tDate
-    , tStorageClass
+    , traDays
+    , traDate
+    , traStorageClass
 
     -- * VersioningConfiguration
     , VersioningConfiguration
@@ -880,38 +1064,59 @@ s3 =
       | otherwise = Nothing
 
 
--- | Prism for BucketAlreadyOwnedByYou' errors.
+-- | The bucket you tried to create already exists, and you own it. Amazon S3 returns this error in all AWS Regions except in the North Virginia Region. For legacy compatibility, if you re-create an existing bucket that you already own in the North Virginia Region, Amazon S3 returns 200 OK and resets the bucket access control lists (ACLs).
+--
+--
 _BucketAlreadyOwnedByYou :: AsError a => Getting (First ServiceError) a ServiceError
 _BucketAlreadyOwnedByYou = _MatchServiceError s3 "BucketAlreadyOwnedByYou"
 
 
--- | This operation is not allowed against this storage tier
+-- | This operation is not allowed against this storage tier.
+--
+--
 _ObjectAlreadyInActiveTierError :: AsError a => Getting (First ServiceError) a ServiceError
 _ObjectAlreadyInActiveTierError =
   _MatchServiceError s3 "ObjectAlreadyInActiveTierError"
 
 
--- | The requested bucket name is not available. The bucket namespace is shared by all users of the system. Please select a different name and try again.
+-- | The requested bucket name is not available. The bucket namespace is shared by all users of the system. Select a different name and try again.
+--
+--
 _BucketAlreadyExists :: AsError a => Getting (First ServiceError) a ServiceError
 _BucketAlreadyExists = _MatchServiceError s3 "BucketAlreadyExists"
 
 
--- | The source object of the COPY operation is not in the active tier and is only stored in Amazon Glacier.
+-- | The source object of the COPY operation is not in the active tier and is only stored in Amazon S3 Glacier.
+--
+--
 _ObjectNotInActiveTierError :: AsError a => Getting (First ServiceError) a ServiceError
 _ObjectNotInActiveTierError = _MatchServiceError s3 "ObjectNotInActiveTierError"
 
 
 -- | The specified multipart upload does not exist.
+--
+--
 _NoSuchUpload :: AsError a => Getting (First ServiceError) a ServiceError
 _NoSuchUpload = _MatchServiceError s3 "NoSuchUpload"
 
 
 -- | The specified bucket does not exist.
+--
+--
 _NoSuchBucket :: AsError a => Getting (First ServiceError) a ServiceError
 _NoSuchBucket = _MatchServiceError s3 "NoSuchBucket"
 
 
 -- | The specified key does not exist.
+--
+--
 _NoSuchKey :: AsError a => Getting (First ServiceError) a ServiceError
 _NoSuchKey = _MatchServiceError s3 "NoSuchKey"
+
+
+-- | Object is archived and inaccessible until restored.
+--
+--
+_InvalidObjectState :: AsError a => Getting (First ServiceError) a ServiceError
+_InvalidObjectState = _MatchServiceError s3 "InvalidObjectState"
 

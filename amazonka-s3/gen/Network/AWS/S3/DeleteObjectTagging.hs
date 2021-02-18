@@ -18,7 +18,21 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Removes the tag-set from an existing object.
+-- Removes the entire tag set from the specified object. For more information about managing object tags, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html Object Tagging> .
+--
+--
+-- To use this operation, you must have permission to perform the @s3:DeleteObjectTagging@ action.
+--
+-- To delete tags of a specific object version, add the @versionId@ query parameter in the request. You will need permission for the @s3:DeleteObjectVersionTagging@ action.
+--
+-- The following operations are related to @DeleteBucketMetricsConfiguration@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectTagging.html PutObjectTagging>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTagging.html GetObjectTagging>
+--
+--
+--
 module Network.AWS.S3.DeleteObjectTagging
     (
     -- * Creating a Request
@@ -26,6 +40,7 @@ module Network.AWS.S3.DeleteObjectTagging
     , DeleteObjectTagging
     -- * Request Lenses
     , dotVersionId
+    , dotExpectedBucketOwner
     , dotBucket
     , dotKey
 
@@ -46,9 +61,10 @@ import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'deleteObjectTagging' smart constructor.
 data DeleteObjectTagging = DeleteObjectTagging'
-  { _dotVersionId :: !(Maybe ObjectVersionId)
-  , _dotBucket    :: !BucketName
-  , _dotKey       :: !ObjectKey
+  { _dotVersionId           :: !(Maybe ObjectVersionId)
+  , _dotExpectedBucketOwner :: !(Maybe Text)
+  , _dotBucket              :: !BucketName
+  , _dotKey                 :: !ObjectKey
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -58,27 +74,37 @@ data DeleteObjectTagging = DeleteObjectTagging'
 --
 -- * 'dotVersionId' - The versionId of the object that the tag-set will be removed from.
 --
--- * 'dotBucket' - Undocumented member.
+-- * 'dotExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
 --
--- * 'dotKey' - Undocumented member.
+-- * 'dotBucket' - The bucket name containing the objects from which to remove the tags.  When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form /AccessPointName/ -/AccountId/ .s3-accesspoint./Region/ .amazonaws.com. When using this operation with an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html Using Access Points> in the /Amazon Simple Storage Service Developer Guide/ . When using this API with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form /AccessPointName/ -/AccountId/ ./outpostID/ .s3-outposts./Region/ .amazonaws.com. When using this operation using S3 on Outposts through the AWS SDKs, you provide the Outposts bucket ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/S3onOutposts.html Using S3 on Outposts> in the /Amazon Simple Storage Service Developer Guide/ .
+--
+-- * 'dotKey' - Name of the object key.
 deleteObjectTagging
     :: BucketName -- ^ 'dotBucket'
     -> ObjectKey -- ^ 'dotKey'
     -> DeleteObjectTagging
 deleteObjectTagging pBucket_ pKey_ =
   DeleteObjectTagging'
-    {_dotVersionId = Nothing, _dotBucket = pBucket_, _dotKey = pKey_}
+    { _dotVersionId = Nothing
+    , _dotExpectedBucketOwner = Nothing
+    , _dotBucket = pBucket_
+    , _dotKey = pKey_
+    }
 
 
 -- | The versionId of the object that the tag-set will be removed from.
 dotVersionId :: Lens' DeleteObjectTagging (Maybe ObjectVersionId)
 dotVersionId = lens _dotVersionId (\ s a -> s{_dotVersionId = a})
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+dotExpectedBucketOwner :: Lens' DeleteObjectTagging (Maybe Text)
+dotExpectedBucketOwner = lens _dotExpectedBucketOwner (\ s a -> s{_dotExpectedBucketOwner = a})
+
+-- | The bucket name containing the objects from which to remove the tags.  When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form /AccessPointName/ -/AccountId/ .s3-accesspoint./Region/ .amazonaws.com. When using this operation with an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html Using Access Points> in the /Amazon Simple Storage Service Developer Guide/ . When using this API with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form /AccessPointName/ -/AccountId/ ./outpostID/ .s3-outposts./Region/ .amazonaws.com. When using this operation using S3 on Outposts through the AWS SDKs, you provide the Outposts bucket ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/S3onOutposts.html Using S3 on Outposts> in the /Amazon Simple Storage Service Developer Guide/ .
 dotBucket :: Lens' DeleteObjectTagging BucketName
 dotBucket = lens _dotBucket (\ s a -> s{_dotBucket = a})
 
--- | Undocumented member.
+-- | Name of the object key.
 dotKey :: Lens' DeleteObjectTagging ObjectKey
 dotKey = lens _dotKey (\ s a -> s{_dotKey = a})
 
@@ -97,7 +123,10 @@ instance Hashable DeleteObjectTagging where
 instance NFData DeleteObjectTagging where
 
 instance ToHeaders DeleteObjectTagging where
-        toHeaders = const mempty
+        toHeaders DeleteObjectTagging'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _dotExpectedBucketOwner]
 
 instance ToPath DeleteObjectTagging where
         toPath DeleteObjectTagging'{..}

@@ -41,6 +41,9 @@ module Network.AWS.S3
     -- ** NoSuchKey
     , _NoSuchKey
 
+    -- ** InvalidObjectState
+    , _InvalidObjectState
+
     -- * Waiters
     -- $waiters
 
@@ -95,6 +98,9 @@ module Network.AWS.S3
     -- ** GetBucketInventoryConfiguration
     , module Network.AWS.S3.GetBucketInventoryConfiguration
 
+    -- ** DeletePublicAccessBlock
+    , module Network.AWS.S3.DeletePublicAccessBlock
+
     -- ** PutBucketInventoryConfiguration
     , module Network.AWS.S3.PutBucketInventoryConfiguration
 
@@ -104,14 +110,35 @@ module Network.AWS.S3
     -- ** ListBucketInventoryConfigurations
     , module Network.AWS.S3.ListBucketInventoryConfigurations
 
+    -- ** PutPublicAccessBlock
+    , module Network.AWS.S3.PutPublicAccessBlock
+
     -- ** DeleteBucketInventoryConfiguration
     , module Network.AWS.S3.DeleteBucketInventoryConfiguration
+
+    -- ** GetBucketIntelligentTieringConfiguration
+    , module Network.AWS.S3.GetBucketIntelligentTieringConfiguration
 
     -- ** GetBucketNotificationConfiguration
     , module Network.AWS.S3.GetBucketNotificationConfiguration
 
+    -- ** GetObjectLockConfiguration
+    , module Network.AWS.S3.GetObjectLockConfiguration
+
+    -- ** PutObjectRetention
+    , module Network.AWS.S3.PutObjectRetention
+
     -- ** PutBucketAccelerateConfiguration
     , module Network.AWS.S3.PutBucketAccelerateConfiguration
+
+    -- ** PutObjectLegalHold
+    , module Network.AWS.S3.PutObjectLegalHold
+
+    -- ** PutBucketOwnershipControls
+    , module Network.AWS.S3.PutBucketOwnershipControls
+
+    -- ** DeleteBucketOwnershipControls
+    , module Network.AWS.S3.DeleteBucketOwnershipControls
 
     -- ** PutBucketMetricsConfiguration
     , module Network.AWS.S3.PutBucketMetricsConfiguration
@@ -161,6 +188,9 @@ module Network.AWS.S3
     -- ** CreateMultipartUpload
     , module Network.AWS.S3.CreateMultipartUpload
 
+    -- ** GetBucketPolicyStatus
+    , module Network.AWS.S3.GetBucketPolicyStatus
+
     -- ** UploadPart
     , module Network.AWS.S3.UploadPart
 
@@ -185,6 +215,15 @@ module Network.AWS.S3
     -- ** ListObjects (Paginated)
     , module Network.AWS.S3.ListObjects
 
+    -- ** GetBucketOwnershipControls
+    , module Network.AWS.S3.GetBucketOwnershipControls
+
+    -- ** GetObjectLegalHold
+    , module Network.AWS.S3.GetObjectLegalHold
+
+    -- ** GetObjectRetention
+    , module Network.AWS.S3.GetObjectRetention
+
     -- ** DeleteBucketPolicy
     , module Network.AWS.S3.DeleteBucketPolicy
 
@@ -206,6 +245,9 @@ module Network.AWS.S3
     -- ** DeleteObjects
     , module Network.AWS.S3.DeleteObjects
 
+    -- ** PutObjectLockConfiguration
+    , module Network.AWS.S3.PutObjectLockConfiguration
+
     -- ** PutBucketNotificationConfiguration
     , module Network.AWS.S3.PutBucketNotificationConfiguration
 
@@ -215,8 +257,20 @@ module Network.AWS.S3
     -- ** DeleteBucketCORS
     , module Network.AWS.S3.DeleteBucketCORS
 
+    -- ** DeleteBucketIntelligentTieringConfiguration
+    , module Network.AWS.S3.DeleteBucketIntelligentTieringConfiguration
+
+    -- ** ListBucketIntelligentTieringConfigurations
+    , module Network.AWS.S3.ListBucketIntelligentTieringConfigurations
+
     -- ** PutBucketCORS
     , module Network.AWS.S3.PutBucketCORS
+
+    -- ** GetPublicAccessBlock
+    , module Network.AWS.S3.GetPublicAccessBlock
+
+    -- ** PutBucketIntelligentTieringConfiguration
+    , module Network.AWS.S3.PutBucketIntelligentTieringConfiguration
 
     -- ** GetBucketCORS
     , module Network.AWS.S3.GetBucketCORS
@@ -289,6 +343,9 @@ module Network.AWS.S3
     -- ** AnalyticsS3ExportFileFormat
     , AnalyticsS3ExportFileFormat (..)
 
+    -- ** ArchiveStatus
+    , ArchiveStatus (..)
+
     -- ** BucketAccelerateStatus
     , BucketAccelerateStatus (..)
 
@@ -304,11 +361,17 @@ module Network.AWS.S3
     -- ** CompressionType
     , CompressionType (..)
 
+    -- ** DeleteMarkerReplicationStatus
+    , DeleteMarkerReplicationStatus (..)
+
     -- ** EncodingType
     , EncodingType (..)
 
     -- ** Event
     , Event (..)
+
+    -- ** ExistingObjectReplicationStatus
+    , ExistingObjectReplicationStatus (..)
 
     -- ** ExpirationStatus
     , ExpirationStatus (..)
@@ -321,6 +384,12 @@ module Network.AWS.S3
 
     -- ** FilterRuleName
     , FilterRuleName (..)
+
+    -- ** IntelligentTieringAccessTier
+    , IntelligentTieringAccessTier (..)
+
+    -- ** IntelligentTieringStatus
+    , IntelligentTieringStatus (..)
 
     -- ** InventoryFormat
     , InventoryFormat (..)
@@ -346,8 +415,26 @@ module Network.AWS.S3
     -- ** MetadataDirective
     , MetadataDirective (..)
 
+    -- ** MetricsStatus
+    , MetricsStatus (..)
+
     -- ** ObjectCannedACL
     , ObjectCannedACL (..)
+
+    -- ** ObjectLockEnabled
+    , ObjectLockEnabled (..)
+
+    -- ** ObjectLockLegalHoldStatus
+    , ObjectLockLegalHoldStatus (..)
+
+    -- ** ObjectLockMode
+    , ObjectLockMode (..)
+
+    -- ** ObjectLockRetentionMode
+    , ObjectLockRetentionMode (..)
+
+    -- ** ObjectOwnership
+    , ObjectOwnership (..)
 
     -- ** ObjectStorageClass
     , ObjectStorageClass (..)
@@ -370,11 +457,17 @@ module Network.AWS.S3
     -- ** QuoteFields
     , QuoteFields (..)
 
+    -- ** ReplicaModificationsStatus
+    , ReplicaModificationsStatus (..)
+
     -- ** ReplicationRuleStatus
     , ReplicationRuleStatus (..)
 
     -- ** ReplicationStatus
     , ReplicationStatus (..)
+
+    -- ** ReplicationTimeStatus
+    , ReplicationTimeStatus (..)
 
     -- ** RequestCharged
     , RequestCharged (..)
@@ -498,6 +591,7 @@ module Network.AWS.S3
     , csvInput
     , ciQuoteCharacter
     , ciRecordDelimiter
+    , ciAllowQuotedRecordDelimiter
     , ciFileHeaderInfo
     , ciQuoteEscapeCharacter
     , ciComments
@@ -555,6 +649,13 @@ module Network.AWS.S3
     , createBucketConfiguration
     , cbcLocationConstraint
 
+    -- ** DefaultRetention
+    , DefaultRetention
+    , defaultRetention
+    , drDays
+    , drMode
+    , drYears
+
     -- ** Delete
     , Delete
     , delete'
@@ -570,6 +671,11 @@ module Network.AWS.S3
     , dmeKey
     , dmeLastModified
 
+    -- ** DeleteMarkerReplication
+    , DeleteMarkerReplication
+    , deleteMarkerReplication
+    , dmrStatus
+
     -- ** DeletedObject
     , DeletedObject
     , deletedObject
@@ -581,10 +687,12 @@ module Network.AWS.S3
     -- ** Destination
     , Destination
     , destination
+    , dMetrics
     , dAccessControlTranslation
     , dAccount
     , dStorageClass
     , dEncryptionConfiguration
+    , dReplicationTime
     , dBucket
 
     -- ** Encryption
@@ -607,6 +715,11 @@ module Network.AWS.S3
     , ErrorDocument
     , errorDocument
     , edKey
+
+    -- ** ExistingObjectReplication
+    , ExistingObjectReplication
+    , existingObjectReplication
+    , eorStatus
 
     -- ** FilterRule
     , FilterRule
@@ -650,7 +763,29 @@ module Network.AWS.S3
     , inputSerialization
     , isJSON
     , isCSV
+    , isParquet
     , isCompressionType
+
+    -- ** IntelligentTieringAndOperator
+    , IntelligentTieringAndOperator
+    , intelligentTieringAndOperator
+    , itaoPrefix
+    , itaoTags
+
+    -- ** IntelligentTieringConfiguration
+    , IntelligentTieringConfiguration
+    , intelligentTieringConfiguration
+    , itcFilter
+    , itcId
+    , itcStatus
+    , itcTierings
+
+    -- ** IntelligentTieringFilter
+    , IntelligentTieringFilter
+    , intelligentTieringFilter
+    , itfTag
+    , itfPrefix
+    , itfAnd
 
     -- ** InventoryConfiguration
     , InventoryConfiguration
@@ -757,6 +892,12 @@ module Network.AWS.S3
     , meValue
     , meName
 
+    -- ** Metrics
+    , Metrics
+    , metrics
+    , mEventThreshold
+    , mStatus
+
     -- ** MetricsAndOperator
     , MetricsAndOperator
     , metricsAndOperator
@@ -825,6 +966,28 @@ module Network.AWS.S3
     , oiVersionId
     , oiKey
 
+    -- ** ObjectLockConfiguration
+    , ObjectLockConfiguration
+    , objectLockConfiguration
+    , olcObjectLockEnabled
+    , olcRule
+
+    -- ** ObjectLockLegalHold
+    , ObjectLockLegalHold
+    , objectLockLegalHold
+    , ollhStatus
+
+    -- ** ObjectLockRetention
+    , ObjectLockRetention
+    , objectLockRetention
+    , olrMode
+    , olrRetainUntilDate
+
+    -- ** ObjectLockRule
+    , ObjectLockRule
+    , objectLockRule
+    , olrDefaultRetention
+
     -- ** ObjectVersion
     , ObjectVersion
     , objectVersion
@@ -854,6 +1017,20 @@ module Network.AWS.S3
     , oDisplayName
     , oId
 
+    -- ** OwnershipControls
+    , OwnershipControls
+    , ownershipControls
+    , ocRules
+
+    -- ** OwnershipControlsRule
+    , OwnershipControlsRule
+    , ownershipControlsRule
+    , ocrObjectOwnership
+
+    -- ** ParquetInput
+    , ParquetInput
+    , parquetInput
+
     -- ** Part
     , Part
     , part
@@ -861,6 +1038,11 @@ module Network.AWS.S3
     , pSize
     , pPartNumber
     , pLastModified
+
+    -- ** PolicyStatus
+    , PolicyStatus
+    , policyStatus
+    , psIsPublic
 
     -- ** Progress
     , Progress
@@ -873,6 +1055,14 @@ module Network.AWS.S3
     , ProgressEvent
     , progressEvent
     , peDetails
+
+    -- ** PublicAccessBlockConfiguration
+    , PublicAccessBlockConfiguration
+    , publicAccessBlockConfiguration
+    , pabcIgnorePublicACLs
+    , pabcBlockPublicACLs
+    , pabcRestrictPublicBuckets
+    , pabcBlockPublicPolicy
 
     -- ** QueueConfiguration
     , QueueConfiguration
@@ -902,6 +1092,11 @@ module Network.AWS.S3
     , rartProtocol
     , rartHostName
 
+    -- ** ReplicaModifications
+    , ReplicaModifications
+    , replicaModifications
+    , rmStatus
+
     -- ** ReplicationConfiguration
     , ReplicationConfiguration
     , replicationConfiguration
@@ -911,11 +1106,39 @@ module Network.AWS.S3
     -- ** ReplicationRule
     , ReplicationRule
     , replicationRule
-    , rrId
-    , rrSourceSelectionCriteria
+    , rrDeleteMarkerReplication
+    , rrPriority
     , rrPrefix
+    , rrExistingObjectReplication
+    , rrId
+    , rrFilter
+    , rrSourceSelectionCriteria
     , rrStatus
     , rrDestination
+
+    -- ** ReplicationRuleAndOperator
+    , ReplicationRuleAndOperator
+    , replicationRuleAndOperator
+    , rraoPrefix
+    , rraoTags
+
+    -- ** ReplicationRuleFilter
+    , ReplicationRuleFilter
+    , replicationRuleFilter
+    , rrfTag
+    , rrfPrefix
+    , rrfAnd
+
+    -- ** ReplicationTime
+    , ReplicationTime
+    , replicationTime
+    , rtStatus
+    , rtTime
+
+    -- ** ReplicationTimeValue
+    , ReplicationTimeValue
+    , replicationTimeValue
+    , rtvMinutes
 
     -- ** RequestPaymentConfiguration
     , RequestPaymentConfiguration
@@ -978,6 +1201,12 @@ module Network.AWS.S3
     , SSES3
     , sSES3
 
+    -- ** ScanRange
+    , ScanRange
+    , scanRange
+    , srStart
+    , srEnd
+
     -- ** SelectObjectContentEventStream
     , SelectObjectContentEventStream
     , selectObjectContentEventStream
@@ -1010,10 +1239,12 @@ module Network.AWS.S3
     , ServerSideEncryptionRule
     , serverSideEncryptionRule
     , sserApplyServerSideEncryptionByDefault
+    , sserBucketKeyEnabled
 
     -- ** SourceSelectionCriteria
     , SourceSelectionCriteria
     , sourceSelectionCriteria
+    , sscReplicaModifications
     , sscSseKMSEncryptedObjects
 
     -- ** SseKMSEncryptedObjects
@@ -1061,6 +1292,12 @@ module Network.AWS.S3
     , tgPermission
     , tgGrantee
 
+    -- ** Tiering
+    , Tiering
+    , tiering
+    , tDays
+    , tAccessTier
+
     -- ** TopicConfiguration
     , TopicConfiguration
     , topicConfiguration
@@ -1072,9 +1309,9 @@ module Network.AWS.S3
     -- ** Transition
     , Transition
     , transition
-    , tDays
-    , tDate
-    , tStorageClass
+    , traDays
+    , traDate
+    , traStorageClass
 
     -- ** VersioningConfiguration
     , VersioningConfiguration
@@ -1100,9 +1337,11 @@ import Network.AWS.S3.DeleteBucket
 import Network.AWS.S3.DeleteBucketAnalyticsConfiguration
 import Network.AWS.S3.DeleteBucketCORS
 import Network.AWS.S3.DeleteBucketEncryption
+import Network.AWS.S3.DeleteBucketIntelligentTieringConfiguration
 import Network.AWS.S3.DeleteBucketInventoryConfiguration
 import Network.AWS.S3.DeleteBucketLifecycle
 import Network.AWS.S3.DeleteBucketMetricsConfiguration
+import Network.AWS.S3.DeleteBucketOwnershipControls
 import Network.AWS.S3.DeleteBucketPolicy
 import Network.AWS.S3.DeleteBucketReplication
 import Network.AWS.S3.DeleteBucketTagging
@@ -1110,18 +1349,22 @@ import Network.AWS.S3.DeleteBucketWebsite
 import Network.AWS.S3.DeleteObject
 import Network.AWS.S3.DeleteObjects
 import Network.AWS.S3.DeleteObjectTagging
+import Network.AWS.S3.DeletePublicAccessBlock
 import Network.AWS.S3.GetBucketAccelerateConfiguration
 import Network.AWS.S3.GetBucketACL
 import Network.AWS.S3.GetBucketAnalyticsConfiguration
 import Network.AWS.S3.GetBucketCORS
 import Network.AWS.S3.GetBucketEncryption
+import Network.AWS.S3.GetBucketIntelligentTieringConfiguration
 import Network.AWS.S3.GetBucketInventoryConfiguration
 import Network.AWS.S3.GetBucketLifecycleConfiguration
 import Network.AWS.S3.GetBucketLocation
 import Network.AWS.S3.GetBucketLogging
 import Network.AWS.S3.GetBucketMetricsConfiguration
 import Network.AWS.S3.GetBucketNotificationConfiguration
+import Network.AWS.S3.GetBucketOwnershipControls
 import Network.AWS.S3.GetBucketPolicy
+import Network.AWS.S3.GetBucketPolicyStatus
 import Network.AWS.S3.GetBucketReplication
 import Network.AWS.S3.GetBucketRequestPayment
 import Network.AWS.S3.GetBucketTagging
@@ -1129,12 +1372,17 @@ import Network.AWS.S3.GetBucketVersioning
 import Network.AWS.S3.GetBucketWebsite
 import Network.AWS.S3.GetObject
 import Network.AWS.S3.GetObjectACL
+import Network.AWS.S3.GetObjectLegalHold
+import Network.AWS.S3.GetObjectLockConfiguration
+import Network.AWS.S3.GetObjectRetention
 import Network.AWS.S3.GetObjectTagging
 import Network.AWS.S3.GetObjectTorrent
+import Network.AWS.S3.GetPublicAccessBlock
 import Network.AWS.S3.HeadBucket
 import Network.AWS.S3.HeadObject
 import Network.AWS.S3.Internal
 import Network.AWS.S3.ListBucketAnalyticsConfigurations
+import Network.AWS.S3.ListBucketIntelligentTieringConfigurations
 import Network.AWS.S3.ListBucketInventoryConfigurations
 import Network.AWS.S3.ListBucketMetricsConfigurations
 import Network.AWS.S3.ListBuckets
@@ -1148,11 +1396,13 @@ import Network.AWS.S3.PutBucketACL
 import Network.AWS.S3.PutBucketAnalyticsConfiguration
 import Network.AWS.S3.PutBucketCORS
 import Network.AWS.S3.PutBucketEncryption
+import Network.AWS.S3.PutBucketIntelligentTieringConfiguration
 import Network.AWS.S3.PutBucketInventoryConfiguration
 import Network.AWS.S3.PutBucketLifecycleConfiguration
 import Network.AWS.S3.PutBucketLogging
 import Network.AWS.S3.PutBucketMetricsConfiguration
 import Network.AWS.S3.PutBucketNotificationConfiguration
+import Network.AWS.S3.PutBucketOwnershipControls
 import Network.AWS.S3.PutBucketPolicy
 import Network.AWS.S3.PutBucketReplication
 import Network.AWS.S3.PutBucketRequestPayment
@@ -1161,7 +1411,11 @@ import Network.AWS.S3.PutBucketVersioning
 import Network.AWS.S3.PutBucketWebsite
 import Network.AWS.S3.PutObject
 import Network.AWS.S3.PutObjectACL
+import Network.AWS.S3.PutObjectLegalHold
+import Network.AWS.S3.PutObjectLockConfiguration
+import Network.AWS.S3.PutObjectRetention
 import Network.AWS.S3.PutObjectTagging
+import Network.AWS.S3.PutPublicAccessBlock
 import Network.AWS.S3.RestoreObject
 import Network.AWS.S3.SelectObjectContent
 import Network.AWS.S3.Types

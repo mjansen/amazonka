@@ -18,13 +18,24 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted.
+-- Deletes the S3 bucket. All objects (including all object versions and delete markers) in the bucket must be deleted before the bucket itself can be deleted.
+--
+--
+-- __Related Resources__
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html CreateBucket>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html DeleteObject>
+--
+--
+--
 module Network.AWS.S3.DeleteBucket
     (
     -- * Creating a Request
       deleteBucket
     , DeleteBucket
     -- * Request Lenses
+    , dbExpectedBucketOwner
     , dbBucket
 
     -- * Destructuring the Response
@@ -40,8 +51,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'deleteBucket' smart constructor.
-newtype DeleteBucket = DeleteBucket'
-  { _dbBucket :: BucketName
+data DeleteBucket = DeleteBucket'
+  { _dbExpectedBucketOwner :: !(Maybe Text)
+  , _dbBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -49,14 +61,21 @@ newtype DeleteBucket = DeleteBucket'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dbBucket' - Undocumented member.
+-- * 'dbExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'dbBucket' - Specifies the bucket being deleted.
 deleteBucket
     :: BucketName -- ^ 'dbBucket'
     -> DeleteBucket
-deleteBucket pBucket_ = DeleteBucket' {_dbBucket = pBucket_}
+deleteBucket pBucket_ =
+  DeleteBucket' {_dbExpectedBucketOwner = Nothing, _dbBucket = pBucket_}
 
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+dbExpectedBucketOwner :: Lens' DeleteBucket (Maybe Text)
+dbExpectedBucketOwner = lens _dbExpectedBucketOwner (\ s a -> s{_dbExpectedBucketOwner = a})
+
+-- | Specifies the bucket being deleted.
 dbBucket :: Lens' DeleteBucket BucketName
 dbBucket = lens _dbBucket (\ s a -> s{_dbBucket = a})
 
@@ -70,7 +89,10 @@ instance Hashable DeleteBucket where
 instance NFData DeleteBucket where
 
 instance ToHeaders DeleteBucket where
-        toHeaders = const mempty
+        toHeaders DeleteBucket'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _dbExpectedBucketOwner]
 
 instance ToPath DeleteBucket where
         toPath DeleteBucket'{..}

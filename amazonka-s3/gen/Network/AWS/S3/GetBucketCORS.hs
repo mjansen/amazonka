@@ -18,13 +18,28 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Returns the cors configuration for the bucket.
+-- Returns the cors configuration information set for the bucket.
+--
+--
+-- To use this operation, you must have permission to perform the s3:GetBucketCORS action. By default, the bucket owner has this permission and can grant it to others.
+--
+-- For more information about cors, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html Enabling Cross-Origin Resource Sharing> .
+--
+-- The following operations are related to @GetBucketCors@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketCors.html PutBucketCors>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketCors.html DeleteBucketCors>
+--
+--
+--
 module Network.AWS.S3.GetBucketCORS
     (
     -- * Creating a Request
       getBucketCORS
     , GetBucketCORS
     -- * Request Lenses
+    , gbcExpectedBucketOwner
     , gbcBucket
 
     -- * Destructuring the Response
@@ -43,8 +58,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'getBucketCORS' smart constructor.
-newtype GetBucketCORS = GetBucketCORS'
-  { _gbcBucket :: BucketName
+data GetBucketCORS = GetBucketCORS'
+  { _gbcExpectedBucketOwner :: !(Maybe Text)
+  , _gbcBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -52,14 +68,21 @@ newtype GetBucketCORS = GetBucketCORS'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'gbcBucket' - Undocumented member.
+-- * 'gbcExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'gbcBucket' - The bucket name for which to get the cors configuration.
 getBucketCORS
     :: BucketName -- ^ 'gbcBucket'
     -> GetBucketCORS
-getBucketCORS pBucket_ = GetBucketCORS' {_gbcBucket = pBucket_}
+getBucketCORS pBucket_ =
+  GetBucketCORS' {_gbcExpectedBucketOwner = Nothing, _gbcBucket = pBucket_}
 
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+gbcExpectedBucketOwner :: Lens' GetBucketCORS (Maybe Text)
+gbcExpectedBucketOwner = lens _gbcExpectedBucketOwner (\ s a -> s{_gbcExpectedBucketOwner = a})
+
+-- | The bucket name for which to get the cors configuration.
 gbcBucket :: Lens' GetBucketCORS BucketName
 gbcBucket = lens _gbcBucket (\ s a -> s{_gbcBucket = a})
 
@@ -78,7 +101,10 @@ instance Hashable GetBucketCORS where
 instance NFData GetBucketCORS where
 
 instance ToHeaders GetBucketCORS where
-        toHeaders = const mempty
+        toHeaders GetBucketCORS'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _gbcExpectedBucketOwner]
 
 instance ToPath GetBucketCORS where
         toPath GetBucketCORS'{..}
@@ -98,7 +124,7 @@ data GetBucketCORSResponse = GetBucketCORSResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'gbcrsCORSRules' - Undocumented member.
+-- * 'gbcrsCORSRules' - A set of origins and methods (cross-origin access that you want to allow). You can add up to 100 rules to the configuration.
 --
 -- * 'gbcrsResponseStatus' - -- | The response status code.
 getBucketCORSResponse
@@ -109,7 +135,7 @@ getBucketCORSResponse pResponseStatus_ =
     {_gbcrsCORSRules = Nothing, _gbcrsResponseStatus = pResponseStatus_}
 
 
--- | Undocumented member.
+-- | A set of origins and methods (cross-origin access that you want to allow). You can add up to 100 rules to the configuration.
 gbcrsCORSRules :: Lens' GetBucketCORSResponse [CORSRule]
 gbcrsCORSRules = lens _gbcrsCORSRules (\ s a -> s{_gbcrsCORSRules = a}) . _Default . _Coerce
 

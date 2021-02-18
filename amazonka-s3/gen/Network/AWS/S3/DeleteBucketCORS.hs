@@ -18,13 +18,28 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Deletes the cors configuration information set for the bucket.
+-- Deletes the @cors@ configuration information set for the bucket.
+--
+--
+-- To use this operation, you must have permission to perform the @s3:PutBucketCORS@ action. The bucket owner has this permission by default and can grant this permission to others.
+--
+-- For information about @cors@ , see <https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html Enabling Cross-Origin Resource Sharing> in the /Amazon Simple Storage Service Developer Guide/ .
+--
+-- __Related Resources:__
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketCors.html PutBucketCors>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/RESTOPTIONSobject.html RESTOPTIONSobject>
+--
+--
+--
 module Network.AWS.S3.DeleteBucketCORS
     (
     -- * Creating a Request
       deleteBucketCORS
     , DeleteBucketCORS
     -- * Request Lenses
+    , dbcExpectedBucketOwner
     , dbcBucket
 
     -- * Destructuring the Response
@@ -40,8 +55,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'deleteBucketCORS' smart constructor.
-newtype DeleteBucketCORS = DeleteBucketCORS'
-  { _dbcBucket :: BucketName
+data DeleteBucketCORS = DeleteBucketCORS'
+  { _dbcExpectedBucketOwner :: !(Maybe Text)
+  , _dbcBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -49,14 +65,21 @@ newtype DeleteBucketCORS = DeleteBucketCORS'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dbcBucket' - Undocumented member.
+-- * 'dbcExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'dbcBucket' - Specifies the bucket whose @cors@ configuration is being deleted.
 deleteBucketCORS
     :: BucketName -- ^ 'dbcBucket'
     -> DeleteBucketCORS
-deleteBucketCORS pBucket_ = DeleteBucketCORS' {_dbcBucket = pBucket_}
+deleteBucketCORS pBucket_ =
+  DeleteBucketCORS' {_dbcExpectedBucketOwner = Nothing, _dbcBucket = pBucket_}
 
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+dbcExpectedBucketOwner :: Lens' DeleteBucketCORS (Maybe Text)
+dbcExpectedBucketOwner = lens _dbcExpectedBucketOwner (\ s a -> s{_dbcExpectedBucketOwner = a})
+
+-- | Specifies the bucket whose @cors@ configuration is being deleted.
 dbcBucket :: Lens' DeleteBucketCORS BucketName
 dbcBucket = lens _dbcBucket (\ s a -> s{_dbcBucket = a})
 
@@ -70,7 +93,10 @@ instance Hashable DeleteBucketCORS where
 instance NFData DeleteBucketCORS where
 
 instance ToHeaders DeleteBucketCORS where
-        toHeaders = const mempty
+        toHeaders DeleteBucketCORS'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _dbcExpectedBucketOwner]
 
 instance ToPath DeleteBucketCORS where
         toPath DeleteBucketCORS'{..}

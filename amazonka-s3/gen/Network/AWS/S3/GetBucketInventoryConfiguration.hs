@@ -18,13 +18,30 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Returns an inventory configuration (identified by the inventory ID) from the bucket.
+-- Returns an inventory configuration (identified by the inventory configuration ID) from the bucket.
+--
+--
+-- To use this operation, you must have permissions to perform the @s3:GetInventoryConfiguration@ action. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources Permissions Related to Bucket Subresource Operations> and <https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html Managing Access Permissions to Your Amazon S3 Resources> .
+--
+-- For information about the Amazon S3 inventory feature, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html Amazon S3 Inventory> .
+--
+-- The following operations are related to @GetBucketInventoryConfiguration@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketInventoryConfiguration.html DeleteBucketInventoryConfiguration>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketInventoryConfigurations.html ListBucketInventoryConfigurations>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketInventoryConfiguration.html PutBucketInventoryConfiguration>
+--
+--
+--
 module Network.AWS.S3.GetBucketInventoryConfiguration
     (
     -- * Creating a Request
       getBucketInventoryConfiguration
     , GetBucketInventoryConfiguration
     -- * Request Lenses
+    , gbicExpectedBucketOwner
     , gbicBucket
     , gbicId
 
@@ -45,14 +62,17 @@ import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'getBucketInventoryConfiguration' smart constructor.
 data GetBucketInventoryConfiguration = GetBucketInventoryConfiguration'
-  { _gbicBucket :: !BucketName
-  , _gbicId     :: !Text
+  { _gbicExpectedBucketOwner :: !(Maybe Text)
+  , _gbicBucket              :: !BucketName
+  , _gbicId                  :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
 -- | Creates a value of 'GetBucketInventoryConfiguration' with the minimum fields required to make a request.
 --
 -- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'gbicExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
 --
 -- * 'gbicBucket' - The name of the bucket containing the inventory configuration to retrieve.
 --
@@ -62,8 +82,13 @@ getBucketInventoryConfiguration
     -> Text -- ^ 'gbicId'
     -> GetBucketInventoryConfiguration
 getBucketInventoryConfiguration pBucket_ pId_ =
-  GetBucketInventoryConfiguration' {_gbicBucket = pBucket_, _gbicId = pId_}
+  GetBucketInventoryConfiguration'
+    {_gbicExpectedBucketOwner = Nothing, _gbicBucket = pBucket_, _gbicId = pId_}
 
+
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+gbicExpectedBucketOwner :: Lens' GetBucketInventoryConfiguration (Maybe Text)
+gbicExpectedBucketOwner = lens _gbicExpectedBucketOwner (\ s a -> s{_gbicExpectedBucketOwner = a})
 
 -- | The name of the bucket containing the inventory configuration to retrieve.
 gbicBucket :: Lens' GetBucketInventoryConfiguration BucketName
@@ -91,7 +116,10 @@ instance NFData GetBucketInventoryConfiguration where
 
 instance ToHeaders GetBucketInventoryConfiguration
          where
-        toHeaders = const mempty
+        toHeaders GetBucketInventoryConfiguration'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _gbicExpectedBucketOwner]
 
 instance ToPath GetBucketInventoryConfiguration where
         toPath GetBucketInventoryConfiguration'{..}

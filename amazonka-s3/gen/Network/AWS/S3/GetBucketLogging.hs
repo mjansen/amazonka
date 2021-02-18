@@ -19,12 +19,23 @@
 -- Portability : non-portable (GHC extensions)
 --
 -- Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner.
+--
+--
+-- The following operations are related to @GetBucketLogging@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html CreateBucket>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLogging.html PutBucketLogging>
+--
+--
+--
 module Network.AWS.S3.GetBucketLogging
     (
     -- * Creating a Request
       getBucketLogging
     , GetBucketLogging
     -- * Request Lenses
+    , gExpectedBucketOwner
     , gBucket
 
     -- * Destructuring the Response
@@ -43,8 +54,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'getBucketLogging' smart constructor.
-newtype GetBucketLogging = GetBucketLogging'
-  { _gBucket :: BucketName
+data GetBucketLogging = GetBucketLogging'
+  { _gExpectedBucketOwner :: !(Maybe Text)
+  , _gBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -52,14 +64,21 @@ newtype GetBucketLogging = GetBucketLogging'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'gBucket' - Undocumented member.
+-- * 'gExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'gBucket' - The bucket name for which to get the logging information.
 getBucketLogging
     :: BucketName -- ^ 'gBucket'
     -> GetBucketLogging
-getBucketLogging pBucket_ = GetBucketLogging' {_gBucket = pBucket_}
+getBucketLogging pBucket_ =
+  GetBucketLogging' {_gExpectedBucketOwner = Nothing, _gBucket = pBucket_}
 
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+gExpectedBucketOwner :: Lens' GetBucketLogging (Maybe Text)
+gExpectedBucketOwner = lens _gExpectedBucketOwner (\ s a -> s{_gExpectedBucketOwner = a})
+
+-- | The bucket name for which to get the logging information.
 gBucket :: Lens' GetBucketLogging BucketName
 gBucket = lens _gBucket (\ s a -> s{_gBucket = a})
 
@@ -77,7 +96,10 @@ instance Hashable GetBucketLogging where
 instance NFData GetBucketLogging where
 
 instance ToHeaders GetBucketLogging where
-        toHeaders = const mempty
+        toHeaders GetBucketLogging'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _gExpectedBucketOwner]
 
 instance ToPath GetBucketLogging where
         toPath GetBucketLogging'{..}

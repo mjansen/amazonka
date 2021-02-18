@@ -18,13 +18,26 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Returns the region the bucket resides in.
+-- Returns the Region the bucket resides in. You set the bucket's Region using the @LocationConstraint@ request parameter in a @CreateBucket@ request. For more information, see <https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html CreateBucket> .
+--
+--
+-- To use this implementation of the operation, you must be the bucket owner.
+--
+-- The following operations are related to @GetBucketLocation@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html GetObject>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html CreateBucket>
+--
+--
+--
 module Network.AWS.S3.GetBucketLocation
     (
     -- * Creating a Request
       getBucketLocation
     , GetBucketLocation
     -- * Request Lenses
+    , gblExpectedBucketOwner
     , gblBucket
 
     -- * Destructuring the Response
@@ -43,8 +56,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'getBucketLocation' smart constructor.
-newtype GetBucketLocation = GetBucketLocation'
-  { _gblBucket :: BucketName
+data GetBucketLocation = GetBucketLocation'
+  { _gblExpectedBucketOwner :: !(Maybe Text)
+  , _gblBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -52,14 +66,21 @@ newtype GetBucketLocation = GetBucketLocation'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'gblBucket' - Undocumented member.
+-- * 'gblExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'gblBucket' - The name of the bucket for which to get the location.
 getBucketLocation
     :: BucketName -- ^ 'gblBucket'
     -> GetBucketLocation
-getBucketLocation pBucket_ = GetBucketLocation' {_gblBucket = pBucket_}
+getBucketLocation pBucket_ =
+  GetBucketLocation' {_gblExpectedBucketOwner = Nothing, _gblBucket = pBucket_}
 
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+gblExpectedBucketOwner :: Lens' GetBucketLocation (Maybe Text)
+gblExpectedBucketOwner = lens _gblExpectedBucketOwner (\ s a -> s{_gblExpectedBucketOwner = a})
+
+-- | The name of the bucket for which to get the location.
 gblBucket :: Lens' GetBucketLocation BucketName
 gblBucket = lens _gblBucket (\ s a -> s{_gblBucket = a})
 
@@ -77,7 +98,10 @@ instance Hashable GetBucketLocation where
 instance NFData GetBucketLocation where
 
 instance ToHeaders GetBucketLocation where
-        toHeaders = const mempty
+        toHeaders GetBucketLocation'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _gblExpectedBucketOwner]
 
 instance ToPath GetBucketLocation where
         toPath GetBucketLocation'{..}
@@ -99,7 +123,7 @@ data GetBucketLocationResponse = GetBucketLocationResponse'
 --
 -- * 'gblbrsResponseStatus' - -- | The response status code.
 --
--- * 'gblbrsLocationConstraint' - Undocumented member.
+-- * 'gblbrsLocationConstraint' - Specifies the Region where the bucket resides. For a list of all the Amazon S3 supported location constraints by Region, see <https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region Regions and Endpoints> . Buckets in Region @us-east-1@ have a LocationConstraint of @null@ .
 getBucketLocationResponse
     :: Int -- ^ 'gblbrsResponseStatus'
     -> LocationConstraint -- ^ 'gblbrsLocationConstraint'
@@ -115,7 +139,7 @@ getBucketLocationResponse pResponseStatus_ pLocationConstraint_ =
 gblbrsResponseStatus :: Lens' GetBucketLocationResponse Int
 gblbrsResponseStatus = lens _gblbrsResponseStatus (\ s a -> s{_gblbrsResponseStatus = a})
 
--- | Undocumented member.
+-- | Specifies the Region where the bucket resides. For a list of all the Amazon S3 supported location constraints by Region, see <https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region Regions and Endpoints> . Buckets in Region @us-east-1@ have a LocationConstraint of @null@ .
 gblbrsLocationConstraint :: Lens' GetBucketLocationResponse LocationConstraint
 gblbrsLocationConstraint = lens _gblbrsLocationConstraint (\ s a -> s{_gblbrsLocationConstraint = a})
 

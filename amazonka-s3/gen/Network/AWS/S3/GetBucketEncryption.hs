@@ -18,13 +18,26 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Returns the server-side encryption configuration of a bucket.
+-- Returns the default encryption configuration for an Amazon S3 bucket. For information about the Amazon S3 default encryption feature, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html Amazon S3 Default Bucket Encryption> .
+--
+--
+-- To use this operation, you must have permission to perform the @s3:GetEncryptionConfiguration@ action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources Permissions Related to Bucket Subresource Operations> and <https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html Managing Access Permissions to Your Amazon S3 Resources> .
+--
+-- The following operations are related to @GetBucketEncryption@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketEncryption.html PutBucketEncryption>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketEncryption.html DeleteBucketEncryption>
+--
+--
+--
 module Network.AWS.S3.GetBucketEncryption
     (
     -- * Creating a Request
       getBucketEncryption
     , GetBucketEncryption
     -- * Request Lenses
+    , gbeExpectedBucketOwner
     , gbeBucket
 
     -- * Destructuring the Response
@@ -43,8 +56,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'getBucketEncryption' smart constructor.
-newtype GetBucketEncryption = GetBucketEncryption'
-  { _gbeBucket :: BucketName
+data GetBucketEncryption = GetBucketEncryption'
+  { _gbeExpectedBucketOwner :: !(Maybe Text)
+  , _gbeBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -52,12 +66,20 @@ newtype GetBucketEncryption = GetBucketEncryption'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
+-- * 'gbeExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
 -- * 'gbeBucket' - The name of the bucket from which the server-side encryption configuration is retrieved.
 getBucketEncryption
     :: BucketName -- ^ 'gbeBucket'
     -> GetBucketEncryption
-getBucketEncryption pBucket_ = GetBucketEncryption' {_gbeBucket = pBucket_}
+getBucketEncryption pBucket_ =
+  GetBucketEncryption'
+    {_gbeExpectedBucketOwner = Nothing, _gbeBucket = pBucket_}
 
+
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+gbeExpectedBucketOwner :: Lens' GetBucketEncryption (Maybe Text)
+gbeExpectedBucketOwner = lens _gbeExpectedBucketOwner (\ s a -> s{_gbeExpectedBucketOwner = a})
 
 -- | The name of the bucket from which the server-side encryption configuration is retrieved.
 gbeBucket :: Lens' GetBucketEncryption BucketName
@@ -78,7 +100,10 @@ instance Hashable GetBucketEncryption where
 instance NFData GetBucketEncryption where
 
 instance ToHeaders GetBucketEncryption where
-        toHeaders = const mempty
+        toHeaders GetBucketEncryption'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _gbeExpectedBucketOwner]
 
 instance ToPath GetBucketEncryption where
         toPath GetBucketEncryption'{..}

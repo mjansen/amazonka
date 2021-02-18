@@ -18,7 +18,25 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Returns a list of inventory configurations for the bucket.
+-- Returns a list of inventory configurations for the bucket. You can have up to 1,000 analytics configurations per bucket.
+--
+--
+-- This operation supports list pagination and does not return more than 100 configurations at a time. Always check the @IsTruncated@ element in the response. If there are no more configurations to list, @IsTruncated@ is set to false. If there are more configurations to list, @IsTruncated@ is set to true, and there is a value in @NextContinuationToken@ . You use the @NextContinuationToken@ value to continue the pagination of the list by passing the value in continuation-token in the request to @GET@ the next page.
+--
+-- To use this operation, you must have permissions to perform the @s3:GetInventoryConfiguration@ action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources Permissions Related to Bucket Subresource Operations> and <https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html Managing Access Permissions to Your Amazon S3 Resources> .
+--
+-- For information about the Amazon S3 inventory feature, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html Amazon S3 Inventory>
+--
+-- The following operations are related to @ListBucketInventoryConfigurations@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketInventoryConfiguration.html GetBucketInventoryConfiguration>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketInventoryConfiguration.html DeleteBucketInventoryConfiguration>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketInventoryConfiguration.html PutBucketInventoryConfiguration>
+--
+--
+--
 module Network.AWS.S3.ListBucketInventoryConfigurations
     (
     -- * Creating a Request
@@ -26,6 +44,7 @@ module Network.AWS.S3.ListBucketInventoryConfigurations
     , ListBucketInventoryConfigurations
     -- * Request Lenses
     , lbicContinuationToken
+    , lbicExpectedBucketOwner
     , lbicBucket
 
     -- * Destructuring the Response
@@ -48,8 +67,9 @@ import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'listBucketInventoryConfigurations' smart constructor.
 data ListBucketInventoryConfigurations = ListBucketInventoryConfigurations'
-  { _lbicContinuationToken :: !(Maybe Text)
-  , _lbicBucket            :: !BucketName
+  { _lbicContinuationToken   :: !(Maybe Text)
+  , _lbicExpectedBucketOwner :: !(Maybe Text)
+  , _lbicBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -59,18 +79,27 @@ data ListBucketInventoryConfigurations = ListBucketInventoryConfigurations'
 --
 -- * 'lbicContinuationToken' - The marker used to continue an inventory configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.
 --
+-- * 'lbicExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
 -- * 'lbicBucket' - The name of the bucket containing the inventory configurations to retrieve.
 listBucketInventoryConfigurations
     :: BucketName -- ^ 'lbicBucket'
     -> ListBucketInventoryConfigurations
 listBucketInventoryConfigurations pBucket_ =
   ListBucketInventoryConfigurations'
-    {_lbicContinuationToken = Nothing, _lbicBucket = pBucket_}
+    { _lbicContinuationToken = Nothing
+    , _lbicExpectedBucketOwner = Nothing
+    , _lbicBucket = pBucket_
+    }
 
 
 -- | The marker used to continue an inventory configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.
 lbicContinuationToken :: Lens' ListBucketInventoryConfigurations (Maybe Text)
 lbicContinuationToken = lens _lbicContinuationToken (\ s a -> s{_lbicContinuationToken = a})
+
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+lbicExpectedBucketOwner :: Lens' ListBucketInventoryConfigurations (Maybe Text)
+lbicExpectedBucketOwner = lens _lbicExpectedBucketOwner (\ s a -> s{_lbicExpectedBucketOwner = a})
 
 -- | The name of the bucket containing the inventory configurations to retrieve.
 lbicBucket :: Lens' ListBucketInventoryConfigurations BucketName
@@ -99,7 +128,10 @@ instance NFData ListBucketInventoryConfigurations
 
 instance ToHeaders ListBucketInventoryConfigurations
          where
-        toHeaders = const mempty
+        toHeaders ListBucketInventoryConfigurations'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _lbicExpectedBucketOwner]
 
 instance ToPath ListBucketInventoryConfigurations
          where
@@ -131,9 +163,9 @@ data ListBucketInventoryConfigurationsResponse = ListBucketInventoryConfiguratio
 --
 -- * 'lbicrsInventoryConfigurationList' - The list of inventory configurations for a bucket.
 --
--- * 'lbicrsNextContinuationToken' - The marker used to continue this inventory configuration listing. Use the NextContinuationToken from this response to continue the listing in a subsequent request. The continuation token is an opaque value that Amazon S3 understands.
+-- * 'lbicrsNextContinuationToken' - The marker used to continue this inventory configuration listing. Use the @NextContinuationToken@ from this response to continue the listing in a subsequent request. The continuation token is an opaque value that Amazon S3 understands.
 --
--- * 'lbicrsIsTruncated' - Indicates whether the returned list of inventory configurations is truncated in this response. A value of true indicates that the list is truncated.
+-- * 'lbicrsIsTruncated' - Tells whether the returned list of inventory configurations is complete. A value of true indicates that the list is not complete and the NextContinuationToken is provided for a subsequent request.
 --
 -- * 'lbicrsResponseStatus' - -- | The response status code.
 listBucketInventoryConfigurationsResponse
@@ -157,11 +189,11 @@ lbicrsContinuationToken = lens _lbicrsContinuationToken (\ s a -> s{_lbicrsConti
 lbicrsInventoryConfigurationList :: Lens' ListBucketInventoryConfigurationsResponse [InventoryConfiguration]
 lbicrsInventoryConfigurationList = lens _lbicrsInventoryConfigurationList (\ s a -> s{_lbicrsInventoryConfigurationList = a}) . _Default . _Coerce
 
--- | The marker used to continue this inventory configuration listing. Use the NextContinuationToken from this response to continue the listing in a subsequent request. The continuation token is an opaque value that Amazon S3 understands.
+-- | The marker used to continue this inventory configuration listing. Use the @NextContinuationToken@ from this response to continue the listing in a subsequent request. The continuation token is an opaque value that Amazon S3 understands.
 lbicrsNextContinuationToken :: Lens' ListBucketInventoryConfigurationsResponse (Maybe Text)
 lbicrsNextContinuationToken = lens _lbicrsNextContinuationToken (\ s a -> s{_lbicrsNextContinuationToken = a})
 
--- | Indicates whether the returned list of inventory configurations is truncated in this response. A value of true indicates that the list is truncated.
+-- | Tells whether the returned list of inventory configurations is complete. A value of true indicates that the list is not complete and the NextContinuationToken is provided for a subsequent request.
 lbicrsIsTruncated :: Lens' ListBucketInventoryConfigurationsResponse (Maybe Bool)
 lbicrsIsTruncated = lens _lbicrsIsTruncated (\ s a -> s{_lbicrsIsTruncated = a})
 

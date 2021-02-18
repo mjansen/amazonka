@@ -18,13 +18,30 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Deletes the lifecycle configuration from the bucket.
+-- Deletes the lifecycle configuration from the specified bucket. Amazon S3 removes all the lifecycle configuration rules in the lifecycle subresource associated with the bucket. Your objects never expire, and Amazon S3 no longer automatically deletes any objects on the basis of rules contained in the deleted lifecycle configuration.
+--
+--
+-- To use this operation, you must have permission to perform the @s3:PutLifecycleConfiguration@ action. By default, the bucket owner has this permission and the bucket owner can grant this permission to others.
+--
+-- There is usually some time lag before lifecycle configuration deletion is fully propagated to all the Amazon S3 systems.
+--
+-- For more information about the object expiration, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/intro-lifecycle-rules.html#intro-lifecycle-rules-actions Elements to Describe Lifecycle Actions> .
+--
+-- Related actions include:
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycleConfiguration.html PutBucketLifecycleConfiguration>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycleConfiguration.html GetBucketLifecycleConfiguration>
+--
+--
+--
 module Network.AWS.S3.DeleteBucketLifecycle
     (
     -- * Creating a Request
       deleteBucketLifecycle
     , DeleteBucketLifecycle
     -- * Request Lenses
+    , dblExpectedBucketOwner
     , dblBucket
 
     -- * Destructuring the Response
@@ -40,8 +57,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'deleteBucketLifecycle' smart constructor.
-newtype DeleteBucketLifecycle = DeleteBucketLifecycle'
-  { _dblBucket :: BucketName
+data DeleteBucketLifecycle = DeleteBucketLifecycle'
+  { _dblExpectedBucketOwner :: !(Maybe Text)
+  , _dblBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -49,14 +67,22 @@ newtype DeleteBucketLifecycle = DeleteBucketLifecycle'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dblBucket' - Undocumented member.
+-- * 'dblExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'dblBucket' - The bucket name of the lifecycle to delete.
 deleteBucketLifecycle
     :: BucketName -- ^ 'dblBucket'
     -> DeleteBucketLifecycle
-deleteBucketLifecycle pBucket_ = DeleteBucketLifecycle' {_dblBucket = pBucket_}
+deleteBucketLifecycle pBucket_ =
+  DeleteBucketLifecycle'
+    {_dblExpectedBucketOwner = Nothing, _dblBucket = pBucket_}
 
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+dblExpectedBucketOwner :: Lens' DeleteBucketLifecycle (Maybe Text)
+dblExpectedBucketOwner = lens _dblExpectedBucketOwner (\ s a -> s{_dblExpectedBucketOwner = a})
+
+-- | The bucket name of the lifecycle to delete.
 dblBucket :: Lens' DeleteBucketLifecycle BucketName
 dblBucket = lens _dblBucket (\ s a -> s{_dblBucket = a})
 
@@ -71,7 +97,10 @@ instance Hashable DeleteBucketLifecycle where
 instance NFData DeleteBucketLifecycle where
 
 instance ToHeaders DeleteBucketLifecycle where
-        toHeaders = const mempty
+        toHeaders DeleteBucketLifecycle'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _dblExpectedBucketOwner]
 
 instance ToPath DeleteBucketLifecycle where
         toPath DeleteBucketLifecycle'{..}

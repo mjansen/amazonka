@@ -19,12 +19,31 @@
 -- Portability : non-portable (GHC extensions)
 --
 -- Returns the replication configuration of a bucket.
+--
+--
+-- For information about replication configuration, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/replication.html Replication> in the /Amazon Simple Storage Service Developer Guide/ .
+--
+-- This operation requires permissions for the @s3:GetReplicationConfiguration@ action. For more information about permissions, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/using-iam-policies.html Using Bucket Policies and User Policies> .
+--
+-- If you include the @Filter@ element in a replication configuration, you must also include the @DeleteMarkerReplication@ and @Priority@ elements. The response also returns those elements.
+--
+-- For information about @GetBucketReplication@ errors, see <https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html#ReplicationErrorCodeList List of replication-related error codes>
+--
+-- The following operations are related to @GetBucketReplication@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketReplication.html PutBucketReplication>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketReplication.html DeleteBucketReplication>
+--
+--
+--
 module Network.AWS.S3.GetBucketReplication
     (
     -- * Creating a Request
       getBucketReplication
     , GetBucketReplication
     -- * Request Lenses
+    , gbrExpectedBucketOwner
     , gbrBucket
 
     -- * Destructuring the Response
@@ -43,8 +62,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'getBucketReplication' smart constructor.
-newtype GetBucketReplication = GetBucketReplication'
-  { _gbrBucket :: BucketName
+data GetBucketReplication = GetBucketReplication'
+  { _gbrExpectedBucketOwner :: !(Maybe Text)
+  , _gbrBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -52,14 +72,22 @@ newtype GetBucketReplication = GetBucketReplication'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'gbrBucket' - Undocumented member.
+-- * 'gbrExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'gbrBucket' - The bucket name for which to get the replication information.
 getBucketReplication
     :: BucketName -- ^ 'gbrBucket'
     -> GetBucketReplication
-getBucketReplication pBucket_ = GetBucketReplication' {_gbrBucket = pBucket_}
+getBucketReplication pBucket_ =
+  GetBucketReplication'
+    {_gbrExpectedBucketOwner = Nothing, _gbrBucket = pBucket_}
 
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+gbrExpectedBucketOwner :: Lens' GetBucketReplication (Maybe Text)
+gbrExpectedBucketOwner = lens _gbrExpectedBucketOwner (\ s a -> s{_gbrExpectedBucketOwner = a})
+
+-- | The bucket name for which to get the replication information.
 gbrBucket :: Lens' GetBucketReplication BucketName
 gbrBucket = lens _gbrBucket (\ s a -> s{_gbrBucket = a})
 
@@ -78,7 +106,10 @@ instance Hashable GetBucketReplication where
 instance NFData GetBucketReplication where
 
 instance ToHeaders GetBucketReplication where
-        toHeaders = const mempty
+        toHeaders GetBucketReplication'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _gbrExpectedBucketOwner]
 
 instance ToPath GetBucketReplication where
         toPath GetBucketReplication'{..}

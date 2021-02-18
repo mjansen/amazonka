@@ -18,13 +18,42 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Sets the accelerate configuration of an existing bucket.
+-- Sets the accelerate configuration of an existing bucket. Amazon S3 Transfer Acceleration is a bucket-level feature that enables you to perform faster data transfers to Amazon S3.
+--
+--
+-- To use this operation, you must have permission to perform the s3:PutAccelerateConfiguration action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources Permissions Related to Bucket Subresource Operations> and <https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html Managing Access Permissions to Your Amazon S3 Resources> .
+--
+-- The Transfer Acceleration state of a bucket can be set to one of the following two values:
+--
+--     * Enabled – Enables accelerated data transfers to the bucket.
+--
+--     * Suspended – Disables accelerated data transfers to the bucket.
+--
+--
+--
+-- The <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.html GetBucketAccelerateConfiguration> operation returns the transfer acceleration state of a bucket.
+--
+-- After setting the Transfer Acceleration state of a bucket to Enabled, it might take up to thirty minutes before the data transfer rates to the bucket increase.
+--
+-- The name of the bucket used for Transfer Acceleration must be DNS-compliant and must not contain periods (".").
+--
+-- For more information about transfer acceleration, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html Transfer Acceleration> .
+--
+-- The following operations are related to @PutBucketAccelerateConfiguration@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.html GetBucketAccelerateConfiguration>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html CreateBucket>
+--
+--
+--
 module Network.AWS.S3.PutBucketAccelerateConfiguration
     (
     -- * Creating a Request
       putBucketAccelerateConfiguration
     , PutBucketAccelerateConfiguration
     -- * Request Lenses
+    , pbacExpectedBucketOwner
     , pbacBucket
     , pbacAccelerateConfiguration
 
@@ -42,7 +71,8 @@ import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'putBucketAccelerateConfiguration' smart constructor.
 data PutBucketAccelerateConfiguration = PutBucketAccelerateConfiguration'
-  { _pbacBucket                  :: !BucketName
+  { _pbacExpectedBucketOwner     :: !(Maybe Text)
+  , _pbacBucket                  :: !BucketName
   , _pbacAccelerateConfiguration :: !AccelerateConfiguration
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
@@ -51,25 +81,32 @@ data PutBucketAccelerateConfiguration = PutBucketAccelerateConfiguration'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'pbacBucket' - Name of the bucket for which the accelerate configuration is set.
+-- * 'pbacExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
 --
--- * 'pbacAccelerateConfiguration' - Specifies the Accelerate Configuration you want to set for the bucket.
+-- * 'pbacBucket' - The name of the bucket for which the accelerate configuration is set.
+--
+-- * 'pbacAccelerateConfiguration' - Container for setting the transfer acceleration state.
 putBucketAccelerateConfiguration
     :: BucketName -- ^ 'pbacBucket'
     -> AccelerateConfiguration -- ^ 'pbacAccelerateConfiguration'
     -> PutBucketAccelerateConfiguration
 putBucketAccelerateConfiguration pBucket_ pAccelerateConfiguration_ =
   PutBucketAccelerateConfiguration'
-    { _pbacBucket = pBucket_
+    { _pbacExpectedBucketOwner = Nothing
+    , _pbacBucket = pBucket_
     , _pbacAccelerateConfiguration = pAccelerateConfiguration_
     }
 
 
--- | Name of the bucket for which the accelerate configuration is set.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+pbacExpectedBucketOwner :: Lens' PutBucketAccelerateConfiguration (Maybe Text)
+pbacExpectedBucketOwner = lens _pbacExpectedBucketOwner (\ s a -> s{_pbacExpectedBucketOwner = a})
+
+-- | The name of the bucket for which the accelerate configuration is set.
 pbacBucket :: Lens' PutBucketAccelerateConfiguration BucketName
 pbacBucket = lens _pbacBucket (\ s a -> s{_pbacBucket = a})
 
--- | Specifies the Accelerate Configuration you want to set for the bucket.
+-- | Container for setting the transfer acceleration state.
 pbacAccelerateConfiguration :: Lens' PutBucketAccelerateConfiguration AccelerateConfiguration
 pbacAccelerateConfiguration = lens _pbacAccelerateConfiguration (\ s a -> s{_pbacAccelerateConfiguration = a})
 
@@ -98,7 +135,10 @@ instance ToElement PutBucketAccelerateConfiguration
 
 instance ToHeaders PutBucketAccelerateConfiguration
          where
-        toHeaders = const mempty
+        toHeaders PutBucketAccelerateConfiguration'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _pbacExpectedBucketOwner]
 
 instance ToPath PutBucketAccelerateConfiguration
          where

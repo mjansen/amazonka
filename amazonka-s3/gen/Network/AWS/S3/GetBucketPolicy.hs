@@ -18,13 +18,28 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Returns the policy of a specified bucket.
+-- Returns the policy of a specified bucket. If you are using an identity other than the root user of the AWS account that owns the bucket, the calling identity must have the @GetBucketPolicy@ permissions on the specified bucket and belong to the bucket owner's account in order to use this operation.
+--
+--
+-- If you don't have @GetBucketPolicy@ permissions, Amazon S3 returns a @403 Access Denied@ error. If you have the correct permissions, but you're not using an identity that belongs to the bucket owner's account, Amazon S3 returns a @405 Method Not Allowed@ error.
+--
+-- /Important:/ As a security precaution, the root user of the AWS account that owns a bucket can always use this operation, even if the policy explicitly denies the root user the ability to perform this action.
+--
+-- For more information about bucket policies, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/using-iam-policies.html Using Bucket Policies and User Policies> .
+--
+-- The following operation is related to @GetBucketPolicy@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html GetObject>
+--
+--
+--
 module Network.AWS.S3.GetBucketPolicy
     (
     -- * Creating a Request
       getBucketPolicy
     , GetBucketPolicy
     -- * Request Lenses
+    , gbpExpectedBucketOwner
     , gbpBucket
 
     -- * Destructuring the Response
@@ -43,8 +58,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'getBucketPolicy' smart constructor.
-newtype GetBucketPolicy = GetBucketPolicy'
-  { _gbpBucket :: BucketName
+data GetBucketPolicy = GetBucketPolicy'
+  { _gbpExpectedBucketOwner :: !(Maybe Text)
+  , _gbpBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -52,14 +68,21 @@ newtype GetBucketPolicy = GetBucketPolicy'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'gbpBucket' - Undocumented member.
+-- * 'gbpExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'gbpBucket' - The bucket name for which to get the bucket policy.
 getBucketPolicy
     :: BucketName -- ^ 'gbpBucket'
     -> GetBucketPolicy
-getBucketPolicy pBucket_ = GetBucketPolicy' {_gbpBucket = pBucket_}
+getBucketPolicy pBucket_ =
+  GetBucketPolicy' {_gbpExpectedBucketOwner = Nothing, _gbpBucket = pBucket_}
 
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+gbpExpectedBucketOwner :: Lens' GetBucketPolicy (Maybe Text)
+gbpExpectedBucketOwner = lens _gbpExpectedBucketOwner (\ s a -> s{_gbpExpectedBucketOwner = a})
+
+-- | The bucket name for which to get the bucket policy.
 gbpBucket :: Lens' GetBucketPolicy BucketName
 gbpBucket = lens _gbpBucket (\ s a -> s{_gbpBucket = a})
 
@@ -77,7 +100,10 @@ instance Hashable GetBucketPolicy where
 instance NFData GetBucketPolicy where
 
 instance ToHeaders GetBucketPolicy where
-        toHeaders = const mempty
+        toHeaders GetBucketPolicy'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _gbpExpectedBucketOwner]
 
 instance ToPath GetBucketPolicy where
         toPath GetBucketPolicy'{..}

@@ -64,6 +64,9 @@ import Test.Tasty
 --         , requestGetBucketInventoryConfiguration $
 --             getBucketInventoryConfiguration
 --
+--         , requestDeletePublicAccessBlock $
+--             deletePublicAccessBlock
+--
 --         , requestPutBucketInventoryConfiguration $
 --             putBucketInventoryConfiguration
 --
@@ -73,14 +76,35 @@ import Test.Tasty
 --         , requestListBucketInventoryConfigurations $
 --             listBucketInventoryConfigurations
 --
+--         , requestPutPublicAccessBlock $
+--             putPublicAccessBlock
+--
 --         , requestDeleteBucketInventoryConfiguration $
 --             deleteBucketInventoryConfiguration
+--
+--         , requestGetBucketIntelligentTieringConfiguration $
+--             getBucketIntelligentTieringConfiguration
 --
 --         , requestGetBucketNotificationConfiguration $
 --             getBucketNotificationConfiguration
 --
+--         , requestGetObjectLockConfiguration $
+--             getObjectLockConfiguration
+--
+--         , requestPutObjectRetention $
+--             putObjectRetention
+--
 --         , requestPutBucketAccelerateConfiguration $
 --             putBucketAccelerateConfiguration
+--
+--         , requestPutObjectLegalHold $
+--             putObjectLegalHold
+--
+--         , requestPutBucketOwnershipControls $
+--             putBucketOwnershipControls
+--
+--         , requestDeleteBucketOwnershipControls $
+--             deleteBucketOwnershipControls
 --
 --         , requestPutBucketMetricsConfiguration $
 --             putBucketMetricsConfiguration
@@ -130,6 +154,9 @@ import Test.Tasty
 --         , requestCreateMultipartUpload $
 --             createMultipartUpload
 --
+--         , requestGetBucketPolicyStatus $
+--             getBucketPolicyStatus
+--
 --         , requestUploadPart $
 --             uploadPart
 --
@@ -154,6 +181,15 @@ import Test.Tasty
 --         , requestListObjects $
 --             listObjects
 --
+--         , requestGetBucketOwnershipControls $
+--             getBucketOwnershipControls
+--
+--         , requestGetObjectLegalHold $
+--             getObjectLegalHold
+--
+--         , requestGetObjectRetention $
+--             getObjectRetention
+--
 --         , requestDeleteBucketPolicy $
 --             deleteBucketPolicy
 --
@@ -175,6 +211,9 @@ import Test.Tasty
 --         , requestDeleteObjects $
 --             deleteObjects
 --
+--         , requestPutObjectLockConfiguration $
+--             putObjectLockConfiguration
+--
 --         , requestPutBucketNotificationConfiguration $
 --             putBucketNotificationConfiguration
 --
@@ -184,8 +223,20 @@ import Test.Tasty
 --         , requestDeleteBucketCORS $
 --             deleteBucketCORS
 --
+--         , requestDeleteBucketIntelligentTieringConfiguration $
+--             deleteBucketIntelligentTieringConfiguration
+--
+--         , requestListBucketIntelligentTieringConfigurations $
+--             listBucketIntelligentTieringConfigurations
+--
 --         , requestPutBucketCORS $
 --             putBucketCORS
+--
+--         , requestGetPublicAccessBlock $
+--             getPublicAccessBlock
+--
+--         , requestPutBucketIntelligentTieringConfiguration $
+--             putBucketIntelligentTieringConfiguration
 --
 --         , requestGetBucketCORS $
 --             getBucketCORS
@@ -289,6 +340,9 @@ import Test.Tasty
 --         , responseGetBucketInventoryConfiguration $
 --             getBucketInventoryConfigurationResponse
 --
+--         , responseDeletePublicAccessBlock $
+--             deletePublicAccessBlockResponse
+--
 --         , responsePutBucketInventoryConfiguration $
 --             putBucketInventoryConfigurationResponse
 --
@@ -298,14 +352,35 @@ import Test.Tasty
 --         , responseListBucketInventoryConfigurations $
 --             listBucketInventoryConfigurationsResponse
 --
+--         , responsePutPublicAccessBlock $
+--             putPublicAccessBlockResponse
+--
 --         , responseDeleteBucketInventoryConfiguration $
 --             deleteBucketInventoryConfigurationResponse
+--
+--         , responseGetBucketIntelligentTieringConfiguration $
+--             getBucketIntelligentTieringConfigurationResponse
 --
 --         , responseGetBucketNotificationConfiguration $
 --             notificationConfiguration
 --
+--         , responseGetObjectLockConfiguration $
+--             getObjectLockConfigurationResponse
+--
+--         , responsePutObjectRetention $
+--             putObjectRetentionResponse
+--
 --         , responsePutBucketAccelerateConfiguration $
 --             putBucketAccelerateConfigurationResponse
+--
+--         , responsePutObjectLegalHold $
+--             putObjectLegalHoldResponse
+--
+--         , responsePutBucketOwnershipControls $
+--             putBucketOwnershipControlsResponse
+--
+--         , responseDeleteBucketOwnershipControls $
+--             deleteBucketOwnershipControlsResponse
 --
 --         , responsePutBucketMetricsConfiguration $
 --             putBucketMetricsConfigurationResponse
@@ -355,6 +430,9 @@ import Test.Tasty
 --         , responseCreateMultipartUpload $
 --             createMultipartUploadResponse
 --
+--         , responseGetBucketPolicyStatus $
+--             getBucketPolicyStatusResponse
+--
 --         , responseUploadPart $
 --             uploadPartResponse
 --
@@ -379,6 +457,15 @@ import Test.Tasty
 --         , responseListObjects $
 --             listObjectsResponse
 --
+--         , responseGetBucketOwnershipControls $
+--             getBucketOwnershipControlsResponse
+--
+--         , responseGetObjectLegalHold $
+--             getObjectLegalHoldResponse
+--
+--         , responseGetObjectRetention $
+--             getObjectRetentionResponse
+--
 --         , responseDeleteBucketPolicy $
 --             deleteBucketPolicyResponse
 --
@@ -400,6 +487,9 @@ import Test.Tasty
 --         , responseDeleteObjects $
 --             deleteObjectsResponse
 --
+--         , responsePutObjectLockConfiguration $
+--             putObjectLockConfigurationResponse
+--
 --         , responsePutBucketNotificationConfiguration $
 --             putBucketNotificationConfigurationResponse
 --
@@ -409,8 +499,20 @@ import Test.Tasty
 --         , responseDeleteBucketCORS $
 --             deleteBucketCORSResponse
 --
+--         , responseDeleteBucketIntelligentTieringConfiguration $
+--             deleteBucketIntelligentTieringConfigurationResponse
+--
+--         , responseListBucketIntelligentTieringConfigurations $
+--             listBucketIntelligentTieringConfigurationsResponse
+--
 --         , responsePutBucketCORS $
 --             putBucketCORSResponse
+--
+--         , responseGetPublicAccessBlock $
+--             getPublicAccessBlockResponse
+--
+--         , responsePutBucketIntelligentTieringConfiguration $
+--             putBucketIntelligentTieringConfigurationResponse
 --
 --         , responseGetBucketCORS $
 --             getBucketCORSResponse
@@ -535,6 +637,11 @@ requestGetBucketInventoryConfiguration = req
     "GetBucketInventoryConfiguration"
     "fixture/GetBucketInventoryConfiguration.yaml"
 
+requestDeletePublicAccessBlock :: DeletePublicAccessBlock -> TestTree
+requestDeletePublicAccessBlock = req
+    "DeletePublicAccessBlock"
+    "fixture/DeletePublicAccessBlock.yaml"
+
 requestPutBucketInventoryConfiguration :: PutBucketInventoryConfiguration -> TestTree
 requestPutBucketInventoryConfiguration = req
     "PutBucketInventoryConfiguration"
@@ -550,20 +657,55 @@ requestListBucketInventoryConfigurations = req
     "ListBucketInventoryConfigurations"
     "fixture/ListBucketInventoryConfigurations.yaml"
 
+requestPutPublicAccessBlock :: PutPublicAccessBlock -> TestTree
+requestPutPublicAccessBlock = req
+    "PutPublicAccessBlock"
+    "fixture/PutPublicAccessBlock.yaml"
+
 requestDeleteBucketInventoryConfiguration :: DeleteBucketInventoryConfiguration -> TestTree
 requestDeleteBucketInventoryConfiguration = req
     "DeleteBucketInventoryConfiguration"
     "fixture/DeleteBucketInventoryConfiguration.yaml"
+
+requestGetBucketIntelligentTieringConfiguration :: GetBucketIntelligentTieringConfiguration -> TestTree
+requestGetBucketIntelligentTieringConfiguration = req
+    "GetBucketIntelligentTieringConfiguration"
+    "fixture/GetBucketIntelligentTieringConfiguration.yaml"
 
 requestGetBucketNotificationConfiguration :: GetBucketNotificationConfiguration -> TestTree
 requestGetBucketNotificationConfiguration = req
     "GetBucketNotificationConfiguration"
     "fixture/GetBucketNotificationConfiguration.yaml"
 
+requestGetObjectLockConfiguration :: GetObjectLockConfiguration -> TestTree
+requestGetObjectLockConfiguration = req
+    "GetObjectLockConfiguration"
+    "fixture/GetObjectLockConfiguration.yaml"
+
+requestPutObjectRetention :: PutObjectRetention -> TestTree
+requestPutObjectRetention = req
+    "PutObjectRetention"
+    "fixture/PutObjectRetention.yaml"
+
 requestPutBucketAccelerateConfiguration :: PutBucketAccelerateConfiguration -> TestTree
 requestPutBucketAccelerateConfiguration = req
     "PutBucketAccelerateConfiguration"
     "fixture/PutBucketAccelerateConfiguration.yaml"
+
+requestPutObjectLegalHold :: PutObjectLegalHold -> TestTree
+requestPutObjectLegalHold = req
+    "PutObjectLegalHold"
+    "fixture/PutObjectLegalHold.yaml"
+
+requestPutBucketOwnershipControls :: PutBucketOwnershipControls -> TestTree
+requestPutBucketOwnershipControls = req
+    "PutBucketOwnershipControls"
+    "fixture/PutBucketOwnershipControls.yaml"
+
+requestDeleteBucketOwnershipControls :: DeleteBucketOwnershipControls -> TestTree
+requestDeleteBucketOwnershipControls = req
+    "DeleteBucketOwnershipControls"
+    "fixture/DeleteBucketOwnershipControls.yaml"
 
 requestPutBucketMetricsConfiguration :: PutBucketMetricsConfiguration -> TestTree
 requestPutBucketMetricsConfiguration = req
@@ -645,6 +787,11 @@ requestCreateMultipartUpload = req
     "CreateMultipartUpload"
     "fixture/CreateMultipartUpload.yaml"
 
+requestGetBucketPolicyStatus :: GetBucketPolicyStatus -> TestTree
+requestGetBucketPolicyStatus = req
+    "GetBucketPolicyStatus"
+    "fixture/GetBucketPolicyStatus.yaml"
+
 requestSelectObjectContent :: SelectObjectContent -> TestTree
 requestSelectObjectContent = req
     "SelectObjectContent"
@@ -679,6 +826,21 @@ requestListObjects :: ListObjects -> TestTree
 requestListObjects = req
     "ListObjects"
     "fixture/ListObjects.yaml"
+
+requestGetBucketOwnershipControls :: GetBucketOwnershipControls -> TestTree
+requestGetBucketOwnershipControls = req
+    "GetBucketOwnershipControls"
+    "fixture/GetBucketOwnershipControls.yaml"
+
+requestGetObjectLegalHold :: GetObjectLegalHold -> TestTree
+requestGetObjectLegalHold = req
+    "GetObjectLegalHold"
+    "fixture/GetObjectLegalHold.yaml"
+
+requestGetObjectRetention :: GetObjectRetention -> TestTree
+requestGetObjectRetention = req
+    "GetObjectRetention"
+    "fixture/GetObjectRetention.yaml"
 
 requestDeleteBucketPolicy :: DeleteBucketPolicy -> TestTree
 requestDeleteBucketPolicy = req
@@ -715,6 +877,11 @@ requestDeleteObjects = req
     "DeleteObjects"
     "fixture/DeleteObjects.yaml"
 
+requestPutObjectLockConfiguration :: PutObjectLockConfiguration -> TestTree
+requestPutObjectLockConfiguration = req
+    "PutObjectLockConfiguration"
+    "fixture/PutObjectLockConfiguration.yaml"
+
 requestPutBucketNotificationConfiguration :: PutBucketNotificationConfiguration -> TestTree
 requestPutBucketNotificationConfiguration = req
     "PutBucketNotificationConfiguration"
@@ -730,10 +897,30 @@ requestDeleteBucketCORS = req
     "DeleteBucketCORS"
     "fixture/DeleteBucketCORS.yaml"
 
+requestDeleteBucketIntelligentTieringConfiguration :: DeleteBucketIntelligentTieringConfiguration -> TestTree
+requestDeleteBucketIntelligentTieringConfiguration = req
+    "DeleteBucketIntelligentTieringConfiguration"
+    "fixture/DeleteBucketIntelligentTieringConfiguration.yaml"
+
+requestListBucketIntelligentTieringConfigurations :: ListBucketIntelligentTieringConfigurations -> TestTree
+requestListBucketIntelligentTieringConfigurations = req
+    "ListBucketIntelligentTieringConfigurations"
+    "fixture/ListBucketIntelligentTieringConfigurations.yaml"
+
 requestPutBucketCORS :: PutBucketCORS -> TestTree
 requestPutBucketCORS = req
     "PutBucketCORS"
     "fixture/PutBucketCORS.yaml"
+
+requestGetPublicAccessBlock :: GetPublicAccessBlock -> TestTree
+requestGetPublicAccessBlock = req
+    "GetPublicAccessBlock"
+    "fixture/GetPublicAccessBlock.yaml"
+
+requestPutBucketIntelligentTieringConfiguration :: PutBucketIntelligentTieringConfiguration -> TestTree
+requestPutBucketIntelligentTieringConfiguration = req
+    "PutBucketIntelligentTieringConfiguration"
+    "fixture/PutBucketIntelligentTieringConfiguration.yaml"
 
 requestGetBucketCORS :: GetBucketCORS -> TestTree
 requestGetBucketCORS = req
@@ -926,6 +1113,13 @@ responseGetBucketInventoryConfiguration = res
     s3
     (Proxy :: Proxy GetBucketInventoryConfiguration)
 
+responseDeletePublicAccessBlock :: DeletePublicAccessBlockResponse -> TestTree
+responseDeletePublicAccessBlock = res
+    "DeletePublicAccessBlockResponse"
+    "fixture/DeletePublicAccessBlockResponse.proto"
+    s3
+    (Proxy :: Proxy DeletePublicAccessBlock)
+
 responsePutBucketInventoryConfiguration :: PutBucketInventoryConfigurationResponse -> TestTree
 responsePutBucketInventoryConfiguration = res
     "PutBucketInventoryConfigurationResponse"
@@ -947,12 +1141,26 @@ responseListBucketInventoryConfigurations = res
     s3
     (Proxy :: Proxy ListBucketInventoryConfigurations)
 
+responsePutPublicAccessBlock :: PutPublicAccessBlockResponse -> TestTree
+responsePutPublicAccessBlock = res
+    "PutPublicAccessBlockResponse"
+    "fixture/PutPublicAccessBlockResponse.proto"
+    s3
+    (Proxy :: Proxy PutPublicAccessBlock)
+
 responseDeleteBucketInventoryConfiguration :: DeleteBucketInventoryConfigurationResponse -> TestTree
 responseDeleteBucketInventoryConfiguration = res
     "DeleteBucketInventoryConfigurationResponse"
     "fixture/DeleteBucketInventoryConfigurationResponse.proto"
     s3
     (Proxy :: Proxy DeleteBucketInventoryConfiguration)
+
+responseGetBucketIntelligentTieringConfiguration :: GetBucketIntelligentTieringConfigurationResponse -> TestTree
+responseGetBucketIntelligentTieringConfiguration = res
+    "GetBucketIntelligentTieringConfigurationResponse"
+    "fixture/GetBucketIntelligentTieringConfigurationResponse.proto"
+    s3
+    (Proxy :: Proxy GetBucketIntelligentTieringConfiguration)
 
 responseGetBucketNotificationConfiguration :: NotificationConfiguration -> TestTree
 responseGetBucketNotificationConfiguration = res
@@ -961,12 +1169,47 @@ responseGetBucketNotificationConfiguration = res
     s3
     (Proxy :: Proxy GetBucketNotificationConfiguration)
 
+responseGetObjectLockConfiguration :: GetObjectLockConfigurationResponse -> TestTree
+responseGetObjectLockConfiguration = res
+    "GetObjectLockConfigurationResponse"
+    "fixture/GetObjectLockConfigurationResponse.proto"
+    s3
+    (Proxy :: Proxy GetObjectLockConfiguration)
+
+responsePutObjectRetention :: PutObjectRetentionResponse -> TestTree
+responsePutObjectRetention = res
+    "PutObjectRetentionResponse"
+    "fixture/PutObjectRetentionResponse.proto"
+    s3
+    (Proxy :: Proxy PutObjectRetention)
+
 responsePutBucketAccelerateConfiguration :: PutBucketAccelerateConfigurationResponse -> TestTree
 responsePutBucketAccelerateConfiguration = res
     "PutBucketAccelerateConfigurationResponse"
     "fixture/PutBucketAccelerateConfigurationResponse.proto"
     s3
     (Proxy :: Proxy PutBucketAccelerateConfiguration)
+
+responsePutObjectLegalHold :: PutObjectLegalHoldResponse -> TestTree
+responsePutObjectLegalHold = res
+    "PutObjectLegalHoldResponse"
+    "fixture/PutObjectLegalHoldResponse.proto"
+    s3
+    (Proxy :: Proxy PutObjectLegalHold)
+
+responsePutBucketOwnershipControls :: PutBucketOwnershipControlsResponse -> TestTree
+responsePutBucketOwnershipControls = res
+    "PutBucketOwnershipControlsResponse"
+    "fixture/PutBucketOwnershipControlsResponse.proto"
+    s3
+    (Proxy :: Proxy PutBucketOwnershipControls)
+
+responseDeleteBucketOwnershipControls :: DeleteBucketOwnershipControlsResponse -> TestTree
+responseDeleteBucketOwnershipControls = res
+    "DeleteBucketOwnershipControlsResponse"
+    "fixture/DeleteBucketOwnershipControlsResponse.proto"
+    s3
+    (Proxy :: Proxy DeleteBucketOwnershipControls)
 
 responsePutBucketMetricsConfiguration :: PutBucketMetricsConfigurationResponse -> TestTree
 responsePutBucketMetricsConfiguration = res
@@ -1073,6 +1316,13 @@ responseCreateMultipartUpload = res
     s3
     (Proxy :: Proxy CreateMultipartUpload)
 
+responseGetBucketPolicyStatus :: GetBucketPolicyStatusResponse -> TestTree
+responseGetBucketPolicyStatus = res
+    "GetBucketPolicyStatusResponse"
+    "fixture/GetBucketPolicyStatusResponse.proto"
+    s3
+    (Proxy :: Proxy GetBucketPolicyStatus)
+
 responseUploadPart :: UploadPartResponse -> TestTree
 responseUploadPart = res
     "UploadPartResponse"
@@ -1129,6 +1379,27 @@ responseListObjects = res
     s3
     (Proxy :: Proxy ListObjects)
 
+responseGetBucketOwnershipControls :: GetBucketOwnershipControlsResponse -> TestTree
+responseGetBucketOwnershipControls = res
+    "GetBucketOwnershipControlsResponse"
+    "fixture/GetBucketOwnershipControlsResponse.proto"
+    s3
+    (Proxy :: Proxy GetBucketOwnershipControls)
+
+responseGetObjectLegalHold :: GetObjectLegalHoldResponse -> TestTree
+responseGetObjectLegalHold = res
+    "GetObjectLegalHoldResponse"
+    "fixture/GetObjectLegalHoldResponse.proto"
+    s3
+    (Proxy :: Proxy GetObjectLegalHold)
+
+responseGetObjectRetention :: GetObjectRetentionResponse -> TestTree
+responseGetObjectRetention = res
+    "GetObjectRetentionResponse"
+    "fixture/GetObjectRetentionResponse.proto"
+    s3
+    (Proxy :: Proxy GetObjectRetention)
+
 responseDeleteBucketPolicy :: DeleteBucketPolicyResponse -> TestTree
 responseDeleteBucketPolicy = res
     "DeleteBucketPolicyResponse"
@@ -1171,6 +1442,13 @@ responseDeleteObjects = res
     s3
     (Proxy :: Proxy DeleteObjects)
 
+responsePutObjectLockConfiguration :: PutObjectLockConfigurationResponse -> TestTree
+responsePutObjectLockConfiguration = res
+    "PutObjectLockConfigurationResponse"
+    "fixture/PutObjectLockConfigurationResponse.proto"
+    s3
+    (Proxy :: Proxy PutObjectLockConfiguration)
+
 responsePutBucketNotificationConfiguration :: PutBucketNotificationConfigurationResponse -> TestTree
 responsePutBucketNotificationConfiguration = res
     "PutBucketNotificationConfigurationResponse"
@@ -1192,12 +1470,40 @@ responseDeleteBucketCORS = res
     s3
     (Proxy :: Proxy DeleteBucketCORS)
 
+responseDeleteBucketIntelligentTieringConfiguration :: DeleteBucketIntelligentTieringConfigurationResponse -> TestTree
+responseDeleteBucketIntelligentTieringConfiguration = res
+    "DeleteBucketIntelligentTieringConfigurationResponse"
+    "fixture/DeleteBucketIntelligentTieringConfigurationResponse.proto"
+    s3
+    (Proxy :: Proxy DeleteBucketIntelligentTieringConfiguration)
+
+responseListBucketIntelligentTieringConfigurations :: ListBucketIntelligentTieringConfigurationsResponse -> TestTree
+responseListBucketIntelligentTieringConfigurations = res
+    "ListBucketIntelligentTieringConfigurationsResponse"
+    "fixture/ListBucketIntelligentTieringConfigurationsResponse.proto"
+    s3
+    (Proxy :: Proxy ListBucketIntelligentTieringConfigurations)
+
 responsePutBucketCORS :: PutBucketCORSResponse -> TestTree
 responsePutBucketCORS = res
     "PutBucketCORSResponse"
     "fixture/PutBucketCORSResponse.proto"
     s3
     (Proxy :: Proxy PutBucketCORS)
+
+responseGetPublicAccessBlock :: GetPublicAccessBlockResponse -> TestTree
+responseGetPublicAccessBlock = res
+    "GetPublicAccessBlockResponse"
+    "fixture/GetPublicAccessBlockResponse.proto"
+    s3
+    (Proxy :: Proxy GetPublicAccessBlock)
+
+responsePutBucketIntelligentTieringConfiguration :: PutBucketIntelligentTieringConfigurationResponse -> TestTree
+responsePutBucketIntelligentTieringConfiguration = res
+    "PutBucketIntelligentTieringConfigurationResponse"
+    "fixture/PutBucketIntelligentTieringConfigurationResponse.proto"
+    s3
+    (Proxy :: Proxy PutBucketIntelligentTieringConfiguration)
 
 responseGetBucketCORS :: GetBucketCORSResponse -> TestTree
 responseGetBucketCORS = res

@@ -19,12 +19,25 @@
 -- Portability : non-portable (GHC extensions)
 --
 -- Deletes the tags from the bucket.
+--
+--
+-- To use this operation, you must have permission to perform the @s3:PutBucketTagging@ action. By default, the bucket owner has this permission and can grant this permission to others.
+--
+-- The following operations are related to @DeleteBucketTagging@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketTagging.html GetBucketTagging>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html PutBucketTagging>
+--
+--
+--
 module Network.AWS.S3.DeleteBucketTagging
     (
     -- * Creating a Request
       deleteBucketTagging
     , DeleteBucketTagging
     -- * Request Lenses
+    , dbtExpectedBucketOwner
     , dbtBucket
 
     -- * Destructuring the Response
@@ -40,8 +53,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'deleteBucketTagging' smart constructor.
-newtype DeleteBucketTagging = DeleteBucketTagging'
-  { _dbtBucket :: BucketName
+data DeleteBucketTagging = DeleteBucketTagging'
+  { _dbtExpectedBucketOwner :: !(Maybe Text)
+  , _dbtBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -49,14 +63,22 @@ newtype DeleteBucketTagging = DeleteBucketTagging'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dbtBucket' - Undocumented member.
+-- * 'dbtExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'dbtBucket' - The bucket that has the tag set to be removed.
 deleteBucketTagging
     :: BucketName -- ^ 'dbtBucket'
     -> DeleteBucketTagging
-deleteBucketTagging pBucket_ = DeleteBucketTagging' {_dbtBucket = pBucket_}
+deleteBucketTagging pBucket_ =
+  DeleteBucketTagging'
+    {_dbtExpectedBucketOwner = Nothing, _dbtBucket = pBucket_}
 
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+dbtExpectedBucketOwner :: Lens' DeleteBucketTagging (Maybe Text)
+dbtExpectedBucketOwner = lens _dbtExpectedBucketOwner (\ s a -> s{_dbtExpectedBucketOwner = a})
+
+-- | The bucket that has the tag set to be removed.
 dbtBucket :: Lens' DeleteBucketTagging BucketName
 dbtBucket = lens _dbtBucket (\ s a -> s{_dbtBucket = a})
 
@@ -71,7 +93,10 @@ instance Hashable DeleteBucketTagging where
 instance NFData DeleteBucketTagging where
 
 instance ToHeaders DeleteBucketTagging where
-        toHeaders = const mempty
+        toHeaders DeleteBucketTagging'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _dbtExpectedBucketOwner]
 
 instance ToPath DeleteBucketTagging where
         toPath DeleteBucketTagging'{..}

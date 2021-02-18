@@ -19,12 +19,29 @@
 -- Portability : non-portable (GHC extensions)
 --
 -- Returns the versioning state of a bucket.
+--
+--
+-- To retrieve the versioning state of a bucket, you must be the bucket owner.
+--
+-- This implementation also returns the MFA Delete status of the versioning state. If the MFA Delete status is @enabled@ , the bucket owner must use an authentication device to change the versioning state of the bucket.
+--
+-- The following operations are related to @GetBucketVersioning@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html GetObject>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html PutObject>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html DeleteObject>
+--
+--
+--
 module Network.AWS.S3.GetBucketVersioning
     (
     -- * Creating a Request
       getBucketVersioning
     , GetBucketVersioning
     -- * Request Lenses
+    , gbvExpectedBucketOwner
     , gbvBucket
 
     -- * Destructuring the Response
@@ -44,8 +61,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'getBucketVersioning' smart constructor.
-newtype GetBucketVersioning = GetBucketVersioning'
-  { _gbvBucket :: BucketName
+data GetBucketVersioning = GetBucketVersioning'
+  { _gbvExpectedBucketOwner :: !(Maybe Text)
+  , _gbvBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -53,14 +71,22 @@ newtype GetBucketVersioning = GetBucketVersioning'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'gbvBucket' - Undocumented member.
+-- * 'gbvExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'gbvBucket' - The name of the bucket for which to get the versioning information.
 getBucketVersioning
     :: BucketName -- ^ 'gbvBucket'
     -> GetBucketVersioning
-getBucketVersioning pBucket_ = GetBucketVersioning' {_gbvBucket = pBucket_}
+getBucketVersioning pBucket_ =
+  GetBucketVersioning'
+    {_gbvExpectedBucketOwner = Nothing, _gbvBucket = pBucket_}
 
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+gbvExpectedBucketOwner :: Lens' GetBucketVersioning (Maybe Text)
+gbvExpectedBucketOwner = lens _gbvExpectedBucketOwner (\ s a -> s{_gbvExpectedBucketOwner = a})
+
+-- | The name of the bucket for which to get the versioning information.
 gbvBucket :: Lens' GetBucketVersioning BucketName
 gbvBucket = lens _gbvBucket (\ s a -> s{_gbvBucket = a})
 
@@ -80,7 +106,10 @@ instance Hashable GetBucketVersioning where
 instance NFData GetBucketVersioning where
 
 instance ToHeaders GetBucketVersioning where
-        toHeaders = const mempty
+        toHeaders GetBucketVersioning'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _gbvExpectedBucketOwner]
 
 instance ToPath GetBucketVersioning where
         toPath GetBucketVersioning'{..}

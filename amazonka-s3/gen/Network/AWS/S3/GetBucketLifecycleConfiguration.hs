@@ -18,13 +18,42 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Returns the lifecycle configuration information set on the bucket.
+-- Returns the lifecycle configuration information set on the bucket. For information about lifecycle configuration, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html Object Lifecycle Management> .
+--
+--
+-- To use this operation, you must have permission to perform the @s3:GetLifecycleConfiguration@ action. The bucket owner has this permission, by default. The bucket owner can grant this permission to others. For more information about permissions, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources Permissions Related to Bucket Subresource Operations> and <https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html Managing Access Permissions to Your Amazon S3 Resources> .
+--
+-- @GetBucketLifecycleConfiguration@ has the following special error:
+--
+--     * Error code: @NoSuchLifecycleConfiguration@
+--
+--     * Description: The lifecycle configuration does not exist.
+--
+--     * HTTP Status Code: 404 Not Found
+--
+--     * SOAP Fault Code Prefix: Client
+--
+--
+--
+--
+--
+-- The following operations are related to @GetBucketLifecycleConfiguration@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycle.html GetBucketLifecycle>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycle.html PutBucketLifecycle>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketLifecycle.html DeleteBucketLifecycle>
+--
+--
+--
 module Network.AWS.S3.GetBucketLifecycleConfiguration
     (
     -- * Creating a Request
       getBucketLifecycleConfiguration
     , GetBucketLifecycleConfiguration
     -- * Request Lenses
+    , gblcExpectedBucketOwner
     , gblcBucket
 
     -- * Destructuring the Response
@@ -43,8 +72,9 @@ import Network.AWS.S3.Types
 import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'getBucketLifecycleConfiguration' smart constructor.
-newtype GetBucketLifecycleConfiguration = GetBucketLifecycleConfiguration'
-  { _gblcBucket :: BucketName
+data GetBucketLifecycleConfiguration = GetBucketLifecycleConfiguration'
+  { _gblcExpectedBucketOwner :: !(Maybe Text)
+  , _gblcBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -52,15 +82,22 @@ newtype GetBucketLifecycleConfiguration = GetBucketLifecycleConfiguration'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'gblcBucket' - Undocumented member.
+-- * 'gblcExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'gblcBucket' - The name of the bucket for which to get the lifecycle information.
 getBucketLifecycleConfiguration
     :: BucketName -- ^ 'gblcBucket'
     -> GetBucketLifecycleConfiguration
 getBucketLifecycleConfiguration pBucket_ =
-  GetBucketLifecycleConfiguration' {_gblcBucket = pBucket_}
+  GetBucketLifecycleConfiguration'
+    {_gblcExpectedBucketOwner = Nothing, _gblcBucket = pBucket_}
 
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+gblcExpectedBucketOwner :: Lens' GetBucketLifecycleConfiguration (Maybe Text)
+gblcExpectedBucketOwner = lens _gblcExpectedBucketOwner (\ s a -> s{_gblcExpectedBucketOwner = a})
+
+-- | The name of the bucket for which to get the lifecycle information.
 gblcBucket :: Lens' GetBucketLifecycleConfiguration BucketName
 gblcBucket = lens _gblcBucket (\ s a -> s{_gblcBucket = a})
 
@@ -83,7 +120,10 @@ instance NFData GetBucketLifecycleConfiguration where
 
 instance ToHeaders GetBucketLifecycleConfiguration
          where
-        toHeaders = const mempty
+        toHeaders GetBucketLifecycleConfiguration'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _gblcExpectedBucketOwner]
 
 instance ToPath GetBucketLifecycleConfiguration where
         toPath GetBucketLifecycleConfiguration'{..}
@@ -104,7 +144,7 @@ data GetBucketLifecycleConfigurationResponse = GetBucketLifecycleConfigurationRe
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'gblcrsRules' - Undocumented member.
+-- * 'gblcrsRules' - Container for a lifecycle rule.
 --
 -- * 'gblcrsResponseStatus' - -- | The response status code.
 getBucketLifecycleConfigurationResponse
@@ -115,7 +155,7 @@ getBucketLifecycleConfigurationResponse pResponseStatus_ =
     {_gblcrsRules = Nothing, _gblcrsResponseStatus = pResponseStatus_}
 
 
--- | Undocumented member.
+-- | Container for a lifecycle rule.
 gblcrsRules :: Lens' GetBucketLifecycleConfigurationResponse [LifecycleRule]
 gblcrsRules = lens _gblcrsRules (\ s a -> s{_gblcrsRules = a}) . _Default . _Coerce
 

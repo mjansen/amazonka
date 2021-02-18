@@ -18,7 +18,23 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Creates a new server-side encryption configuration (or replaces an existing one, if present).
+-- This operation uses the @encryption@ subresource to configure default encryption and Amazon S3 Bucket Key for an existing bucket.
+--
+--
+-- Default encryption for a bucket can use server-side encryption with Amazon S3-managed keys (SSE-S3) or AWS KMS customer master keys (SSE-KMS). If you specify default encryption using SSE-KMS, you can also configure Amazon S3 Bucket Key. For information about default encryption, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html Amazon S3 default bucket encryption> in the /Amazon Simple Storage Service Developer Guide/ . For more information about S3 Bucket Keys, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html Amazon S3 Bucket Keys> in the /Amazon Simple Storage Service Developer Guide/ .
+--
+-- /Important:/ This operation requires AWS Signature Version 4. For more information, see <sig-v4-authenticating-requests.html Authenticating Requests (AWS Signature Version 4)> .
+--
+-- To use this operation, you must have permissions to perform the @s3:PutEncryptionConfiguration@ action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources Permissions Related to Bucket Subresource Operations> and <https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html Managing Access Permissions to Your Amazon S3 Resources> in the Amazon Simple Storage Service Developer Guide.
+--
+-- __Related Resources__
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketEncryption.html GetBucketEncryption>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketEncryption.html DeleteBucketEncryption>
+--
+--
+--
 module Network.AWS.S3.PutBucketEncryption
     (
     -- * Creating a Request
@@ -26,6 +42,7 @@ module Network.AWS.S3.PutBucketEncryption
     , PutBucketEncryption
     -- * Request Lenses
     , pbeContentMD5
+    , pbeExpectedBucketOwner
     , pbeBucket
     , pbeServerSideEncryptionConfiguration
 
@@ -44,6 +61,7 @@ import Network.AWS.S3.Types.Product
 -- | /See:/ 'putBucketEncryption' smart constructor.
 data PutBucketEncryption = PutBucketEncryption'
   { _pbeContentMD5                        :: !(Maybe Text)
+  , _pbeExpectedBucketOwner               :: !(Maybe Text)
   , _pbeBucket                            :: !BucketName
   , _pbeServerSideEncryptionConfiguration :: !ServerSideEncryptionConfiguration
   } deriving (Eq, Show, Data, Typeable, Generic)
@@ -53,9 +71,11 @@ data PutBucketEncryption = PutBucketEncryption'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'pbeContentMD5' - The base64-encoded 128-bit MD5 digest of the server-side encryption configuration.
+-- * 'pbeContentMD5' - The base64-encoded 128-bit MD5 digest of the server-side encryption configuration. For requests made using the AWS Command Line Interface (CLI) or AWS SDKs, this field is calculated automatically.
 --
--- * 'pbeBucket' - The name of the bucket for which the server-side encryption configuration is set.
+-- * 'pbeExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'pbeBucket' - Specifies default encryption for a bucket using server-side encryption with Amazon S3-managed keys (SSE-S3) or customer master keys stored in AWS KMS (SSE-KMS). For information about the Amazon S3 default encryption feature, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html Amazon S3 Default Bucket Encryption> in the /Amazon Simple Storage Service Developer Guide/ .
 --
 -- * 'pbeServerSideEncryptionConfiguration' - Undocumented member.
 putBucketEncryption
@@ -65,17 +85,22 @@ putBucketEncryption
 putBucketEncryption pBucket_ pServerSideEncryptionConfiguration_ =
   PutBucketEncryption'
     { _pbeContentMD5 = Nothing
+    , _pbeExpectedBucketOwner = Nothing
     , _pbeBucket = pBucket_
     , _pbeServerSideEncryptionConfiguration =
         pServerSideEncryptionConfiguration_
     }
 
 
--- | The base64-encoded 128-bit MD5 digest of the server-side encryption configuration.
+-- | The base64-encoded 128-bit MD5 digest of the server-side encryption configuration. For requests made using the AWS Command Line Interface (CLI) or AWS SDKs, this field is calculated automatically.
 pbeContentMD5 :: Lens' PutBucketEncryption (Maybe Text)
 pbeContentMD5 = lens _pbeContentMD5 (\ s a -> s{_pbeContentMD5 = a})
 
--- | The name of the bucket for which the server-side encryption configuration is set.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+pbeExpectedBucketOwner :: Lens' PutBucketEncryption (Maybe Text)
+pbeExpectedBucketOwner = lens _pbeExpectedBucketOwner (\ s a -> s{_pbeExpectedBucketOwner = a})
+
+-- | Specifies default encryption for a bucket using server-side encryption with Amazon S3-managed keys (SSE-S3) or customer master keys stored in AWS KMS (SSE-KMS). For information about the Amazon S3 default encryption feature, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html Amazon S3 Default Bucket Encryption> in the /Amazon Simple Storage Service Developer Guide/ .
 pbeBucket :: Lens' PutBucketEncryption BucketName
 pbeBucket = lens _pbeBucket (\ s a -> s{_pbeBucket = a})
 
@@ -102,7 +127,10 @@ instance ToElement PutBucketEncryption where
 
 instance ToHeaders PutBucketEncryption where
         toHeaders PutBucketEncryption'{..}
-          = mconcat ["Content-MD5" =# _pbeContentMD5]
+          = mconcat
+              ["Content-MD5" =# _pbeContentMD5,
+               "x-amz-expected-bucket-owner" =#
+                 _pbeExpectedBucketOwner]
 
 instance ToPath PutBucketEncryption where
         toPath PutBucketEncryption'{..}

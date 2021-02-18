@@ -18,7 +18,25 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Lists the metrics configurations for the bucket.
+-- Lists the metrics configurations for the bucket. The metrics configurations are only for the request metrics of the bucket and do not provide information on daily storage metrics. You can have up to 1,000 configurations per bucket.
+--
+--
+-- This operation supports list pagination and does not return more than 100 configurations at a time. Always check the @IsTruncated@ element in the response. If there are no more configurations to list, @IsTruncated@ is set to false. If there are more configurations to list, @IsTruncated@ is set to true, and there is a value in @NextContinuationToken@ . You use the @NextContinuationToken@ value to continue the pagination of the list by passing the value in @continuation-token@ in the request to @GET@ the next page.
+--
+-- To use this operation, you must have permissions to perform the @s3:GetMetricsConfiguration@ action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources Permissions Related to Bucket Subresource Operations> and <https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html Managing Access Permissions to Your Amazon S3 Resources> .
+--
+-- For more information about metrics configurations and CloudWatch request metrics, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html Monitoring Metrics with Amazon CloudWatch> .
+--
+-- The following operations are related to @ListBucketMetricsConfigurations@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketMetricsConfiguration.html PutBucketMetricsConfiguration>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketMetricsConfiguration.html GetBucketMetricsConfiguration>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketMetricsConfiguration.html DeleteBucketMetricsConfiguration>
+--
+--
+--
 module Network.AWS.S3.ListBucketMetricsConfigurations
     (
     -- * Creating a Request
@@ -26,6 +44,7 @@ module Network.AWS.S3.ListBucketMetricsConfigurations
     , ListBucketMetricsConfigurations
     -- * Request Lenses
     , lbmcContinuationToken
+    , lbmcExpectedBucketOwner
     , lbmcBucket
 
     -- * Destructuring the Response
@@ -48,8 +67,9 @@ import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'listBucketMetricsConfigurations' smart constructor.
 data ListBucketMetricsConfigurations = ListBucketMetricsConfigurations'
-  { _lbmcContinuationToken :: !(Maybe Text)
-  , _lbmcBucket            :: !BucketName
+  { _lbmcContinuationToken   :: !(Maybe Text)
+  , _lbmcExpectedBucketOwner :: !(Maybe Text)
+  , _lbmcBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -59,18 +79,27 @@ data ListBucketMetricsConfigurations = ListBucketMetricsConfigurations'
 --
 -- * 'lbmcContinuationToken' - The marker that is used to continue a metrics configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.
 --
+-- * 'lbmcExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
 -- * 'lbmcBucket' - The name of the bucket containing the metrics configurations to retrieve.
 listBucketMetricsConfigurations
     :: BucketName -- ^ 'lbmcBucket'
     -> ListBucketMetricsConfigurations
 listBucketMetricsConfigurations pBucket_ =
   ListBucketMetricsConfigurations'
-    {_lbmcContinuationToken = Nothing, _lbmcBucket = pBucket_}
+    { _lbmcContinuationToken = Nothing
+    , _lbmcExpectedBucketOwner = Nothing
+    , _lbmcBucket = pBucket_
+    }
 
 
 -- | The marker that is used to continue a metrics configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.
 lbmcContinuationToken :: Lens' ListBucketMetricsConfigurations (Maybe Text)
 lbmcContinuationToken = lens _lbmcContinuationToken (\ s a -> s{_lbmcContinuationToken = a})
+
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+lbmcExpectedBucketOwner :: Lens' ListBucketMetricsConfigurations (Maybe Text)
+lbmcExpectedBucketOwner = lens _lbmcExpectedBucketOwner (\ s a -> s{_lbmcExpectedBucketOwner = a})
 
 -- | The name of the bucket containing the metrics configurations to retrieve.
 lbmcBucket :: Lens' ListBucketMetricsConfigurations BucketName
@@ -98,7 +127,10 @@ instance NFData ListBucketMetricsConfigurations where
 
 instance ToHeaders ListBucketMetricsConfigurations
          where
-        toHeaders = const mempty
+        toHeaders ListBucketMetricsConfigurations'{..}
+          = mconcat
+              ["x-amz-expected-bucket-owner" =#
+                 _lbmcExpectedBucketOwner]
 
 instance ToPath ListBucketMetricsConfigurations where
         toPath ListBucketMetricsConfigurations'{..}
@@ -129,7 +161,7 @@ data ListBucketMetricsConfigurationsResponse = ListBucketMetricsConfigurationsRe
 --
 -- * 'lbmcrsMetricsConfigurationList' - The list of metrics configurations for a bucket.
 --
--- * 'lbmcrsNextContinuationToken' - The marker used to continue a metrics configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.
+-- * 'lbmcrsNextContinuationToken' - The marker used to continue a metrics configuration listing that has been truncated. Use the @NextContinuationToken@ from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.
 --
 -- * 'lbmcrsIsTruncated' - Indicates whether the returned list of metrics configurations is complete. A value of true indicates that the list is not complete and the NextContinuationToken will be provided for a subsequent request.
 --
@@ -155,7 +187,7 @@ lbmcrsContinuationToken = lens _lbmcrsContinuationToken (\ s a -> s{_lbmcrsConti
 lbmcrsMetricsConfigurationList :: Lens' ListBucketMetricsConfigurationsResponse [MetricsConfiguration]
 lbmcrsMetricsConfigurationList = lens _lbmcrsMetricsConfigurationList (\ s a -> s{_lbmcrsMetricsConfigurationList = a}) . _Default . _Coerce
 
--- | The marker used to continue a metrics configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.
+-- | The marker used to continue a metrics configuration listing that has been truncated. Use the @NextContinuationToken@ from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.
 lbmcrsNextContinuationToken :: Lens' ListBucketMetricsConfigurationsResponse (Maybe Text)
 lbmcrsNextContinuationToken = lens _lbmcrsNextContinuationToken (\ s a -> s{_lbmcrsNextContinuationToken = a})
 

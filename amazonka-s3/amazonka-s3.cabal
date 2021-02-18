@@ -54,9 +54,11 @@ library
         , Network.AWS.S3.DeleteBucketAnalyticsConfiguration
         , Network.AWS.S3.DeleteBucketCORS
         , Network.AWS.S3.DeleteBucketEncryption
+        , Network.AWS.S3.DeleteBucketIntelligentTieringConfiguration
         , Network.AWS.S3.DeleteBucketInventoryConfiguration
         , Network.AWS.S3.DeleteBucketLifecycle
         , Network.AWS.S3.DeleteBucketMetricsConfiguration
+        , Network.AWS.S3.DeleteBucketOwnershipControls
         , Network.AWS.S3.DeleteBucketPolicy
         , Network.AWS.S3.DeleteBucketReplication
         , Network.AWS.S3.DeleteBucketTagging
@@ -64,18 +66,22 @@ library
         , Network.AWS.S3.DeleteObject
         , Network.AWS.S3.DeleteObjectTagging
         , Network.AWS.S3.DeleteObjects
+        , Network.AWS.S3.DeletePublicAccessBlock
         , Network.AWS.S3.GetBucketACL
         , Network.AWS.S3.GetBucketAccelerateConfiguration
         , Network.AWS.S3.GetBucketAnalyticsConfiguration
         , Network.AWS.S3.GetBucketCORS
         , Network.AWS.S3.GetBucketEncryption
+        , Network.AWS.S3.GetBucketIntelligentTieringConfiguration
         , Network.AWS.S3.GetBucketInventoryConfiguration
         , Network.AWS.S3.GetBucketLifecycleConfiguration
         , Network.AWS.S3.GetBucketLocation
         , Network.AWS.S3.GetBucketLogging
         , Network.AWS.S3.GetBucketMetricsConfiguration
         , Network.AWS.S3.GetBucketNotificationConfiguration
+        , Network.AWS.S3.GetBucketOwnershipControls
         , Network.AWS.S3.GetBucketPolicy
+        , Network.AWS.S3.GetBucketPolicyStatus
         , Network.AWS.S3.GetBucketReplication
         , Network.AWS.S3.GetBucketRequestPayment
         , Network.AWS.S3.GetBucketTagging
@@ -83,11 +89,16 @@ library
         , Network.AWS.S3.GetBucketWebsite
         , Network.AWS.S3.GetObject
         , Network.AWS.S3.GetObjectACL
+        , Network.AWS.S3.GetObjectLegalHold
+        , Network.AWS.S3.GetObjectLockConfiguration
+        , Network.AWS.S3.GetObjectRetention
         , Network.AWS.S3.GetObjectTagging
         , Network.AWS.S3.GetObjectTorrent
+        , Network.AWS.S3.GetPublicAccessBlock
         , Network.AWS.S3.HeadBucket
         , Network.AWS.S3.HeadObject
         , Network.AWS.S3.ListBucketAnalyticsConfigurations
+        , Network.AWS.S3.ListBucketIntelligentTieringConfigurations
         , Network.AWS.S3.ListBucketInventoryConfigurations
         , Network.AWS.S3.ListBucketMetricsConfigurations
         , Network.AWS.S3.ListBuckets
@@ -101,11 +112,13 @@ library
         , Network.AWS.S3.PutBucketAnalyticsConfiguration
         , Network.AWS.S3.PutBucketCORS
         , Network.AWS.S3.PutBucketEncryption
+        , Network.AWS.S3.PutBucketIntelligentTieringConfiguration
         , Network.AWS.S3.PutBucketInventoryConfiguration
         , Network.AWS.S3.PutBucketLifecycleConfiguration
         , Network.AWS.S3.PutBucketLogging
         , Network.AWS.S3.PutBucketMetricsConfiguration
         , Network.AWS.S3.PutBucketNotificationConfiguration
+        , Network.AWS.S3.PutBucketOwnershipControls
         , Network.AWS.S3.PutBucketPolicy
         , Network.AWS.S3.PutBucketReplication
         , Network.AWS.S3.PutBucketRequestPayment
@@ -114,7 +127,11 @@ library
         , Network.AWS.S3.PutBucketWebsite
         , Network.AWS.S3.PutObject
         , Network.AWS.S3.PutObjectACL
+        , Network.AWS.S3.PutObjectLegalHold
+        , Network.AWS.S3.PutObjectLockConfiguration
+        , Network.AWS.S3.PutObjectRetention
         , Network.AWS.S3.PutObjectTagging
+        , Network.AWS.S3.PutPublicAccessBlock
         , Network.AWS.S3.RestoreObject
         , Network.AWS.S3.SelectObjectContent
         , Network.AWS.S3.Types

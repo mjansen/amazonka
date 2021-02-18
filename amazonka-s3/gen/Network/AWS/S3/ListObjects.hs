@@ -18,7 +18,25 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket.
+-- Returns some or all (up to 1,000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. A 200 OK response can contain valid or invalid XML. Be sure to design your application to parse the contents of the response and handle it appropriately.
+--
+--
+-- /Important:/ This API has been revised. We recommend that you use the newer version, <https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html ListObjectsV2> , when developing applications. For backward compatibility, Amazon S3 continues to support @ListObjects@ .
+--
+-- The following operations are related to @ListObjects@ :
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html ListObjectsV2>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html GetObject>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html PutObject>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html CreateBucket>
+--
+--     * <https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBuckets.html ListBuckets>
+--
+--
+--
 --
 -- This operation returns paginated results.
 module Network.AWS.S3.ListObjects
@@ -33,6 +51,7 @@ module Network.AWS.S3.ListObjects
     , loMarker
     , loMaxKeys
     , loDelimiter
+    , loExpectedBucketOwner
     , loBucket
 
     -- * Destructuring the Response
@@ -62,13 +81,14 @@ import Network.AWS.S3.Types.Product
 
 -- | /See:/ 'listObjects' smart constructor.
 data ListObjects = ListObjects'
-  { _loPrefix       :: !(Maybe Text)
-  , _loEncodingType :: !(Maybe EncodingType)
-  , _loRequestPayer :: !(Maybe RequestPayer)
-  , _loMarker       :: !(Maybe Text)
-  , _loMaxKeys      :: !(Maybe Int)
-  , _loDelimiter    :: !(Maybe Delimiter)
-  , _loBucket       :: !BucketName
+  { _loPrefix              :: !(Maybe Text)
+  , _loEncodingType        :: !(Maybe EncodingType)
+  , _loRequestPayer        :: !(Maybe RequestPayer)
+  , _loMarker              :: !(Maybe Text)
+  , _loMaxKeys             :: !(Maybe Int)
+  , _loDelimiter           :: !(Maybe Delimiter)
+  , _loExpectedBucketOwner :: !(Maybe Text)
+  , _loBucket              :: !BucketName
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -84,11 +104,13 @@ data ListObjects = ListObjects'
 --
 -- * 'loMarker' - Specifies the key to start with when listing objects in a bucket.
 --
--- * 'loMaxKeys' - Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.
+-- * 'loMaxKeys' - Sets the maximum number of keys returned in the response. By default the API returns up to 1,000 key names. The response might contain fewer keys but will never contain more.
 --
 -- * 'loDelimiter' - A delimiter is a character you use to group keys.
 --
--- * 'loBucket' - Undocumented member.
+-- * 'loExpectedBucketOwner' - The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+--
+-- * 'loBucket' - The name of the bucket containing the objects. When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form /AccessPointName/ -/AccountId/ .s3-accesspoint./Region/ .amazonaws.com. When using this operation with an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html Using Access Points> in the /Amazon Simple Storage Service Developer Guide/ . When using this API with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form /AccessPointName/ -/AccountId/ ./outpostID/ .s3-outposts./Region/ .amazonaws.com. When using this operation using S3 on Outposts through the AWS SDKs, you provide the Outposts bucket ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/S3onOutposts.html Using S3 on Outposts> in the /Amazon Simple Storage Service Developer Guide/ .
 listObjects
     :: BucketName -- ^ 'loBucket'
     -> ListObjects
@@ -100,6 +122,7 @@ listObjects pBucket_ =
     , _loMarker = Nothing
     , _loMaxKeys = Nothing
     , _loDelimiter = Nothing
+    , _loExpectedBucketOwner = Nothing
     , _loBucket = pBucket_
     }
 
@@ -120,7 +143,7 @@ loRequestPayer = lens _loRequestPayer (\ s a -> s{_loRequestPayer = a})
 loMarker :: Lens' ListObjects (Maybe Text)
 loMarker = lens _loMarker (\ s a -> s{_loMarker = a})
 
--- | Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.
+-- | Sets the maximum number of keys returned in the response. By default the API returns up to 1,000 key names. The response might contain fewer keys but will never contain more.
 loMaxKeys :: Lens' ListObjects (Maybe Int)
 loMaxKeys = lens _loMaxKeys (\ s a -> s{_loMaxKeys = a})
 
@@ -128,7 +151,11 @@ loMaxKeys = lens _loMaxKeys (\ s a -> s{_loMaxKeys = a})
 loDelimiter :: Lens' ListObjects (Maybe Delimiter)
 loDelimiter = lens _loDelimiter (\ s a -> s{_loDelimiter = a})
 
--- | Undocumented member.
+-- | The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP @403 (Access Denied)@ error.
+loExpectedBucketOwner :: Lens' ListObjects (Maybe Text)
+loExpectedBucketOwner = lens _loExpectedBucketOwner (\ s a -> s{_loExpectedBucketOwner = a})
+
+-- | The name of the bucket containing the objects. When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form /AccessPointName/ -/AccountId/ .s3-accesspoint./Region/ .amazonaws.com. When using this operation with an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html Using Access Points> in the /Amazon Simple Storage Service Developer Guide/ . When using this API with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form /AccessPointName/ -/AccountId/ ./outpostID/ .s3-outposts./Region/ .amazonaws.com. When using this operation using S3 on Outposts through the AWS SDKs, you provide the Outposts bucket ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <https://docs.aws.amazon.com/AmazonS3/latest/dev/S3onOutposts.html Using S3 on Outposts> in the /Amazon Simple Storage Service Developer Guide/ .
 loBucket :: Lens' ListObjects BucketName
 loBucket = lens _loBucket (\ s a -> s{_loBucket = a})
 
@@ -172,7 +199,10 @@ instance NFData ListObjects where
 
 instance ToHeaders ListObjects where
         toHeaders ListObjects'{..}
-          = mconcat ["x-amz-request-payer" =# _loRequestPayer]
+          = mconcat
+              ["x-amz-request-payer" =# _loRequestPayer,
+               "x-amz-expected-bucket-owner" =#
+                 _loExpectedBucketOwner]
 
 instance ToPath ListObjects where
         toPath ListObjects'{..}
@@ -206,25 +236,25 @@ data ListObjectsResponse = ListObjectsResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'lorsContents' - Undocumented member.
+-- * 'lorsContents' - Metadata about each object returned.
 --
--- * 'lorsPrefix' - Undocumented member.
+-- * 'lorsPrefix' - Keys that begin with the indicated prefix.
 --
--- * 'lorsCommonPrefixes' - Undocumented member.
+-- * 'lorsCommonPrefixes' - All of the keys rolled up in a common prefix count as a single return when calculating the number of returns.  A response can contain CommonPrefixes only if you specify a delimiter. CommonPrefixes contains all (if there are any) keys between Prefix and the next occurrence of the string specified by the delimiter. CommonPrefixes lists keys that act like subdirectories in the directory specified by Prefix. For example, if the prefix is notes/ and the delimiter is a slash (/) as in notes/summer/july, the common prefix is notes/summer/. All of the keys that roll up into a common prefix count as a single return when calculating the number of returns.
 --
 -- * 'lorsEncodingType' - Encoding type used by Amazon S3 to encode object keys in the response.
 --
--- * 'lorsName' - Undocumented member.
+-- * 'lorsName' - The bucket name.
 --
--- * 'lorsMarker' - Undocumented member.
+-- * 'lorsMarker' - Indicates where in the bucket listing begins. Marker is included in the response if it was sent with the request.
 --
--- * 'lorsNextMarker' - When response is truncated (the IsTruncated element value in the response is true), you can use the key name in this field as marker in the subsequent request to get next set of objects. Amazon S3 lists objects in alphabetical order Note: This element is returned only if you have delimiter request parameter specified. If response does not include the NextMaker and it is truncated, you can use the value of the last Key in the response as the marker in the subsequent request to get the next set of object keys.
+-- * 'lorsNextMarker' - When response is truncated (the IsTruncated element value in the response is true), you can use the key name in this field as marker in the subsequent request to get next set of objects. Amazon S3 lists objects in alphabetical order Note: This element is returned only if you have delimiter request parameter specified. If response does not include the NextMarker and it is truncated, you can use the value of the last Key in the response as the marker in the subsequent request to get the next set of object keys.
 --
--- * 'lorsMaxKeys' - Undocumented member.
+-- * 'lorsMaxKeys' - The maximum number of keys returned in the response body.
 --
--- * 'lorsIsTruncated' - A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria.
+-- * 'lorsIsTruncated' - A flag that indicates whether Amazon S3 returned all of the results that satisfied the search criteria.
 --
--- * 'lorsDelimiter' - Undocumented member.
+-- * 'lorsDelimiter' - Causes keys that contain the same string between the prefix and the first occurrence of the delimiter to be rolled up into a single result element in the @CommonPrefixes@ collection. These rolled-up keys are not returned elsewhere in the response. Each rolled-up result counts as only one return against the @MaxKeys@ value.
 --
 -- * 'lorsResponseStatus' - -- | The response status code.
 listObjectsResponse
@@ -246,15 +276,15 @@ listObjectsResponse pResponseStatus_ =
     }
 
 
--- | Undocumented member.
+-- | Metadata about each object returned.
 lorsContents :: Lens' ListObjectsResponse [Object]
 lorsContents = lens _lorsContents (\ s a -> s{_lorsContents = a}) . _Default . _Coerce
 
--- | Undocumented member.
+-- | Keys that begin with the indicated prefix.
 lorsPrefix :: Lens' ListObjectsResponse (Maybe Text)
 lorsPrefix = lens _lorsPrefix (\ s a -> s{_lorsPrefix = a})
 
--- | Undocumented member.
+-- | All of the keys rolled up in a common prefix count as a single return when calculating the number of returns.  A response can contain CommonPrefixes only if you specify a delimiter. CommonPrefixes contains all (if there are any) keys between Prefix and the next occurrence of the string specified by the delimiter. CommonPrefixes lists keys that act like subdirectories in the directory specified by Prefix. For example, if the prefix is notes/ and the delimiter is a slash (/) as in notes/summer/july, the common prefix is notes/summer/. All of the keys that roll up into a common prefix count as a single return when calculating the number of returns.
 lorsCommonPrefixes :: Lens' ListObjectsResponse [CommonPrefix]
 lorsCommonPrefixes = lens _lorsCommonPrefixes (\ s a -> s{_lorsCommonPrefixes = a}) . _Default . _Coerce
 
@@ -262,27 +292,27 @@ lorsCommonPrefixes = lens _lorsCommonPrefixes (\ s a -> s{_lorsCommonPrefixes = 
 lorsEncodingType :: Lens' ListObjectsResponse (Maybe EncodingType)
 lorsEncodingType = lens _lorsEncodingType (\ s a -> s{_lorsEncodingType = a})
 
--- | Undocumented member.
+-- | The bucket name.
 lorsName :: Lens' ListObjectsResponse (Maybe BucketName)
 lorsName = lens _lorsName (\ s a -> s{_lorsName = a})
 
--- | Undocumented member.
+-- | Indicates where in the bucket listing begins. Marker is included in the response if it was sent with the request.
 lorsMarker :: Lens' ListObjectsResponse (Maybe Text)
 lorsMarker = lens _lorsMarker (\ s a -> s{_lorsMarker = a})
 
--- | When response is truncated (the IsTruncated element value in the response is true), you can use the key name in this field as marker in the subsequent request to get next set of objects. Amazon S3 lists objects in alphabetical order Note: This element is returned only if you have delimiter request parameter specified. If response does not include the NextMaker and it is truncated, you can use the value of the last Key in the response as the marker in the subsequent request to get the next set of object keys.
+-- | When response is truncated (the IsTruncated element value in the response is true), you can use the key name in this field as marker in the subsequent request to get next set of objects. Amazon S3 lists objects in alphabetical order Note: This element is returned only if you have delimiter request parameter specified. If response does not include the NextMarker and it is truncated, you can use the value of the last Key in the response as the marker in the subsequent request to get the next set of object keys.
 lorsNextMarker :: Lens' ListObjectsResponse (Maybe Text)
 lorsNextMarker = lens _lorsNextMarker (\ s a -> s{_lorsNextMarker = a})
 
--- | Undocumented member.
+-- | The maximum number of keys returned in the response body.
 lorsMaxKeys :: Lens' ListObjectsResponse (Maybe Int)
 lorsMaxKeys = lens _lorsMaxKeys (\ s a -> s{_lorsMaxKeys = a})
 
--- | A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria.
+-- | A flag that indicates whether Amazon S3 returned all of the results that satisfied the search criteria.
 lorsIsTruncated :: Lens' ListObjectsResponse (Maybe Bool)
 lorsIsTruncated = lens _lorsIsTruncated (\ s a -> s{_lorsIsTruncated = a})
 
--- | Undocumented member.
+-- | Causes keys that contain the same string between the prefix and the first occurrence of the delimiter to be rolled up into a single result element in the @CommonPrefixes@ collection. These rolled-up keys are not returned elsewhere in the response. Each rolled-up result counts as only one return against the @MaxKeys@ value.
 lorsDelimiter :: Lens' ListObjectsResponse (Maybe Delimiter)
 lorsDelimiter = lens _lorsDelimiter (\ s a -> s{_lorsDelimiter = a})
 
