@@ -58,7 +58,7 @@ fixtures =
                 & gbrrsReplicationConfiguration ?~
                    (replicationConfiguration "arn:aws:iam::35667example:role/CrossRegionReplicationRoleForS3"
                        & rcRules .~
-                           [ replicationRule "" Enabled (destination "arn:aws:s3:::exampletargetbucket")
+                           [ replicationRule Enabled (destination "arn:aws:s3:::exampletargetbucket")
                                & rrId ?~ "rule1"
                            ])
 
