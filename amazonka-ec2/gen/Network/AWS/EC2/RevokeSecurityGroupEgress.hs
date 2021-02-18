@@ -18,7 +18,7 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- [EC2-VPC only] Removes one or more egress rules from a security group for EC2-VPC. This action doesn't apply to security groups for use in EC2-Classic. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.
+-- [VPC only] Removes the specified egress rules from a security group for EC2-VPC. This action does not apply to security groups for use in EC2-Classic. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.
 --
 --
 -- Each rule consists of the protocol and the IPv4 or IPv6 CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code. If the security group rule has a description, you do not have to specify the description to revoke the rule.
@@ -44,6 +44,10 @@ module Network.AWS.EC2.RevokeSecurityGroupEgress
     -- * Destructuring the Response
     , revokeSecurityGroupEgressResponse
     , RevokeSecurityGroupEgressResponse
+    -- * Response Lenses
+    , rsgersReturn
+    , rsgersUnknownIPPermissions
+    , rsgersResponseStatus
     ) where
 
 import Network.AWS.EC2.Types
@@ -53,11 +57,7 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for RevokeSecurityGroupEgress.
---
---
---
--- /See:/ 'revokeSecurityGroupEgress' smart constructor.
+-- | /See:/ 'revokeSecurityGroupEgress' smart constructor.
 data RevokeSecurityGroupEgress = RevokeSecurityGroupEgress'
   { _rsgeFromPort                   :: !(Maybe Int)
   , _rsgeIPPermissions              :: !(Maybe [IPPermission])
@@ -77,7 +77,7 @@ data RevokeSecurityGroupEgress = RevokeSecurityGroupEgress'
 --
 -- * 'rsgeFromPort' - Not supported. Use a set of IP permissions to specify the port.
 --
--- * 'rsgeIPPermissions' - One or more sets of IP permissions. You can't specify a destination security group and a CIDR IP address range in the same set of permissions.
+-- * 'rsgeIPPermissions' - The sets of IP permissions. You can't specify a destination security group and a CIDR IP address range in the same set of permissions.
 --
 -- * 'rsgeIPProtocol' - Not supported. Use a set of IP permissions to specify the protocol name or number.
 --
@@ -113,7 +113,7 @@ revokeSecurityGroupEgress pGroupId_ =
 rsgeFromPort :: Lens' RevokeSecurityGroupEgress (Maybe Int)
 rsgeFromPort = lens _rsgeFromPort (\ s a -> s{_rsgeFromPort = a})
 
--- | One or more sets of IP permissions. You can't specify a destination security group and a CIDR IP address range in the same set of permissions.
+-- | The sets of IP permissions. You can't specify a destination security group and a CIDR IP address range in the same set of permissions.
 rsgeIPPermissions :: Lens' RevokeSecurityGroupEgress [IPPermission]
 rsgeIPPermissions = lens _rsgeIPPermissions (\ s a -> s{_rsgeIPPermissions = a}) . _Default . _Coerce
 
@@ -150,7 +150,13 @@ instance AWSRequest RevokeSecurityGroupEgress where
              RevokeSecurityGroupEgressResponse
         request = postQuery ec2
         response
-          = receiveNull RevokeSecurityGroupEgressResponse'
+          = receiveXML
+              (\ s h x ->
+                 RevokeSecurityGroupEgressResponse' <$>
+                   (x .@? "return") <*>
+                     (x .@? "unknownIpPermissionSet" .!@ mempty >>=
+                        may (parseXMLList "item"))
+                     <*> (pure (fromEnum s)))
 
 instance Hashable RevokeSecurityGroupEgress where
 
@@ -180,17 +186,44 @@ instance ToQuery RevokeSecurityGroupEgress where
                "DryRun" =: _rsgeDryRun, "GroupId" =: _rsgeGroupId]
 
 -- | /See:/ 'revokeSecurityGroupEgressResponse' smart constructor.
-data RevokeSecurityGroupEgressResponse =
-  RevokeSecurityGroupEgressResponse'
-  deriving (Eq, Read, Show, Data, Typeable, Generic)
+data RevokeSecurityGroupEgressResponse = RevokeSecurityGroupEgressResponse'
+  { _rsgersReturn               :: !(Maybe Bool)
+  , _rsgersUnknownIPPermissions :: !(Maybe [IPPermission])
+  , _rsgersResponseStatus       :: !Int
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
 -- | Creates a value of 'RevokeSecurityGroupEgressResponse' with the minimum fields required to make a request.
 --
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'rsgersReturn' - Returns @true@ if the request succeeds; otherwise, returns an error.
+--
+-- * 'rsgersUnknownIPPermissions' - The outbound rules that were unknown to the service. In some cases, @unknownIpPermissionSet@ might be in a different format from the request parameter.
+--
+-- * 'rsgersResponseStatus' - -- | The response status code.
 revokeSecurityGroupEgressResponse
-    :: RevokeSecurityGroupEgressResponse
-revokeSecurityGroupEgressResponse = RevokeSecurityGroupEgressResponse'
+    :: Int -- ^ 'rsgersResponseStatus'
+    -> RevokeSecurityGroupEgressResponse
+revokeSecurityGroupEgressResponse pResponseStatus_ =
+  RevokeSecurityGroupEgressResponse'
+    { _rsgersReturn = Nothing
+    , _rsgersUnknownIPPermissions = Nothing
+    , _rsgersResponseStatus = pResponseStatus_
+    }
 
+
+-- | Returns @true@ if the request succeeds; otherwise, returns an error.
+rsgersReturn :: Lens' RevokeSecurityGroupEgressResponse (Maybe Bool)
+rsgersReturn = lens _rsgersReturn (\ s a -> s{_rsgersReturn = a})
+
+-- | The outbound rules that were unknown to the service. In some cases, @unknownIpPermissionSet@ might be in a different format from the request parameter.
+rsgersUnknownIPPermissions :: Lens' RevokeSecurityGroupEgressResponse [IPPermission]
+rsgersUnknownIPPermissions = lens _rsgersUnknownIPPermissions (\ s a -> s{_rsgersUnknownIPPermissions = a}) . _Default . _Coerce
+
+-- | -- | The response status code.
+rsgersResponseStatus :: Lens' RevokeSecurityGroupEgressResponse Int
+rsgersResponseStatus = lens _rsgersResponseStatus (\ s a -> s{_rsgersResponseStatus = a})
 
 instance NFData RevokeSecurityGroupEgressResponse
          where

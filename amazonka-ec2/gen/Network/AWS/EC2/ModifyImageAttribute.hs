@@ -79,9 +79,9 @@ data ModifyImageAttribute = ModifyImageAttribute'
 --
 -- * 'miaAttribute' - The name of the attribute to modify. The valid values are @description@ , @launchPermission@ , and @productCodes@ .
 --
--- * 'miaUserIds' - One or more AWS account IDs. This parameter can be used only when the @Attribute@ parameter is @launchPermission@ .
+-- * 'miaUserIds' - The AWS account IDs. This parameter can be used only when the @Attribute@ parameter is @launchPermission@ .
 --
--- * 'miaUserGroups' - One or more user groups. This parameter can be used only when the @Attribute@ parameter is @launchPermission@ .
+-- * 'miaUserGroups' - The user groups. This parameter can be used only when the @Attribute@ parameter is @launchPermission@ .
 --
 -- * 'miaValue' - The value of the attribute being modified. This parameter can be used only when the @Attribute@ parameter is @description@ or @productCodes@ .
 --
@@ -89,7 +89,7 @@ data ModifyImageAttribute = ModifyImageAttribute'
 --
 -- * 'miaOperationType' - The operation type. This parameter can be used only when the @Attribute@ parameter is @launchPermission@ .
 --
--- * 'miaProductCodes' - One or more DevPay product codes. After you add a product code to an AMI, it can't be removed.
+-- * 'miaProductCodes' - The DevPay product codes. After you add a product code to an AMI, it can't be removed.
 --
 -- * 'miaDescription' - A new description for the AMI.
 --
@@ -118,11 +118,11 @@ modifyImageAttribute pImageId_ =
 miaAttribute :: Lens' ModifyImageAttribute (Maybe Text)
 miaAttribute = lens _miaAttribute (\ s a -> s{_miaAttribute = a})
 
--- | One or more AWS account IDs. This parameter can be used only when the @Attribute@ parameter is @launchPermission@ .
+-- | The AWS account IDs. This parameter can be used only when the @Attribute@ parameter is @launchPermission@ .
 miaUserIds :: Lens' ModifyImageAttribute [Text]
 miaUserIds = lens _miaUserIds (\ s a -> s{_miaUserIds = a}) . _Default . _Coerce
 
--- | One or more user groups. This parameter can be used only when the @Attribute@ parameter is @launchPermission@ .
+-- | The user groups. This parameter can be used only when the @Attribute@ parameter is @launchPermission@ .
 miaUserGroups :: Lens' ModifyImageAttribute [Text]
 miaUserGroups = lens _miaUserGroups (\ s a -> s{_miaUserGroups = a}) . _Default . _Coerce
 
@@ -138,7 +138,7 @@ miaLaunchPermission = lens _miaLaunchPermission (\ s a -> s{_miaLaunchPermission
 miaOperationType :: Lens' ModifyImageAttribute (Maybe OperationType)
 miaOperationType = lens _miaOperationType (\ s a -> s{_miaOperationType = a})
 
--- | One or more DevPay product codes. After you add a product code to an AMI, it can't be removed.
+-- | The DevPay product codes. After you add a product code to an AMI, it can't be removed.
 miaProductCodes :: Lens' ModifyImageAttribute [Text]
 miaProductCodes = lens _miaProductCodes (\ s a -> s{_miaProductCodes = a}) . _Default . _Coerce
 

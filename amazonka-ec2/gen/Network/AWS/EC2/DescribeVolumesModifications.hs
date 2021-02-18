@@ -18,13 +18,15 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Reports the current modification status of EBS volumes.
+-- Describes the most recent volume modification request for the specified EBS volumes.
 --
 --
--- Current-generation EBS volumes support modification of attributes including type, size, and (for @io1@ volumes) IOPS provisioning while either attached to or detached from an instance. Following an action from the API or the console to modify a volume, the status of the modification may be @modifying@ , @optimizing@ , @completed@ , or @failed@ . If a volume has never been modified, then certain elements of the returned @VolumeModification@ objects are null.
+-- If a volume has never been modified, some information in the output will be null. If a volume has been modified more than once, the output includes only the most recent modification request.
 --
--- You can also use CloudWatch Events to check the status of a modification to an EBS volume. For information about CloudWatch Events, see the <http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ Amazon CloudWatch Events User Guide> . For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#monitoring_mods Monitoring Volume Modifications"> .
+-- You can also use CloudWatch Events to check the status of a modification to an EBS volume. For information about CloudWatch Events, see the <https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ Amazon CloudWatch Events User Guide> . For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#monitoring_mods Monitoring volume modifications> in the /Amazon Elastic Compute Cloud User Guide/ .
 --
+--
+-- This operation returns paginated results.
 module Network.AWS.EC2.DescribeVolumesModifications
     (
     -- * Creating a Request
@@ -49,6 +51,7 @@ module Network.AWS.EC2.DescribeVolumesModifications
 import Network.AWS.EC2.Types
 import Network.AWS.EC2.Types.Product
 import Network.AWS.Lens
+import Network.AWS.Pager
 import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
@@ -67,9 +70,9 @@ data DescribeVolumesModifications = DescribeVolumesModifications'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dvmFilters' - One or more filters. Supported filters: @volume-id@ , @modification-state@ , @target-size@ , @target-iops@ , @target-volume-type@ , @original-size@ , @original-iops@ , @original-volume-type@ , @start-time@ .
+-- * 'dvmFilters' - The filters.     * @modification-state@ - The current modification state (modifying | optimizing | completed | failed).     * @original-iops@ - The original IOPS rate of the volume.     * @original-size@ - The original size of the volume, in GiB.     * @original-volume-type@ - The original volume type of the volume (standard | io1 | io2 | gp2 | sc1 | st1).     * @originalMultiAttachEnabled@ - Indicates whether Multi-Attach support was enabled (true | false).     * @start-time@ - The modification start time.     * @target-iops@ - The target IOPS rate of the volume.     * @target-size@ - The target size of the volume, in GiB.     * @target-volume-type@ - The target volume type of the volume (standard | io1 | io2 | gp2 | sc1 | st1).     * @targetMultiAttachEnabled@ - Indicates whether Multi-Attach support is to be enabled (true | false).     * @volume-id@ - The ID of the volume.
 --
--- * 'dvmVolumeIds' - One or more volume IDs for which in-progress modifications will be described.
+-- * 'dvmVolumeIds' - The IDs of the volumes.
 --
 -- * 'dvmNextToken' - The @nextToken@ value returned by a previous paginated request.
 --
@@ -88,11 +91,11 @@ describeVolumesModifications =
     }
 
 
--- | One or more filters. Supported filters: @volume-id@ , @modification-state@ , @target-size@ , @target-iops@ , @target-volume-type@ , @original-size@ , @original-iops@ , @original-volume-type@ , @start-time@ .
+-- | The filters.     * @modification-state@ - The current modification state (modifying | optimizing | completed | failed).     * @original-iops@ - The original IOPS rate of the volume.     * @original-size@ - The original size of the volume, in GiB.     * @original-volume-type@ - The original volume type of the volume (standard | io1 | io2 | gp2 | sc1 | st1).     * @originalMultiAttachEnabled@ - Indicates whether Multi-Attach support was enabled (true | false).     * @start-time@ - The modification start time.     * @target-iops@ - The target IOPS rate of the volume.     * @target-size@ - The target size of the volume, in GiB.     * @target-volume-type@ - The target volume type of the volume (standard | io1 | io2 | gp2 | sc1 | st1).     * @targetMultiAttachEnabled@ - Indicates whether Multi-Attach support is to be enabled (true | false).     * @volume-id@ - The ID of the volume.
 dvmFilters :: Lens' DescribeVolumesModifications [Filter]
 dvmFilters = lens _dvmFilters (\ s a -> s{_dvmFilters = a}) . _Default . _Coerce
 
--- | One or more volume IDs for which in-progress modifications will be described.
+-- | The IDs of the volumes.
 dvmVolumeIds :: Lens' DescribeVolumesModifications [Text]
 dvmVolumeIds = lens _dvmVolumeIds (\ s a -> s{_dvmVolumeIds = a}) . _Default . _Coerce
 
@@ -107,6 +110,13 @@ dvmDryRun = lens _dvmDryRun (\ s a -> s{_dvmDryRun = a})
 -- | The maximum number of results (up to a limit of 500) to be returned in a paginated request.
 dvmMaxResults :: Lens' DescribeVolumesModifications (Maybe Int)
 dvmMaxResults = lens _dvmMaxResults (\ s a -> s{_dvmMaxResults = a})
+
+instance AWSPager DescribeVolumesModifications where
+        page rq rs
+          | stop (rs ^. dvmrsNextToken) = Nothing
+          | stop (rs ^. dvmrsVolumesModifications) = Nothing
+          | otherwise =
+            Just $ rq & dvmNextToken .~ rs ^. dvmrsNextToken
 
 instance AWSRequest DescribeVolumesModifications
          where
@@ -155,7 +165,7 @@ data DescribeVolumesModificationsResponse = DescribeVolumesModificationsResponse
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dvmrsVolumesModifications' - A list of returned 'VolumeModification' objects.
+-- * 'dvmrsVolumesModifications' - Information about the volume modifications.
 --
 -- * 'dvmrsNextToken' - Token for pagination, null if there are no more results
 --
@@ -171,7 +181,7 @@ describeVolumesModificationsResponse pResponseStatus_ =
     }
 
 
--- | A list of returned 'VolumeModification' objects.
+-- | Information about the volume modifications.
 dvmrsVolumesModifications :: Lens' DescribeVolumesModificationsResponse [VolumeModification]
 dvmrsVolumesModifications = lens _dvmrsVolumesModifications (\ s a -> s{_dvmrsVolumesModifications = a}) . _Default . _Coerce
 

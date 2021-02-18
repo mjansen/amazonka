@@ -18,7 +18,7 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Purchases one or more Scheduled Instances with the specified schedule.
+-- Purchases the Scheduled Instances with the specified schedule.
 --
 --
 -- Scheduled Instances enable you to purchase Amazon EC2 compute capacity by the hour for a one-year term. Before you can purchase a Scheduled Instance, you must call 'DescribeScheduledInstanceAvailability' to check for available schedules and obtain a purchase token. After you purchase a Scheduled Instance, you must call 'RunScheduledInstances' during each scheduled time period.
@@ -66,11 +66,11 @@ data PurchaseScheduledInstances = PurchaseScheduledInstances'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'psiClientToken' - Unique, case-sensitive identifier that ensures the idempotency of the request. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html Ensuring Idempotency> .
+-- * 'psiClientToken' - Unique, case-sensitive identifier that ensures the idempotency of the request. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html Ensuring Idempotency> .
 --
 -- * 'psiDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'psiPurchaseRequests' - One or more purchase requests.
+-- * 'psiPurchaseRequests' - The purchase requests.
 purchaseScheduledInstances
     :: NonEmpty PurchaseRequest -- ^ 'psiPurchaseRequests'
     -> PurchaseScheduledInstances
@@ -82,7 +82,7 @@ purchaseScheduledInstances pPurchaseRequests_ =
     }
 
 
--- | Unique, case-sensitive identifier that ensures the idempotency of the request. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html Ensuring Idempotency> .
+-- | Unique, case-sensitive identifier that ensures the idempotency of the request. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html Ensuring Idempotency> .
 psiClientToken :: Lens' PurchaseScheduledInstances (Maybe Text)
 psiClientToken = lens _psiClientToken (\ s a -> s{_psiClientToken = a})
 
@@ -90,7 +90,7 @@ psiClientToken = lens _psiClientToken (\ s a -> s{_psiClientToken = a})
 psiDryRun :: Lens' PurchaseScheduledInstances (Maybe Bool)
 psiDryRun = lens _psiDryRun (\ s a -> s{_psiDryRun = a})
 
--- | One or more purchase requests.
+-- | The purchase requests.
 psiPurchaseRequests :: Lens' PurchaseScheduledInstances (NonEmpty PurchaseRequest)
 psiPurchaseRequests = lens _psiPurchaseRequests (\ s a -> s{_psiPurchaseRequests = a}) . _List1
 

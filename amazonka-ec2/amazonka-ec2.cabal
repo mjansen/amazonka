@@ -46,27 +46,38 @@ library
     exposed-modules:
           Network.AWS.EC2
         , Network.AWS.EC2.AcceptReservedInstancesExchangeQuote
+        , Network.AWS.EC2.AcceptTransitGatewayMulticastDomainAssociations
+        , Network.AWS.EC2.AcceptTransitGatewayPeeringAttachment
+        , Network.AWS.EC2.AcceptTransitGatewayVPCAttachment
         , Network.AWS.EC2.AcceptVPCEndpointConnections
         , Network.AWS.EC2.AcceptVPCPeeringConnection
+        , Network.AWS.EC2.AdvertiseByoipCidr
         , Network.AWS.EC2.AllocateAddress
         , Network.AWS.EC2.AllocateHosts
+        , Network.AWS.EC2.ApplySecurityGroupsToClientVPNTargetNetwork
         , Network.AWS.EC2.AssignIPv6Addresses
         , Network.AWS.EC2.AssignPrivateIPAddresses
         , Network.AWS.EC2.AssociateAddress
+        , Network.AWS.EC2.AssociateClientVPNTargetNetwork
         , Network.AWS.EC2.AssociateDHCPOptions
+        , Network.AWS.EC2.AssociateEnclaveCertificateIAMRole
         , Network.AWS.EC2.AssociateIAMInstanceProfile
         , Network.AWS.EC2.AssociateRouteTable
         , Network.AWS.EC2.AssociateSubnetCidrBlock
+        , Network.AWS.EC2.AssociateTransitGatewayMulticastDomain
+        , Network.AWS.EC2.AssociateTransitGatewayRouteTable
         , Network.AWS.EC2.AssociateVPCCidrBlock
         , Network.AWS.EC2.AttachClassicLinkVPC
         , Network.AWS.EC2.AttachInternetGateway
         , Network.AWS.EC2.AttachNetworkInterface
         , Network.AWS.EC2.AttachVPNGateway
         , Network.AWS.EC2.AttachVolume
+        , Network.AWS.EC2.AuthorizeClientVPNIngress
         , Network.AWS.EC2.AuthorizeSecurityGroupEgress
         , Network.AWS.EC2.AuthorizeSecurityGroupIngress
         , Network.AWS.EC2.BundleInstance
         , Network.AWS.EC2.CancelBundleTask
+        , Network.AWS.EC2.CancelCapacityReservation
         , Network.AWS.EC2.CancelConversionTask
         , Network.AWS.EC2.CancelExportTask
         , Network.AWS.EC2.CancelImportTask
@@ -77,6 +88,10 @@ library
         , Network.AWS.EC2.CopyFpgaImage
         , Network.AWS.EC2.CopyImage
         , Network.AWS.EC2.CopySnapshot
+        , Network.AWS.EC2.CreateCapacityReservation
+        , Network.AWS.EC2.CreateCarrierGateway
+        , Network.AWS.EC2.CreateClientVPNEndpoint
+        , Network.AWS.EC2.CreateClientVPNRoute
         , Network.AWS.EC2.CreateCustomerGateway
         , Network.AWS.EC2.CreateDHCPOptions
         , Network.AWS.EC2.CreateDefaultSubnet
@@ -91,9 +106,13 @@ library
         , Network.AWS.EC2.CreateKeyPair
         , Network.AWS.EC2.CreateLaunchTemplate
         , Network.AWS.EC2.CreateLaunchTemplateVersion
+        , Network.AWS.EC2.CreateLocalGatewayRoute
+        , Network.AWS.EC2.CreateLocalGatewayRouteTableVPCAssociation
+        , Network.AWS.EC2.CreateManagedPrefixList
         , Network.AWS.EC2.CreateNatGateway
         , Network.AWS.EC2.CreateNetworkACL
         , Network.AWS.EC2.CreateNetworkACLEntry
+        , Network.AWS.EC2.CreateNetworkInsightsPath
         , Network.AWS.EC2.CreateNetworkInterface
         , Network.AWS.EC2.CreateNetworkInterfacePermission
         , Network.AWS.EC2.CreatePlacementGroup
@@ -102,9 +121,23 @@ library
         , Network.AWS.EC2.CreateRouteTable
         , Network.AWS.EC2.CreateSecurityGroup
         , Network.AWS.EC2.CreateSnapshot
+        , Network.AWS.EC2.CreateSnapshots
         , Network.AWS.EC2.CreateSpotDatafeedSubscription
         , Network.AWS.EC2.CreateSubnet
         , Network.AWS.EC2.CreateTags
+        , Network.AWS.EC2.CreateTrafficMirrorFilter
+        , Network.AWS.EC2.CreateTrafficMirrorFilterRule
+        , Network.AWS.EC2.CreateTrafficMirrorSession
+        , Network.AWS.EC2.CreateTrafficMirrorTarget
+        , Network.AWS.EC2.CreateTransitGateway
+        , Network.AWS.EC2.CreateTransitGatewayConnect
+        , Network.AWS.EC2.CreateTransitGatewayConnectPeer
+        , Network.AWS.EC2.CreateTransitGatewayMulticastDomain
+        , Network.AWS.EC2.CreateTransitGatewayPeeringAttachment
+        , Network.AWS.EC2.CreateTransitGatewayPrefixListReference
+        , Network.AWS.EC2.CreateTransitGatewayRoute
+        , Network.AWS.EC2.CreateTransitGatewayRouteTable
+        , Network.AWS.EC2.CreateTransitGatewayVPCAttachment
         , Network.AWS.EC2.CreateVPC
         , Network.AWS.EC2.CreateVPCEndpoint
         , Network.AWS.EC2.CreateVPCEndpointConnectionNotification
@@ -114,7 +147,9 @@ library
         , Network.AWS.EC2.CreateVPNConnectionRoute
         , Network.AWS.EC2.CreateVPNGateway
         , Network.AWS.EC2.CreateVolume
-        , Network.AWS.EC2.DeleteCustomerGateway
+        , Network.AWS.EC2.DeleteCarrierGateway
+        , Network.AWS.EC2.DeleteClientVPNEndpoint
+        , Network.AWS.EC2.DeleteClientVPNRoute
         , Network.AWS.EC2.DeleteDHCPOptions
         , Network.AWS.EC2.DeleteEgressOnlyInternetGateway
         , Network.AWS.EC2.DeleteFleets
@@ -124,12 +159,18 @@ library
         , Network.AWS.EC2.DeleteKeyPair
         , Network.AWS.EC2.DeleteLaunchTemplate
         , Network.AWS.EC2.DeleteLaunchTemplateVersions
+        , Network.AWS.EC2.DeleteLocalGatewayRoute
+        , Network.AWS.EC2.DeleteLocalGatewayRouteTableVPCAssociation
+        , Network.AWS.EC2.DeleteManagedPrefixList
         , Network.AWS.EC2.DeleteNatGateway
         , Network.AWS.EC2.DeleteNetworkACL
         , Network.AWS.EC2.DeleteNetworkACLEntry
+        , Network.AWS.EC2.DeleteNetworkInsightsAnalysis
+        , Network.AWS.EC2.DeleteNetworkInsightsPath
         , Network.AWS.EC2.DeleteNetworkInterface
         , Network.AWS.EC2.DeleteNetworkInterfacePermission
         , Network.AWS.EC2.DeletePlacementGroup
+        , Network.AWS.EC2.DeleteQueuedReservedInstances
         , Network.AWS.EC2.DeleteRoute
         , Network.AWS.EC2.DeleteRouteTable
         , Network.AWS.EC2.DeleteSecurityGroup
@@ -137,6 +178,19 @@ library
         , Network.AWS.EC2.DeleteSpotDatafeedSubscription
         , Network.AWS.EC2.DeleteSubnet
         , Network.AWS.EC2.DeleteTags
+        , Network.AWS.EC2.DeleteTrafficMirrorFilter
+        , Network.AWS.EC2.DeleteTrafficMirrorFilterRule
+        , Network.AWS.EC2.DeleteTrafficMirrorSession
+        , Network.AWS.EC2.DeleteTrafficMirrorTarget
+        , Network.AWS.EC2.DeleteTransitGateway
+        , Network.AWS.EC2.DeleteTransitGatewayConnect
+        , Network.AWS.EC2.DeleteTransitGatewayConnectPeer
+        , Network.AWS.EC2.DeleteTransitGatewayMulticastDomain
+        , Network.AWS.EC2.DeleteTransitGatewayPeeringAttachment
+        , Network.AWS.EC2.DeleteTransitGatewayPrefixListReference
+        , Network.AWS.EC2.DeleteTransitGatewayRoute
+        , Network.AWS.EC2.DeleteTransitGatewayRouteTable
+        , Network.AWS.EC2.DeleteTransitGatewayVPCAttachment
         , Network.AWS.EC2.DeleteVPC
         , Network.AWS.EC2.DeleteVPCEndpointConnectionNotifications
         , Network.AWS.EC2.DeleteVPCEndpointServiceConfigurations
@@ -146,19 +200,35 @@ library
         , Network.AWS.EC2.DeleteVPNConnectionRoute
         , Network.AWS.EC2.DeleteVPNGateway
         , Network.AWS.EC2.DeleteVolume
+        , Network.AWS.EC2.DeprovisionByoipCidr
         , Network.AWS.EC2.DeregisterImage
+        , Network.AWS.EC2.DeregisterInstanceEventNotificationAttributes
+        , Network.AWS.EC2.DeregisterTransitGatewayMulticastGroupMembers
+        , Network.AWS.EC2.DeregisterTransitGatewayMulticastGroupSources
         , Network.AWS.EC2.DescribeAccountAttributes
         , Network.AWS.EC2.DescribeAddresses
+        , Network.AWS.EC2.DescribeAddressesAttribute
         , Network.AWS.EC2.DescribeAggregateIdFormat
         , Network.AWS.EC2.DescribeAvailabilityZones
         , Network.AWS.EC2.DescribeBundleTasks
+        , Network.AWS.EC2.DescribeByoipCidrs
+        , Network.AWS.EC2.DescribeCapacityReservations
+        , Network.AWS.EC2.DescribeCarrierGateways
         , Network.AWS.EC2.DescribeClassicLinkInstances
+        , Network.AWS.EC2.DescribeClientVPNAuthorizationRules
+        , Network.AWS.EC2.DescribeClientVPNConnections
+        , Network.AWS.EC2.DescribeClientVPNEndpoints
+        , Network.AWS.EC2.DescribeClientVPNRoutes
+        , Network.AWS.EC2.DescribeClientVPNTargetNetworks
+        , Network.AWS.EC2.DescribeCoipPools
         , Network.AWS.EC2.DescribeConversionTasks
         , Network.AWS.EC2.DescribeCustomerGateways
         , Network.AWS.EC2.DescribeDHCPOptions
         , Network.AWS.EC2.DescribeEgressOnlyInternetGateways
         , Network.AWS.EC2.DescribeElasticGpus
+        , Network.AWS.EC2.DescribeExportImageTasks
         , Network.AWS.EC2.DescribeExportTasks
+        , Network.AWS.EC2.DescribeFastSnapshotRestores
         , Network.AWS.EC2.DescribeFleetHistory
         , Network.AWS.EC2.DescribeFleetInstances
         , Network.AWS.EC2.DescribeFleets
@@ -169,6 +239,7 @@ library
         , Network.AWS.EC2.DescribeHostReservations
         , Network.AWS.EC2.DescribeHosts
         , Network.AWS.EC2.DescribeIAMInstanceProfileAssociations
+        , Network.AWS.EC2.DescribeIPv6Pools
         , Network.AWS.EC2.DescribeIdFormat
         , Network.AWS.EC2.DescribeIdentityIdFormat
         , Network.AWS.EC2.DescribeImageAttribute
@@ -177,21 +248,34 @@ library
         , Network.AWS.EC2.DescribeImportSnapshotTasks
         , Network.AWS.EC2.DescribeInstanceAttribute
         , Network.AWS.EC2.DescribeInstanceCreditSpecifications
+        , Network.AWS.EC2.DescribeInstanceEventNotificationAttributes
         , Network.AWS.EC2.DescribeInstanceStatus
+        , Network.AWS.EC2.DescribeInstanceTypeOfferings
+        , Network.AWS.EC2.DescribeInstanceTypes
         , Network.AWS.EC2.DescribeInstances
         , Network.AWS.EC2.DescribeInternetGateways
         , Network.AWS.EC2.DescribeKeyPairs
         , Network.AWS.EC2.DescribeLaunchTemplateVersions
         , Network.AWS.EC2.DescribeLaunchTemplates
+        , Network.AWS.EC2.DescribeLocalGatewayRouteTableVPCAssociations
+        , Network.AWS.EC2.DescribeLocalGatewayRouteTableVirtualInterfaceGroupAssociations
+        , Network.AWS.EC2.DescribeLocalGatewayRouteTables
+        , Network.AWS.EC2.DescribeLocalGatewayVirtualInterfaceGroups
+        , Network.AWS.EC2.DescribeLocalGatewayVirtualInterfaces
+        , Network.AWS.EC2.DescribeLocalGateways
+        , Network.AWS.EC2.DescribeManagedPrefixLists
         , Network.AWS.EC2.DescribeMovingAddresses
         , Network.AWS.EC2.DescribeNatGateways
         , Network.AWS.EC2.DescribeNetworkACLs
+        , Network.AWS.EC2.DescribeNetworkInsightsAnalyses
+        , Network.AWS.EC2.DescribeNetworkInsightsPaths
         , Network.AWS.EC2.DescribeNetworkInterfaceAttribute
         , Network.AWS.EC2.DescribeNetworkInterfacePermissions
         , Network.AWS.EC2.DescribeNetworkInterfaces
         , Network.AWS.EC2.DescribePlacementGroups
         , Network.AWS.EC2.DescribePrefixLists
         , Network.AWS.EC2.DescribePrincipalIdFormat
+        , Network.AWS.EC2.DescribePublicIPv4Pools
         , Network.AWS.EC2.DescribeRegions
         , Network.AWS.EC2.DescribeReservedInstances
         , Network.AWS.EC2.DescribeReservedInstancesListings
@@ -201,7 +285,6 @@ library
         , Network.AWS.EC2.DescribeScheduledInstanceAvailability
         , Network.AWS.EC2.DescribeScheduledInstances
         , Network.AWS.EC2.DescribeSecurityGroupReferences
-        , Network.AWS.EC2.DescribeSecurityGroups
         , Network.AWS.EC2.DescribeSnapshotAttribute
         , Network.AWS.EC2.DescribeSnapshots
         , Network.AWS.EC2.DescribeSpotDatafeedSubscription
@@ -213,6 +296,17 @@ library
         , Network.AWS.EC2.DescribeStaleSecurityGroups
         , Network.AWS.EC2.DescribeSubnets
         , Network.AWS.EC2.DescribeTags
+        , Network.AWS.EC2.DescribeTrafficMirrorFilters
+        , Network.AWS.EC2.DescribeTrafficMirrorSessions
+        , Network.AWS.EC2.DescribeTrafficMirrorTargets
+        , Network.AWS.EC2.DescribeTransitGatewayAttachments
+        , Network.AWS.EC2.DescribeTransitGatewayConnectPeers
+        , Network.AWS.EC2.DescribeTransitGatewayConnects
+        , Network.AWS.EC2.DescribeTransitGatewayMulticastDomains
+        , Network.AWS.EC2.DescribeTransitGatewayPeeringAttachments
+        , Network.AWS.EC2.DescribeTransitGatewayRouteTables
+        , Network.AWS.EC2.DescribeTransitGatewayVPCAttachments
+        , Network.AWS.EC2.DescribeTransitGateways
         , Network.AWS.EC2.DescribeVPCAttribute
         , Network.AWS.EC2.DescribeVPCClassicLink
         , Network.AWS.EC2.DescribeVPCClassicLinkDNSSupport
@@ -235,29 +329,65 @@ library
         , Network.AWS.EC2.DetachNetworkInterface
         , Network.AWS.EC2.DetachVPNGateway
         , Network.AWS.EC2.DetachVolume
+        , Network.AWS.EC2.DisableEBSEncryptionByDefault
+        , Network.AWS.EC2.DisableFastSnapshotRestores
+        , Network.AWS.EC2.DisableTransitGatewayRouteTablePropagation
         , Network.AWS.EC2.DisableVGWRoutePropagation
         , Network.AWS.EC2.DisableVPCClassicLink
         , Network.AWS.EC2.DisableVPCClassicLinkDNSSupport
         , Network.AWS.EC2.DisassociateAddress
+        , Network.AWS.EC2.DisassociateClientVPNTargetNetwork
+        , Network.AWS.EC2.DisassociateEnclaveCertificateIAMRole
         , Network.AWS.EC2.DisassociateIAMInstanceProfile
         , Network.AWS.EC2.DisassociateRouteTable
         , Network.AWS.EC2.DisassociateSubnetCidrBlock
+        , Network.AWS.EC2.DisassociateTransitGatewayMulticastDomain
+        , Network.AWS.EC2.DisassociateTransitGatewayRouteTable
         , Network.AWS.EC2.DisassociateVPCCidrBlock
+        , Network.AWS.EC2.EnableEBSEncryptionByDefault
+        , Network.AWS.EC2.EnableFastSnapshotRestores
+        , Network.AWS.EC2.EnableTransitGatewayRouteTablePropagation
         , Network.AWS.EC2.EnableVGWRoutePropagation
         , Network.AWS.EC2.EnableVPCClassicLink
         , Network.AWS.EC2.EnableVPCClassicLinkDNSSupport
         , Network.AWS.EC2.EnableVolumeIO
+        , Network.AWS.EC2.ExportClientVPNClientCertificateRevocationList
+        , Network.AWS.EC2.ExportClientVPNClientConfiguration
+        , Network.AWS.EC2.ExportImage
+        , Network.AWS.EC2.ExportTransitGatewayRoutes
+        , Network.AWS.EC2.GetAssociatedEnclaveCertificateIAMRoles
+        , Network.AWS.EC2.GetAssociatedIPv6PoolCidrs
+        , Network.AWS.EC2.GetCapacityReservationUsage
+        , Network.AWS.EC2.GetCoipPoolUsage
         , Network.AWS.EC2.GetConsoleOutput
         , Network.AWS.EC2.GetConsoleScreenshot
+        , Network.AWS.EC2.GetDefaultCreditSpecification
+        , Network.AWS.EC2.GetEBSDefaultKMSKeyId
+        , Network.AWS.EC2.GetEBSEncryptionByDefault
+        , Network.AWS.EC2.GetGroupsForCapacityReservation
         , Network.AWS.EC2.GetHostReservationPurchasePreview
         , Network.AWS.EC2.GetLaunchTemplateData
+        , Network.AWS.EC2.GetManagedPrefixListAssociations
+        , Network.AWS.EC2.GetManagedPrefixListEntries
         , Network.AWS.EC2.GetPasswordData
         , Network.AWS.EC2.GetReservedInstancesExchangeQuote
+        , Network.AWS.EC2.GetTransitGatewayAttachmentPropagations
+        , Network.AWS.EC2.GetTransitGatewayMulticastDomainAssociations
+        , Network.AWS.EC2.GetTransitGatewayPrefixListReferences
+        , Network.AWS.EC2.GetTransitGatewayRouteTableAssociations
+        , Network.AWS.EC2.GetTransitGatewayRouteTablePropagations
+        , Network.AWS.EC2.ImportClientVPNClientCertificateRevocationList
         , Network.AWS.EC2.ImportImage
         , Network.AWS.EC2.ImportInstance
         , Network.AWS.EC2.ImportKeyPair
         , Network.AWS.EC2.ImportSnapshot
         , Network.AWS.EC2.ImportVolume
+        , Network.AWS.EC2.ModifyAddressAttribute
+        , Network.AWS.EC2.ModifyAvailabilityZoneGroup
+        , Network.AWS.EC2.ModifyCapacityReservation
+        , Network.AWS.EC2.ModifyClientVPNEndpoint
+        , Network.AWS.EC2.ModifyDefaultCreditSpecification
+        , Network.AWS.EC2.ModifyEBSDefaultKMSKeyId
         , Network.AWS.EC2.ModifyFleet
         , Network.AWS.EC2.ModifyFpgaImageAttribute
         , Network.AWS.EC2.ModifyHosts
@@ -265,14 +395,24 @@ library
         , Network.AWS.EC2.ModifyIdentityIdFormat
         , Network.AWS.EC2.ModifyImageAttribute
         , Network.AWS.EC2.ModifyInstanceAttribute
+        , Network.AWS.EC2.ModifyInstanceCapacityReservationAttributes
         , Network.AWS.EC2.ModifyInstanceCreditSpecification
+        , Network.AWS.EC2.ModifyInstanceEventStartTime
+        , Network.AWS.EC2.ModifyInstanceMetadataOptions
         , Network.AWS.EC2.ModifyInstancePlacement
         , Network.AWS.EC2.ModifyLaunchTemplate
+        , Network.AWS.EC2.ModifyManagedPrefixList
         , Network.AWS.EC2.ModifyNetworkInterfaceAttribute
         , Network.AWS.EC2.ModifyReservedInstances
         , Network.AWS.EC2.ModifySnapshotAttribute
         , Network.AWS.EC2.ModifySpotFleetRequest
         , Network.AWS.EC2.ModifySubnetAttribute
+        , Network.AWS.EC2.ModifyTrafficMirrorFilterNetworkServices
+        , Network.AWS.EC2.ModifyTrafficMirrorFilterRule
+        , Network.AWS.EC2.ModifyTrafficMirrorSession
+        , Network.AWS.EC2.ModifyTransitGateway
+        , Network.AWS.EC2.ModifyTransitGatewayPrefixListReference
+        , Network.AWS.EC2.ModifyTransitGatewayVPCAttachment
         , Network.AWS.EC2.ModifyVPCAttribute
         , Network.AWS.EC2.ModifyVPCEndpoint
         , Network.AWS.EC2.ModifyVPCEndpointConnectionNotification
@@ -280,15 +420,26 @@ library
         , Network.AWS.EC2.ModifyVPCEndpointServicePermissions
         , Network.AWS.EC2.ModifyVPCPeeringConnectionOptions
         , Network.AWS.EC2.ModifyVPCTenancy
+        , Network.AWS.EC2.ModifyVPNConnection
+        , Network.AWS.EC2.ModifyVPNConnectionOptions
+        , Network.AWS.EC2.ModifyVPNTunnelCertificate
+        , Network.AWS.EC2.ModifyVPNTunnelOptions
         , Network.AWS.EC2.ModifyVolume
         , Network.AWS.EC2.ModifyVolumeAttribute
         , Network.AWS.EC2.MonitorInstances
         , Network.AWS.EC2.MoveAddressToVPC
+        , Network.AWS.EC2.ProvisionByoipCidr
         , Network.AWS.EC2.PurchaseHostReservation
         , Network.AWS.EC2.PurchaseReservedInstancesOffering
         , Network.AWS.EC2.PurchaseScheduledInstances
         , Network.AWS.EC2.RebootInstances
         , Network.AWS.EC2.RegisterImage
+        , Network.AWS.EC2.RegisterInstanceEventNotificationAttributes
+        , Network.AWS.EC2.RegisterTransitGatewayMulticastGroupMembers
+        , Network.AWS.EC2.RegisterTransitGatewayMulticastGroupSources
+        , Network.AWS.EC2.RejectTransitGatewayMulticastDomainAssociations
+        , Network.AWS.EC2.RejectTransitGatewayPeeringAttachment
+        , Network.AWS.EC2.RejectTransitGatewayVPCAttachment
         , Network.AWS.EC2.RejectVPCEndpointConnections
         , Network.AWS.EC2.RejectVPCPeeringConnection
         , Network.AWS.EC2.ReleaseAddress
@@ -298,21 +449,33 @@ library
         , Network.AWS.EC2.ReplaceNetworkACLEntry
         , Network.AWS.EC2.ReplaceRoute
         , Network.AWS.EC2.ReplaceRouteTableAssociation
+        , Network.AWS.EC2.ReplaceTransitGatewayRoute
         , Network.AWS.EC2.ReportInstanceStatus
         , Network.AWS.EC2.RequestSpotFleet
         , Network.AWS.EC2.RequestSpotInstances
+        , Network.AWS.EC2.ResetAddressAttribute
+        , Network.AWS.EC2.ResetEBSDefaultKMSKeyId
         , Network.AWS.EC2.ResetFpgaImageAttribute
         , Network.AWS.EC2.ResetImageAttribute
         , Network.AWS.EC2.ResetInstanceAttribute
         , Network.AWS.EC2.ResetNetworkInterfaceAttribute
         , Network.AWS.EC2.ResetSnapshotAttribute
         , Network.AWS.EC2.RestoreAddressToClassic
+        , Network.AWS.EC2.RestoreManagedPrefixListVersion
+        , Network.AWS.EC2.RevokeClientVPNIngress
         , Network.AWS.EC2.RevokeSecurityGroupEgress
         , Network.AWS.EC2.RevokeSecurityGroupIngress
         , Network.AWS.EC2.RunInstances
         , Network.AWS.EC2.RunScheduledInstances
+        , Network.AWS.EC2.SearchLocalGatewayRoutes
+        , Network.AWS.EC2.SearchTransitGatewayMulticastGroups
+        , Network.AWS.EC2.SearchTransitGatewayRoutes
+        , Network.AWS.EC2.SendDiagnosticInterrupt
         , Network.AWS.EC2.StartInstances
+        , Network.AWS.EC2.StartNetworkInsightsAnalysis
+        , Network.AWS.EC2.StartVPCEndpointServicePrivateDNSVerification
         , Network.AWS.EC2.StopInstances
+        , Network.AWS.EC2.TerminateClientVPNConnections
         , Network.AWS.EC2.TerminateInstances
         , Network.AWS.EC2.Types
         , Network.AWS.EC2.UnassignIPv6Addresses
@@ -321,6 +484,7 @@ library
         , Network.AWS.EC2.UpdateSecurityGroupRuleDescriptionsEgress
         , Network.AWS.EC2.UpdateSecurityGroupRuleDescriptionsIngress
         , Network.AWS.EC2.Waiters
+        , Network.AWS.EC2.WithdrawByoipCidr
 
     other-modules:
           Network.AWS.EC2.Internal

@@ -18,10 +18,12 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Associates a CIDR block with your VPC. You can associate a secondary IPv4 CIDR block, or you can associate an Amazon-provided IPv6 CIDR block. The IPv6 CIDR block size is fixed at /56.
+-- Associates a CIDR block with your VPC. You can associate a secondary IPv4 CIDR block, an Amazon-provided IPv6 CIDR block, or an IPv6 CIDR block from an IPv6 address pool that you provisioned through bring your own IP addresses (<https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-byoip.html BYOIP> ). The IPv6 CIDR block size is fixed at /56.
 --
 --
--- For more information about associating CIDR blocks with your VPC and applicable restrictions, see <http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html#VPC_Sizing VPC and Subnet Sizing> in the /Amazon Virtual Private Cloud User Guide/ .
+-- You must specify one of the following in the request: an IPv4 CIDR block, an IPv6 pool, or an Amazon-provided IPv6 CIDR block.
+--
+-- For more information about associating CIDR blocks with your VPC and applicable restrictions, see <https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html#VPC_Sizing VPC and Subnet Sizing> in the /Amazon Virtual Private Cloud User Guide/ .
 --
 module Network.AWS.EC2.AssociateVPCCidrBlock
     (
@@ -29,7 +31,10 @@ module Network.AWS.EC2.AssociateVPCCidrBlock
       associateVPCCidrBlock
     , AssociateVPCCidrBlock
     -- * Request Lenses
+    , avcbIPv6CidrBlock
+    , avcbIPv6CidrBlockNetworkBorderGroup
     , avcbCidrBlock
+    , avcbIPv6Pool
     , avcbAmazonProvidedIPv6CidrBlock
     , avcbVPCId
 
@@ -52,9 +57,12 @@ import Network.AWS.Response
 
 -- | /See:/ 'associateVPCCidrBlock' smart constructor.
 data AssociateVPCCidrBlock = AssociateVPCCidrBlock'
-  { _avcbCidrBlock                   :: !(Maybe Text)
-  , _avcbAmazonProvidedIPv6CidrBlock :: !(Maybe Bool)
-  , _avcbVPCId                       :: !Text
+  { _avcbIPv6CidrBlock                   :: !(Maybe Text)
+  , _avcbIPv6CidrBlockNetworkBorderGroup :: !(Maybe Text)
+  , _avcbCidrBlock                       :: !(Maybe Text)
+  , _avcbIPv6Pool                        :: !(Maybe Text)
+  , _avcbAmazonProvidedIPv6CidrBlock     :: !(Maybe Bool)
+  , _avcbVPCId                           :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -62,7 +70,13 @@ data AssociateVPCCidrBlock = AssociateVPCCidrBlock'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
+-- * 'avcbIPv6CidrBlock' - An IPv6 CIDR block from the IPv6 address pool. You must also specify @Ipv6Pool@ in the request. To let Amazon choose the IPv6 CIDR block for you, omit this parameter.
+--
+-- * 'avcbIPv6CidrBlockNetworkBorderGroup' - The name of the location from which we advertise the IPV6 CIDR block. Use this parameter to limit the CIDR block to this location. You must set @AmazonProvidedIpv6CidrBlock@ to @true@ to use this parameter. You can have one IPv6 CIDR block association per network border group.
+--
 -- * 'avcbCidrBlock' - An IPv4 CIDR block to associate with the VPC.
+--
+-- * 'avcbIPv6Pool' - The ID of an IPv6 address pool from which to allocate the IPv6 CIDR block.
 --
 -- * 'avcbAmazonProvidedIPv6CidrBlock' - Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IPv6 addresses, or the size of the CIDR block.
 --
@@ -72,15 +86,30 @@ associateVPCCidrBlock
     -> AssociateVPCCidrBlock
 associateVPCCidrBlock pVPCId_ =
   AssociateVPCCidrBlock'
-    { _avcbCidrBlock = Nothing
+    { _avcbIPv6CidrBlock = Nothing
+    , _avcbIPv6CidrBlockNetworkBorderGroup = Nothing
+    , _avcbCidrBlock = Nothing
+    , _avcbIPv6Pool = Nothing
     , _avcbAmazonProvidedIPv6CidrBlock = Nothing
     , _avcbVPCId = pVPCId_
     }
 
 
+-- | An IPv6 CIDR block from the IPv6 address pool. You must also specify @Ipv6Pool@ in the request. To let Amazon choose the IPv6 CIDR block for you, omit this parameter.
+avcbIPv6CidrBlock :: Lens' AssociateVPCCidrBlock (Maybe Text)
+avcbIPv6CidrBlock = lens _avcbIPv6CidrBlock (\ s a -> s{_avcbIPv6CidrBlock = a})
+
+-- | The name of the location from which we advertise the IPV6 CIDR block. Use this parameter to limit the CIDR block to this location. You must set @AmazonProvidedIpv6CidrBlock@ to @true@ to use this parameter. You can have one IPv6 CIDR block association per network border group.
+avcbIPv6CidrBlockNetworkBorderGroup :: Lens' AssociateVPCCidrBlock (Maybe Text)
+avcbIPv6CidrBlockNetworkBorderGroup = lens _avcbIPv6CidrBlockNetworkBorderGroup (\ s a -> s{_avcbIPv6CidrBlockNetworkBorderGroup = a})
+
 -- | An IPv4 CIDR block to associate with the VPC.
 avcbCidrBlock :: Lens' AssociateVPCCidrBlock (Maybe Text)
 avcbCidrBlock = lens _avcbCidrBlock (\ s a -> s{_avcbCidrBlock = a})
+
+-- | The ID of an IPv6 address pool from which to allocate the IPv6 CIDR block.
+avcbIPv6Pool :: Lens' AssociateVPCCidrBlock (Maybe Text)
+avcbIPv6Pool = lens _avcbIPv6Pool (\ s a -> s{_avcbIPv6Pool = a})
 
 -- | Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IPv6 addresses, or the size of the CIDR block.
 avcbAmazonProvidedIPv6CidrBlock :: Lens' AssociateVPCCidrBlock (Maybe Bool)
@@ -117,7 +146,11 @@ instance ToQuery AssociateVPCCidrBlock where
           = mconcat
               ["Action" =: ("AssociateVpcCidrBlock" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
+               "Ipv6CidrBlock" =: _avcbIPv6CidrBlock,
+               "Ipv6CidrBlockNetworkBorderGroup" =:
+                 _avcbIPv6CidrBlockNetworkBorderGroup,
                "CidrBlock" =: _avcbCidrBlock,
+               "Ipv6Pool" =: _avcbIPv6Pool,
                "AmazonProvidedIpv6CidrBlock" =:
                  _avcbAmazonProvidedIPv6CidrBlock,
                "VpcId" =: _avcbVPCId]

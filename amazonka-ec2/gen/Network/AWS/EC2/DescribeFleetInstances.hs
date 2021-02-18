@@ -21,6 +21,8 @@
 -- Describes the running instances for the specified EC2 Fleet.
 --
 --
+-- For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet.html#monitor-ec2-fleet Monitoring your EC2 Fleet> in the /Amazon EC2 User Guide/ .
+--
 module Network.AWS.EC2.DescribeFleetInstances
     (
     -- * Creating a Request
@@ -64,7 +66,7 @@ data DescribeFleetInstances = DescribeFleetInstances'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dfisFilters' - One or more filters.
+-- * 'dfisFilters' - The filters.     * @instance-type@ - The instance type.
 --
 -- * 'dfisNextToken' - The token for the next set of results.
 --
@@ -86,7 +88,7 @@ describeFleetInstances pFleetId_ =
     }
 
 
--- | One or more filters.
+-- | The filters.     * @instance-type@ - The instance type.
 dfisFilters :: Lens' DescribeFleetInstances [Filter]
 dfisFilters = lens _dfisFilters (\ s a -> s{_dfisFilters = a}) . _Default . _Coerce
 

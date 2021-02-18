@@ -18,7 +18,7 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Allocates a Dedicated Host to your account. At minimum you need to specify the instance size type, Availability Zone, and quantity of hosts you want to allocate.
+-- Allocates a Dedicated Host to your account. At a minimum, specify the supported instance type or instance family, the Availability Zone in which to allocate the host, and the number of hosts to allocate.
 --
 --
 module Network.AWS.EC2.AllocateHosts
@@ -27,10 +27,13 @@ module Network.AWS.EC2.AllocateHosts
       allocateHosts
     , AllocateHosts
     -- * Request Lenses
+    , ahInstanceFamily
     , ahClientToken
+    , ahInstanceType
+    , ahTagSpecifications
+    , ahHostRecovery
     , ahAutoPlacement
     , ahAvailabilityZone
-    , ahInstanceType
     , ahQuantity
 
     -- * Destructuring the Response
@@ -48,17 +51,16 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for AllocateHosts.
---
---
---
--- /See:/ 'allocateHosts' smart constructor.
+-- | /See:/ 'allocateHosts' smart constructor.
 data AllocateHosts = AllocateHosts'
-  { _ahClientToken      :: !(Maybe Text)
-  , _ahAutoPlacement    :: !(Maybe AutoPlacement)
-  , _ahAvailabilityZone :: !Text
-  , _ahInstanceType     :: !Text
-  , _ahQuantity         :: !Int
+  { _ahInstanceFamily    :: !(Maybe Text)
+  , _ahClientToken       :: !(Maybe Text)
+  , _ahInstanceType      :: !(Maybe Text)
+  , _ahTagSpecifications :: !(Maybe [TagSpecification])
+  , _ahHostRecovery      :: !(Maybe HostRecovery)
+  , _ahAutoPlacement     :: !(Maybe AutoPlacement)
+  , _ahAvailabilityZone  :: !Text
+  , _ahQuantity          :: !Int
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -66,47 +68,67 @@ data AllocateHosts = AllocateHosts'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'ahClientToken' - Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html How to Ensure Idempotency> in the /Amazon Elastic Compute Cloud User Guide/ .
+-- * 'ahInstanceFamily' - Specifies the instance family to be supported by the Dedicated Hosts. If you specify an instance family, the Dedicated Hosts support multiple instance types within that instance family. If you want the Dedicated Hosts to support a specific instance type only, omit this parameter and specify __InstanceType__ instead. You cannot specify __InstanceFamily__ and __InstanceType__ in the same request.
 --
--- * 'ahAutoPlacement' - This is enabled by default. This property allows instances to be automatically placed onto available Dedicated Hosts, when you are launching instances without specifying a host ID. Default: Enabled
+-- * 'ahClientToken' - Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html Ensuring Idempotency> .
 --
--- * 'ahAvailabilityZone' - The Availability Zone for the Dedicated Hosts.
+-- * 'ahInstanceType' - Specifies the instance type to be supported by the Dedicated Hosts. If you specify an instance type, the Dedicated Hosts support instances of the specified instance type only. If you want the Dedicated Hosts to support multiple instance types in a specific instance family, omit this parameter and specify __InstanceFamily__ instead. You cannot specify __InstanceType__ and __InstanceFamily__ in the same request.
 --
--- * 'ahInstanceType' - Specify the instance type that you want your Dedicated Hosts to be configured for. When you specify the instance type, that is the only instance type that you can launch onto that host.
+-- * 'ahTagSpecifications' - The tags to apply to the Dedicated Host during creation.
 --
--- * 'ahQuantity' - The number of Dedicated Hosts you want to allocate to your account with these parameters.
+-- * 'ahHostRecovery' - Indicates whether to enable or disable host recovery for the Dedicated Host. Host recovery is disabled by default. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-recovery.html Host recovery> in the /Amazon EC2 User Guide/ . Default: @off@
+--
+-- * 'ahAutoPlacement' - Indicates whether the host accepts any untargeted instance launches that match its instance type configuration, or if it only accepts Host tenancy instance launches that specify its unique host ID. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/how-dedicated-hosts-work.html#dedicated-hosts-understanding Understanding auto-placement and affinity> in the /Amazon EC2 User Guide/ . Default: @on@
+--
+-- * 'ahAvailabilityZone' - The Availability Zone in which to allocate the Dedicated Host.
+--
+-- * 'ahQuantity' - The number of Dedicated Hosts to allocate to your account with these parameters.
 allocateHosts
     :: Text -- ^ 'ahAvailabilityZone'
-    -> Text -- ^ 'ahInstanceType'
     -> Int -- ^ 'ahQuantity'
     -> AllocateHosts
-allocateHosts pAvailabilityZone_ pInstanceType_ pQuantity_ =
+allocateHosts pAvailabilityZone_ pQuantity_ =
   AllocateHosts'
-    { _ahClientToken = Nothing
+    { _ahInstanceFamily = Nothing
+    , _ahClientToken = Nothing
+    , _ahInstanceType = Nothing
+    , _ahTagSpecifications = Nothing
+    , _ahHostRecovery = Nothing
     , _ahAutoPlacement = Nothing
     , _ahAvailabilityZone = pAvailabilityZone_
-    , _ahInstanceType = pInstanceType_
     , _ahQuantity = pQuantity_
     }
 
 
--- | Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html How to Ensure Idempotency> in the /Amazon Elastic Compute Cloud User Guide/ .
+-- | Specifies the instance family to be supported by the Dedicated Hosts. If you specify an instance family, the Dedicated Hosts support multiple instance types within that instance family. If you want the Dedicated Hosts to support a specific instance type only, omit this parameter and specify __InstanceType__ instead. You cannot specify __InstanceFamily__ and __InstanceType__ in the same request.
+ahInstanceFamily :: Lens' AllocateHosts (Maybe Text)
+ahInstanceFamily = lens _ahInstanceFamily (\ s a -> s{_ahInstanceFamily = a})
+
+-- | Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html Ensuring Idempotency> .
 ahClientToken :: Lens' AllocateHosts (Maybe Text)
 ahClientToken = lens _ahClientToken (\ s a -> s{_ahClientToken = a})
 
--- | This is enabled by default. This property allows instances to be automatically placed onto available Dedicated Hosts, when you are launching instances without specifying a host ID. Default: Enabled
+-- | Specifies the instance type to be supported by the Dedicated Hosts. If you specify an instance type, the Dedicated Hosts support instances of the specified instance type only. If you want the Dedicated Hosts to support multiple instance types in a specific instance family, omit this parameter and specify __InstanceFamily__ instead. You cannot specify __InstanceType__ and __InstanceFamily__ in the same request.
+ahInstanceType :: Lens' AllocateHosts (Maybe Text)
+ahInstanceType = lens _ahInstanceType (\ s a -> s{_ahInstanceType = a})
+
+-- | The tags to apply to the Dedicated Host during creation.
+ahTagSpecifications :: Lens' AllocateHosts [TagSpecification]
+ahTagSpecifications = lens _ahTagSpecifications (\ s a -> s{_ahTagSpecifications = a}) . _Default . _Coerce
+
+-- | Indicates whether to enable or disable host recovery for the Dedicated Host. Host recovery is disabled by default. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-recovery.html Host recovery> in the /Amazon EC2 User Guide/ . Default: @off@
+ahHostRecovery :: Lens' AllocateHosts (Maybe HostRecovery)
+ahHostRecovery = lens _ahHostRecovery (\ s a -> s{_ahHostRecovery = a})
+
+-- | Indicates whether the host accepts any untargeted instance launches that match its instance type configuration, or if it only accepts Host tenancy instance launches that specify its unique host ID. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/how-dedicated-hosts-work.html#dedicated-hosts-understanding Understanding auto-placement and affinity> in the /Amazon EC2 User Guide/ . Default: @on@
 ahAutoPlacement :: Lens' AllocateHosts (Maybe AutoPlacement)
 ahAutoPlacement = lens _ahAutoPlacement (\ s a -> s{_ahAutoPlacement = a})
 
--- | The Availability Zone for the Dedicated Hosts.
+-- | The Availability Zone in which to allocate the Dedicated Host.
 ahAvailabilityZone :: Lens' AllocateHosts Text
 ahAvailabilityZone = lens _ahAvailabilityZone (\ s a -> s{_ahAvailabilityZone = a})
 
--- | Specify the instance type that you want your Dedicated Hosts to be configured for. When you specify the instance type, that is the only instance type that you can launch onto that host.
-ahInstanceType :: Lens' AllocateHosts Text
-ahInstanceType = lens _ahInstanceType (\ s a -> s{_ahInstanceType = a})
-
--- | The number of Dedicated Hosts you want to allocate to your account with these parameters.
+-- | The number of Dedicated Hosts to allocate to your account with these parameters.
 ahQuantity :: Lens' AllocateHosts Int
 ahQuantity = lens _ahQuantity (\ s a -> s{_ahQuantity = a})
 
@@ -136,10 +158,15 @@ instance ToQuery AllocateHosts where
           = mconcat
               ["Action" =: ("AllocateHosts" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
+               "InstanceFamily" =: _ahInstanceFamily,
                "ClientToken" =: _ahClientToken,
+               "InstanceType" =: _ahInstanceType,
+               toQuery
+                 (toQueryList "TagSpecification" <$>
+                    _ahTagSpecifications),
+               "HostRecovery" =: _ahHostRecovery,
                "AutoPlacement" =: _ahAutoPlacement,
                "AvailabilityZone" =: _ahAvailabilityZone,
-               "InstanceType" =: _ahInstanceType,
                "Quantity" =: _ahQuantity]
 
 -- | Contains the output of AllocateHosts.
@@ -157,7 +184,7 @@ data AllocateHostsResponse = AllocateHostsResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'ahrsHostIds' - The ID of the allocated Dedicated Host. This is used when you want to launch an instance onto a specific host.
+-- * 'ahrsHostIds' - The ID of the allocated Dedicated Host. This is used to launch an instance onto a specific host.
 --
 -- * 'ahrsResponseStatus' - -- | The response status code.
 allocateHostsResponse
@@ -168,7 +195,7 @@ allocateHostsResponse pResponseStatus_ =
     {_ahrsHostIds = Nothing, _ahrsResponseStatus = pResponseStatus_}
 
 
--- | The ID of the allocated Dedicated Host. This is used when you want to launch an instance onto a specific host.
+-- | The ID of the allocated Dedicated Host. This is used to launch an instance onto a specific host.
 ahrsHostIds :: Lens' AllocateHostsResponse [Text]
 ahrsHostIds = lens _ahrsHostIds (\ s a -> s{_ahrsHostIds = a}) . _Default . _Coerce
 

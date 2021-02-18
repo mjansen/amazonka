@@ -18,9 +18,11 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Describes one or more versions of a specified launch template. You can describe all versions, individual versions, or a range of versions.
+-- Describes one or more versions of a specified launch template. You can describe all versions, individual versions, or a range of versions. You can also describe all the latest versions or all the default versions of all the launch templates in your account.
 --
 --
+--
+-- This operation returns paginated results.
 module Network.AWS.EC2.DescribeLaunchTemplateVersions
     (
     -- * Creating a Request
@@ -49,6 +51,7 @@ module Network.AWS.EC2.DescribeLaunchTemplateVersions
 import Network.AWS.EC2.Types
 import Network.AWS.EC2.Types.Product
 import Network.AWS.Lens
+import Network.AWS.Pager
 import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
@@ -71,9 +74,9 @@ data DescribeLaunchTemplateVersions = DescribeLaunchTemplateVersions'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dltvsLaunchTemplateName' - The name of the launch template. You must specify either the launch template ID or launch template name in the request.
+-- * 'dltvsLaunchTemplateName' - The name of the launch template. To describe one or more versions of a specified launch template, you must specify either the launch template ID or the launch template name in the request. To describe all the latest or default launch template versions in your account, you must omit this parameter.
 --
--- * 'dltvsLaunchTemplateId' - The ID of the launch template. You must specify either the launch template ID or launch template name in the request.
+-- * 'dltvsLaunchTemplateId' - The ID of the launch template. To describe one or more versions of a specified launch template, you must specify either the launch template ID or the launch template name in the request. To describe all the latest or default launch template versions in your account, you must omit this parameter.
 --
 -- * 'dltvsMinVersion' - The version number after which to describe launch template versions.
 --
@@ -81,13 +84,13 @@ data DescribeLaunchTemplateVersions = DescribeLaunchTemplateVersions'
 --
 -- * 'dltvsMaxVersion' - The version number up to which to describe launch template versions.
 --
--- * 'dltvsVersions' - One or more versions of the launch template.
+-- * 'dltvsVersions' - One or more versions of the launch template. Valid values depend on whether you are describing a specified launch template (by ID or name) or all launch templates in your account. To describe one or more versions of a specified launch template, valid values are @> Latest@ , @> Default@ , and numbers. To describe all launch templates in your account that are defined as the latest version, the valid value is @> Latest@ . To describe all launch templates in your account that are defined as the default version, the valid value is @> Default@ . You can specify @> Latest@ and @> Default@ in the same call. You cannot specify numbers.
 --
 -- * 'dltvsNextToken' - The token to request the next page of results.
 --
 -- * 'dltvsDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'dltvsMaxResults' - The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned @NextToken@ value. This value can be between 5 and 1000.
+-- * 'dltvsMaxResults' - The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned @NextToken@ value. This value can be between 1 and 200.
 describeLaunchTemplateVersions
     :: DescribeLaunchTemplateVersions
 describeLaunchTemplateVersions =
@@ -104,11 +107,11 @@ describeLaunchTemplateVersions =
     }
 
 
--- | The name of the launch template. You must specify either the launch template ID or launch template name in the request.
+-- | The name of the launch template. To describe one or more versions of a specified launch template, you must specify either the launch template ID or the launch template name in the request. To describe all the latest or default launch template versions in your account, you must omit this parameter.
 dltvsLaunchTemplateName :: Lens' DescribeLaunchTemplateVersions (Maybe Text)
 dltvsLaunchTemplateName = lens _dltvsLaunchTemplateName (\ s a -> s{_dltvsLaunchTemplateName = a})
 
--- | The ID of the launch template. You must specify either the launch template ID or launch template name in the request.
+-- | The ID of the launch template. To describe one or more versions of a specified launch template, you must specify either the launch template ID or the launch template name in the request. To describe all the latest or default launch template versions in your account, you must omit this parameter.
 dltvsLaunchTemplateId :: Lens' DescribeLaunchTemplateVersions (Maybe Text)
 dltvsLaunchTemplateId = lens _dltvsLaunchTemplateId (\ s a -> s{_dltvsLaunchTemplateId = a})
 
@@ -124,7 +127,7 @@ dltvsFilters = lens _dltvsFilters (\ s a -> s{_dltvsFilters = a}) . _Default . _
 dltvsMaxVersion :: Lens' DescribeLaunchTemplateVersions (Maybe Text)
 dltvsMaxVersion = lens _dltvsMaxVersion (\ s a -> s{_dltvsMaxVersion = a})
 
--- | One or more versions of the launch template.
+-- | One or more versions of the launch template. Valid values depend on whether you are describing a specified launch template (by ID or name) or all launch templates in your account. To describe one or more versions of a specified launch template, valid values are @> Latest@ , @> Default@ , and numbers. To describe all launch templates in your account that are defined as the latest version, the valid value is @> Latest@ . To describe all launch templates in your account that are defined as the default version, the valid value is @> Default@ . You can specify @> Latest@ and @> Default@ in the same call. You cannot specify numbers.
 dltvsVersions :: Lens' DescribeLaunchTemplateVersions [Text]
 dltvsVersions = lens _dltvsVersions (\ s a -> s{_dltvsVersions = a}) . _Default . _Coerce
 
@@ -136,9 +139,17 @@ dltvsNextToken = lens _dltvsNextToken (\ s a -> s{_dltvsNextToken = a})
 dltvsDryRun :: Lens' DescribeLaunchTemplateVersions (Maybe Bool)
 dltvsDryRun = lens _dltvsDryRun (\ s a -> s{_dltvsDryRun = a})
 
--- | The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned @NextToken@ value. This value can be between 5 and 1000.
+-- | The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned @NextToken@ value. This value can be between 1 and 200.
 dltvsMaxResults :: Lens' DescribeLaunchTemplateVersions (Maybe Int)
 dltvsMaxResults = lens _dltvsMaxResults (\ s a -> s{_dltvsMaxResults = a})
+
+instance AWSPager DescribeLaunchTemplateVersions
+         where
+        page rq rs
+          | stop (rs ^. dltvrsNextToken) = Nothing
+          | stop (rs ^. dltvrsLaunchTemplateVersions) = Nothing
+          | otherwise =
+            Just $ rq & dltvsNextToken .~ rs ^. dltvrsNextToken
 
 instance AWSRequest DescribeLaunchTemplateVersions
          where

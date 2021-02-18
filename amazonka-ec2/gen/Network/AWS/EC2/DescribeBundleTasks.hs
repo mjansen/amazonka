@@ -18,7 +18,7 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Describes one or more of your bundling tasks.
+-- Describes the specified bundle tasks or all of your bundle tasks.
 --
 --
 module Network.AWS.EC2.DescribeBundleTasks
@@ -46,11 +46,7 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for DescribeBundleTasks.
---
---
---
--- /See:/ 'describeBundleTasks' smart constructor.
+-- | /See:/ 'describeBundleTasks' smart constructor.
 data DescribeBundleTasks = DescribeBundleTasks'
   { _dbtBundleIds :: !(Maybe [Text])
   , _dbtFilters   :: !(Maybe [Filter])
@@ -62,9 +58,9 @@ data DescribeBundleTasks = DescribeBundleTasks'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dbtBundleIds' - One or more bundle task IDs. Default: Describes all your bundle tasks.
+-- * 'dbtBundleIds' - The bundle task IDs. Default: Describes all your bundle tasks.
 --
--- * 'dbtFilters' - One or more filters.     * @bundle-id@ - The ID of the bundle task.     * @error-code@ - If the task failed, the error code returned.     * @error-message@ - If the task failed, the error message returned.     * @instance-id@ - The ID of the instance.     * @progress@ - The level of task completion, as a percentage (for example, 20%).     * @s3-bucket@ - The Amazon S3 bucket to store the AMI.     * @s3-prefix@ - The beginning of the AMI name.     * @start-time@ - The time the task started (for example, 2013-09-15T17:15:20.000Z).     * @state@ - The state of the task (@pending@ | @waiting-for-shutdown@ | @bundling@ | @storing@ | @cancelling@ | @complete@ | @failed@ ).     * @update-time@ - The time of the most recent update for the task.
+-- * 'dbtFilters' - The filters.     * @bundle-id@ - The ID of the bundle task.     * @error-code@ - If the task failed, the error code returned.     * @error-message@ - If the task failed, the error message returned.     * @instance-id@ - The ID of the instance.     * @progress@ - The level of task completion, as a percentage (for example, 20%).     * @s3-bucket@ - The Amazon S3 bucket to store the AMI.     * @s3-prefix@ - The beginning of the AMI name.     * @start-time@ - The time the task started (for example, 2013-09-15T17:15:20.000Z).     * @state@ - The state of the task (@pending@ | @waiting-for-shutdown@ | @bundling@ | @storing@ | @cancelling@ | @complete@ | @failed@ ).     * @update-time@ - The time of the most recent update for the task.
 --
 -- * 'dbtDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 describeBundleTasks
@@ -74,11 +70,11 @@ describeBundleTasks =
     {_dbtBundleIds = Nothing, _dbtFilters = Nothing, _dbtDryRun = Nothing}
 
 
--- | One or more bundle task IDs. Default: Describes all your bundle tasks.
+-- | The bundle task IDs. Default: Describes all your bundle tasks.
 dbtBundleIds :: Lens' DescribeBundleTasks [Text]
 dbtBundleIds = lens _dbtBundleIds (\ s a -> s{_dbtBundleIds = a}) . _Default . _Coerce
 
--- | One or more filters.     * @bundle-id@ - The ID of the bundle task.     * @error-code@ - If the task failed, the error code returned.     * @error-message@ - If the task failed, the error message returned.     * @instance-id@ - The ID of the instance.     * @progress@ - The level of task completion, as a percentage (for example, 20%).     * @s3-bucket@ - The Amazon S3 bucket to store the AMI.     * @s3-prefix@ - The beginning of the AMI name.     * @start-time@ - The time the task started (for example, 2013-09-15T17:15:20.000Z).     * @state@ - The state of the task (@pending@ | @waiting-for-shutdown@ | @bundling@ | @storing@ | @cancelling@ | @complete@ | @failed@ ).     * @update-time@ - The time of the most recent update for the task.
+-- | The filters.     * @bundle-id@ - The ID of the bundle task.     * @error-code@ - If the task failed, the error code returned.     * @error-message@ - If the task failed, the error message returned.     * @instance-id@ - The ID of the instance.     * @progress@ - The level of task completion, as a percentage (for example, 20%).     * @s3-bucket@ - The Amazon S3 bucket to store the AMI.     * @s3-prefix@ - The beginning of the AMI name.     * @start-time@ - The time the task started (for example, 2013-09-15T17:15:20.000Z).     * @state@ - The state of the task (@pending@ | @waiting-for-shutdown@ | @bundling@ | @storing@ | @cancelling@ | @complete@ | @failed@ ).     * @update-time@ - The time of the most recent update for the task.
 dbtFilters :: Lens' DescribeBundleTasks [Filter]
 dbtFilters = lens _dbtFilters (\ s a -> s{_dbtFilters = a}) . _Default . _Coerce
 
@@ -117,11 +113,7 @@ instance ToQuery DescribeBundleTasks where
                toQuery (toQueryList "Filter" <$> _dbtFilters),
                "DryRun" =: _dbtDryRun]
 
--- | Contains the output of DescribeBundleTasks.
---
---
---
--- /See:/ 'describeBundleTasksResponse' smart constructor.
+-- | /See:/ 'describeBundleTasksResponse' smart constructor.
 data DescribeBundleTasksResponse = DescribeBundleTasksResponse'
   { _dbtrsBundleTasks    :: !(Maybe [BundleTask])
   , _dbtrsResponseStatus :: !Int
@@ -132,7 +124,7 @@ data DescribeBundleTasksResponse = DescribeBundleTasksResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dbtrsBundleTasks' - Information about one or more bundle tasks.
+-- * 'dbtrsBundleTasks' - Information about the bundle tasks.
 --
 -- * 'dbtrsResponseStatus' - -- | The response status code.
 describeBundleTasksResponse
@@ -143,7 +135,7 @@ describeBundleTasksResponse pResponseStatus_ =
     {_dbtrsBundleTasks = Nothing, _dbtrsResponseStatus = pResponseStatus_}
 
 
--- | Information about one or more bundle tasks.
+-- | Information about the bundle tasks.
 dbtrsBundleTasks :: Lens' DescribeBundleTasksResponse [BundleTask]
 dbtrsBundleTasks = lens _dbtrsBundleTasks (\ s a -> s{_dbtrsBundleTasks = a}) . _Default . _Coerce
 

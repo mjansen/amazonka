@@ -18,8 +18,10 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Modifies the attributes of your VPC endpoint service configuration. You can change the Network Load Balancers for your service, and you can specify whether acceptance is required for requests to connect to your endpoint service through an interface VPC endpoint.
+-- Modifies the attributes of your VPC endpoint service configuration. You can change the Network Load Balancers or Gateway Load Balancers for your service, and you can specify whether acceptance is required for requests to connect to your endpoint service through an interface VPC endpoint.
 --
+--
+-- If you set or modify the private DNS name, you must prove that you own the private DNS domain name. For more information, see <https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-services-dns-validation.html VPC Endpoint Service Private DNS Name Verification> in the /Amazon Virtual Private Cloud User Guide/ .
 --
 module Network.AWS.EC2.ModifyVPCEndpointServiceConfiguration
     (
@@ -27,9 +29,13 @@ module Network.AWS.EC2.ModifyVPCEndpointServiceConfiguration
       modifyVPCEndpointServiceConfiguration
     , ModifyVPCEndpointServiceConfiguration
     -- * Request Lenses
+    , mvescRemoveGatewayLoadBalancerARNs
+    , mvescRemovePrivateDNSName
+    , mvescAddGatewayLoadBalancerARNs
     , mvescRemoveNetworkLoadBalancerARNs
     , mvescAcceptanceRequired
     , mvescAddNetworkLoadBalancerARNs
+    , mvescPrivateDNSName
     , mvescDryRun
     , mvescServiceId
 
@@ -50,9 +56,13 @@ import Network.AWS.Response
 
 -- | /See:/ 'modifyVPCEndpointServiceConfiguration' smart constructor.
 data ModifyVPCEndpointServiceConfiguration = ModifyVPCEndpointServiceConfiguration'
-  { _mvescRemoveNetworkLoadBalancerARNs :: !(Maybe [Text])
+  { _mvescRemoveGatewayLoadBalancerARNs :: !(Maybe [Text])
+  , _mvescRemovePrivateDNSName          :: !(Maybe Bool)
+  , _mvescAddGatewayLoadBalancerARNs    :: !(Maybe [Text])
+  , _mvescRemoveNetworkLoadBalancerARNs :: !(Maybe [Text])
   , _mvescAcceptanceRequired            :: !(Maybe Bool)
   , _mvescAddNetworkLoadBalancerARNs    :: !(Maybe [Text])
+  , _mvescPrivateDNSName                :: !(Maybe Text)
   , _mvescDryRun                        :: !(Maybe Bool)
   , _mvescServiceId                     :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
@@ -62,11 +72,19 @@ data ModifyVPCEndpointServiceConfiguration = ModifyVPCEndpointServiceConfigurati
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
+-- * 'mvescRemoveGatewayLoadBalancerARNs' - The Amazon Resource Names (ARNs) of Gateway Load Balancers to remove from your service configuration.
+--
+-- * 'mvescRemovePrivateDNSName' - (Interface endpoint configuration) Removes the private DNS name of the endpoint service.
+--
+-- * 'mvescAddGatewayLoadBalancerARNs' - The Amazon Resource Names (ARNs) of Gateway Load Balancers to add to your service configuration.
+--
 -- * 'mvescRemoveNetworkLoadBalancerARNs' - The Amazon Resource Names (ARNs) of Network Load Balancers to remove from your service configuration.
 --
--- * 'mvescAcceptanceRequired' - Indicate whether requests to create an endpoint to your service must be accepted.
+-- * 'mvescAcceptanceRequired' - Indicates whether requests to create an endpoint to your service must be accepted.
 --
 -- * 'mvescAddNetworkLoadBalancerARNs' - The Amazon Resource Names (ARNs) of Network Load Balancers to add to your service configuration.
+--
+-- * 'mvescPrivateDNSName' - (Interface endpoint configuration) The private DNS name to assign to the endpoint service.
 --
 -- * 'mvescDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
@@ -76,25 +94,45 @@ modifyVPCEndpointServiceConfiguration
     -> ModifyVPCEndpointServiceConfiguration
 modifyVPCEndpointServiceConfiguration pServiceId_ =
   ModifyVPCEndpointServiceConfiguration'
-    { _mvescRemoveNetworkLoadBalancerARNs = Nothing
+    { _mvescRemoveGatewayLoadBalancerARNs = Nothing
+    , _mvescRemovePrivateDNSName = Nothing
+    , _mvescAddGatewayLoadBalancerARNs = Nothing
+    , _mvescRemoveNetworkLoadBalancerARNs = Nothing
     , _mvescAcceptanceRequired = Nothing
     , _mvescAddNetworkLoadBalancerARNs = Nothing
+    , _mvescPrivateDNSName = Nothing
     , _mvescDryRun = Nothing
     , _mvescServiceId = pServiceId_
     }
 
 
+-- | The Amazon Resource Names (ARNs) of Gateway Load Balancers to remove from your service configuration.
+mvescRemoveGatewayLoadBalancerARNs :: Lens' ModifyVPCEndpointServiceConfiguration [Text]
+mvescRemoveGatewayLoadBalancerARNs = lens _mvescRemoveGatewayLoadBalancerARNs (\ s a -> s{_mvescRemoveGatewayLoadBalancerARNs = a}) . _Default . _Coerce
+
+-- | (Interface endpoint configuration) Removes the private DNS name of the endpoint service.
+mvescRemovePrivateDNSName :: Lens' ModifyVPCEndpointServiceConfiguration (Maybe Bool)
+mvescRemovePrivateDNSName = lens _mvescRemovePrivateDNSName (\ s a -> s{_mvescRemovePrivateDNSName = a})
+
+-- | The Amazon Resource Names (ARNs) of Gateway Load Balancers to add to your service configuration.
+mvescAddGatewayLoadBalancerARNs :: Lens' ModifyVPCEndpointServiceConfiguration [Text]
+mvescAddGatewayLoadBalancerARNs = lens _mvescAddGatewayLoadBalancerARNs (\ s a -> s{_mvescAddGatewayLoadBalancerARNs = a}) . _Default . _Coerce
+
 -- | The Amazon Resource Names (ARNs) of Network Load Balancers to remove from your service configuration.
 mvescRemoveNetworkLoadBalancerARNs :: Lens' ModifyVPCEndpointServiceConfiguration [Text]
 mvescRemoveNetworkLoadBalancerARNs = lens _mvescRemoveNetworkLoadBalancerARNs (\ s a -> s{_mvescRemoveNetworkLoadBalancerARNs = a}) . _Default . _Coerce
 
--- | Indicate whether requests to create an endpoint to your service must be accepted.
+-- | Indicates whether requests to create an endpoint to your service must be accepted.
 mvescAcceptanceRequired :: Lens' ModifyVPCEndpointServiceConfiguration (Maybe Bool)
 mvescAcceptanceRequired = lens _mvescAcceptanceRequired (\ s a -> s{_mvescAcceptanceRequired = a})
 
 -- | The Amazon Resource Names (ARNs) of Network Load Balancers to add to your service configuration.
 mvescAddNetworkLoadBalancerARNs :: Lens' ModifyVPCEndpointServiceConfiguration [Text]
 mvescAddNetworkLoadBalancerARNs = lens _mvescAddNetworkLoadBalancerARNs (\ s a -> s{_mvescAddNetworkLoadBalancerARNs = a}) . _Default . _Coerce
+
+-- | (Interface endpoint configuration) The private DNS name to assign to the endpoint service.
+mvescPrivateDNSName :: Lens' ModifyVPCEndpointServiceConfiguration (Maybe Text)
+mvescPrivateDNSName = lens _mvescPrivateDNSName (\ s a -> s{_mvescPrivateDNSName = a})
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 mvescDryRun :: Lens' ModifyVPCEndpointServiceConfiguration (Maybe Bool)
@@ -142,12 +180,20 @@ instance ToQuery
                     ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
                toQuery
+                 (toQueryList "RemoveGatewayLoadBalancerArn" <$>
+                    _mvescRemoveGatewayLoadBalancerARNs),
+               "RemovePrivateDnsName" =: _mvescRemovePrivateDNSName,
+               toQuery
+                 (toQueryList "AddGatewayLoadBalancerArn" <$>
+                    _mvescAddGatewayLoadBalancerARNs),
+               toQuery
                  (toQueryList "RemoveNetworkLoadBalancerArn" <$>
                     _mvescRemoveNetworkLoadBalancerARNs),
                "AcceptanceRequired" =: _mvescAcceptanceRequired,
                toQuery
                  (toQueryList "AddNetworkLoadBalancerArn" <$>
                     _mvescAddNetworkLoadBalancerARNs),
+               "PrivateDnsName" =: _mvescPrivateDNSName,
                "DryRun" =: _mvescDryRun,
                "ServiceId" =: _mvescServiceId]
 

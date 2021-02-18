@@ -18,10 +18,10 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Describes one or more of your Elastic IP addresses.
+-- Describes the specified Elastic IP addresses or all of your Elastic IP addresses.
 --
 --
--- An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html Elastic IP Addresses> in the /Amazon Elastic Compute Cloud User Guide/ .
+-- An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html Elastic IP Addresses> in the /Amazon Elastic Compute Cloud User Guide/ .
 --
 module Network.AWS.EC2.DescribeAddresses
     (
@@ -49,11 +49,7 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for DescribeAddresses.
---
---
---
--- /See:/ 'describeAddresses' smart constructor.
+-- | /See:/ 'describeAddresses' smart constructor.
 data DescribeAddresses = DescribeAddresses'
   { _daFilters       :: !(Maybe [Filter])
   , _daPublicIPs     :: !(Maybe [Text])
@@ -66,11 +62,11 @@ data DescribeAddresses = DescribeAddresses'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'daFilters' - One or more filters. Filter names and values are case-sensitive.     * @allocation-id@ - [EC2-VPC] The allocation ID for the address.     * @association-id@ - [EC2-VPC] The association ID for the address.     * @domain@ - Indicates whether the address is for use in EC2-Classic (@standard@ ) or in a VPC (@vpc@ ).     * @instance-id@ - The ID of the instance the address is associated with, if any.     * @network-interface-id@ - [EC2-VPC] The ID of the network interface that the address is associated with, if any.     * @network-interface-owner-id@ - The AWS account ID of the owner.     * @private-ip-address@ - [EC2-VPC] The private IP address associated with the Elastic IP address.     * @public-ip@ - The Elastic IP address.     * @tag@ :/key/ =/value/ - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify @tag:Purpose@ for the filter name and @X@ for the filter value.     * @tag-key@ - The key of a tag assigned to the resource. This filter is independent of the @tag-value@ filter. For example, if you use both the filter "tag-key=Purpose" and the filter "tag-value=X", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of the tag's key). If you want to list only resources where Purpose is X, see the @tag@ :/key/ =/value/ filter.
+-- * 'daFilters' - One or more filters. Filter names and values are case-sensitive.     * @allocation-id@ - [EC2-VPC] The allocation ID for the address.     * @association-id@ - [EC2-VPC] The association ID for the address.     * @domain@ - Indicates whether the address is for use in EC2-Classic (@standard@ ) or in a VPC (@vpc@ ).     * @instance-id@ - The ID of the instance the address is associated with, if any.     * @network-border-group@ - A unique set of Availability Zones, Local Zones, or Wavelength Zones from where AWS advertises IP addresses.      * @network-interface-id@ - [EC2-VPC] The ID of the network interface that the address is associated with, if any.     * @network-interface-owner-id@ - The AWS account ID of the owner.     * @private-ip-address@ - [EC2-VPC] The private IP address associated with the Elastic IP address.     * @public-ip@ - The Elastic IP address, or the carrier IP address.     * @tag@ :<key> - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key @Owner@ and the value @TeamA@ , specify @tag:Owner@ for the filter name and @TeamA@ for the filter value.     * @tag-key@ - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.
 --
--- * 'daPublicIPs' - [EC2-Classic] One or more Elastic IP addresses. Default: Describes all your Elastic IP addresses.
+-- * 'daPublicIPs' - One or more Elastic IP addresses. Default: Describes all your Elastic IP addresses.
 --
--- * 'daAllocationIds' - [EC2-VPC] One or more allocation IDs. Default: Describes all your Elastic IP addresses.
+-- * 'daAllocationIds' - [EC2-VPC] Information about the allocation IDs.
 --
 -- * 'daDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 describeAddresses
@@ -84,15 +80,15 @@ describeAddresses =
     }
 
 
--- | One or more filters. Filter names and values are case-sensitive.     * @allocation-id@ - [EC2-VPC] The allocation ID for the address.     * @association-id@ - [EC2-VPC] The association ID for the address.     * @domain@ - Indicates whether the address is for use in EC2-Classic (@standard@ ) or in a VPC (@vpc@ ).     * @instance-id@ - The ID of the instance the address is associated with, if any.     * @network-interface-id@ - [EC2-VPC] The ID of the network interface that the address is associated with, if any.     * @network-interface-owner-id@ - The AWS account ID of the owner.     * @private-ip-address@ - [EC2-VPC] The private IP address associated with the Elastic IP address.     * @public-ip@ - The Elastic IP address.     * @tag@ :/key/ =/value/ - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify @tag:Purpose@ for the filter name and @X@ for the filter value.     * @tag-key@ - The key of a tag assigned to the resource. This filter is independent of the @tag-value@ filter. For example, if you use both the filter "tag-key=Purpose" and the filter "tag-value=X", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of the tag's key). If you want to list only resources where Purpose is X, see the @tag@ :/key/ =/value/ filter.
+-- | One or more filters. Filter names and values are case-sensitive.     * @allocation-id@ - [EC2-VPC] The allocation ID for the address.     * @association-id@ - [EC2-VPC] The association ID for the address.     * @domain@ - Indicates whether the address is for use in EC2-Classic (@standard@ ) or in a VPC (@vpc@ ).     * @instance-id@ - The ID of the instance the address is associated with, if any.     * @network-border-group@ - A unique set of Availability Zones, Local Zones, or Wavelength Zones from where AWS advertises IP addresses.      * @network-interface-id@ - [EC2-VPC] The ID of the network interface that the address is associated with, if any.     * @network-interface-owner-id@ - The AWS account ID of the owner.     * @private-ip-address@ - [EC2-VPC] The private IP address associated with the Elastic IP address.     * @public-ip@ - The Elastic IP address, or the carrier IP address.     * @tag@ :<key> - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key @Owner@ and the value @TeamA@ , specify @tag:Owner@ for the filter name and @TeamA@ for the filter value.     * @tag-key@ - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.
 daFilters :: Lens' DescribeAddresses [Filter]
 daFilters = lens _daFilters (\ s a -> s{_daFilters = a}) . _Default . _Coerce
 
--- | [EC2-Classic] One or more Elastic IP addresses. Default: Describes all your Elastic IP addresses.
+-- | One or more Elastic IP addresses. Default: Describes all your Elastic IP addresses.
 daPublicIPs :: Lens' DescribeAddresses [Text]
 daPublicIPs = lens _daPublicIPs (\ s a -> s{_daPublicIPs = a}) . _Default . _Coerce
 
--- | [EC2-VPC] One or more allocation IDs. Default: Describes all your Elastic IP addresses.
+-- | [EC2-VPC] Information about the allocation IDs.
 daAllocationIds :: Lens' DescribeAddresses [Text]
 daAllocationIds = lens _daAllocationIds (\ s a -> s{_daAllocationIds = a}) . _Default . _Coerce
 
@@ -132,11 +128,7 @@ instance ToQuery DescribeAddresses where
                  (toQueryList "AllocationId" <$> _daAllocationIds),
                "DryRun" =: _daDryRun]
 
--- | Contains the output of DescribeAddresses.
---
---
---
--- /See:/ 'describeAddressesResponse' smart constructor.
+-- | /See:/ 'describeAddressesResponse' smart constructor.
 data DescribeAddressesResponse = DescribeAddressesResponse'
   { _darsAddresses      :: !(Maybe [Address])
   , _darsResponseStatus :: !Int
@@ -147,7 +139,7 @@ data DescribeAddressesResponse = DescribeAddressesResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'darsAddresses' - Information about one or more Elastic IP addresses.
+-- * 'darsAddresses' - Information about the Elastic IP addresses.
 --
 -- * 'darsResponseStatus' - -- | The response status code.
 describeAddressesResponse
@@ -158,7 +150,7 @@ describeAddressesResponse pResponseStatus_ =
     {_darsAddresses = Nothing, _darsResponseStatus = pResponseStatus_}
 
 
--- | Information about one or more Elastic IP addresses.
+-- | Information about the Elastic IP addresses.
 darsAddresses :: Lens' DescribeAddressesResponse [Address]
 darsAddresses = lens _darsAddresses (\ s a -> s{_darsAddresses = a}) . _Default . _Coerce
 

@@ -18,7 +18,7 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Requests a VPC peering connection between two VPCs: a requester VPC that you own and an accepter VPC with which to create the connection. The accepter VPC can belong to another AWS account and can be in a different region to the requester VPC. The requester VPC and accepter VPC cannot have overlapping CIDR blocks.
+-- Requests a VPC peering connection between two VPCs: a requester VPC that you own and an accepter VPC with which to create the connection. The accepter VPC can belong to another AWS account and can be in a different Region to the requester VPC. The requester VPC and accepter VPC cannot have overlapping CIDR blocks.
 --
 --
 -- The owner of the accepter VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.
@@ -34,6 +34,7 @@ module Network.AWS.EC2.CreateVPCPeeringConnection
     , cvpcPeerVPCId
     , cvpcVPCId
     , cvpcPeerOwnerId
+    , cvpcTagSpecifications
     , cvpcPeerRegion
     , cvpcDryRun
 
@@ -52,17 +53,14 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for CreateVpcPeeringConnection.
---
---
---
--- /See:/ 'createVPCPeeringConnection' smart constructor.
+-- | /See:/ 'createVPCPeeringConnection' smart constructor.
 data CreateVPCPeeringConnection = CreateVPCPeeringConnection'
-  { _cvpcPeerVPCId   :: !(Maybe Text)
-  , _cvpcVPCId       :: !(Maybe Text)
-  , _cvpcPeerOwnerId :: !(Maybe Text)
-  , _cvpcPeerRegion  :: !(Maybe Text)
-  , _cvpcDryRun      :: !(Maybe Bool)
+  { _cvpcPeerVPCId         :: !(Maybe Text)
+  , _cvpcVPCId             :: !(Maybe Text)
+  , _cvpcPeerOwnerId       :: !(Maybe Text)
+  , _cvpcTagSpecifications :: !(Maybe [TagSpecification])
+  , _cvpcPeerRegion        :: !(Maybe Text)
+  , _cvpcDryRun            :: !(Maybe Bool)
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -76,7 +74,9 @@ data CreateVPCPeeringConnection = CreateVPCPeeringConnection'
 --
 -- * 'cvpcPeerOwnerId' - The AWS account ID of the owner of the accepter VPC. Default: Your AWS account ID
 --
--- * 'cvpcPeerRegion' - The region code for the accepter VPC, if the accepter VPC is located in a region other than the region in which you make the request. Default: The region in which you make the request.
+-- * 'cvpcTagSpecifications' - The tags to assign to the peering connection.
+--
+-- * 'cvpcPeerRegion' - The Region code for the accepter VPC, if the accepter VPC is located in a Region other than the Region in which you make the request. Default: The Region in which you make the request.
 --
 -- * 'cvpcDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 createVPCPeeringConnection
@@ -86,6 +86,7 @@ createVPCPeeringConnection =
     { _cvpcPeerVPCId = Nothing
     , _cvpcVPCId = Nothing
     , _cvpcPeerOwnerId = Nothing
+    , _cvpcTagSpecifications = Nothing
     , _cvpcPeerRegion = Nothing
     , _cvpcDryRun = Nothing
     }
@@ -103,7 +104,11 @@ cvpcVPCId = lens _cvpcVPCId (\ s a -> s{_cvpcVPCId = a})
 cvpcPeerOwnerId :: Lens' CreateVPCPeeringConnection (Maybe Text)
 cvpcPeerOwnerId = lens _cvpcPeerOwnerId (\ s a -> s{_cvpcPeerOwnerId = a})
 
--- | The region code for the accepter VPC, if the accepter VPC is located in a region other than the region in which you make the request. Default: The region in which you make the request.
+-- | The tags to assign to the peering connection.
+cvpcTagSpecifications :: Lens' CreateVPCPeeringConnection [TagSpecification]
+cvpcTagSpecifications = lens _cvpcTagSpecifications (\ s a -> s{_cvpcTagSpecifications = a}) . _Default . _Coerce
+
+-- | The Region code for the accepter VPC, if the accepter VPC is located in a Region other than the Region in which you make the request. Default: The Region in which you make the request.
 cvpcPeerRegion :: Lens' CreateVPCPeeringConnection (Maybe Text)
 cvpcPeerRegion = lens _cvpcPeerRegion (\ s a -> s{_cvpcPeerRegion = a})
 
@@ -140,14 +145,13 @@ instance ToQuery CreateVPCPeeringConnection where
                "Version" =: ("2016-11-15" :: ByteString),
                "PeerVpcId" =: _cvpcPeerVPCId, "VpcId" =: _cvpcVPCId,
                "PeerOwnerId" =: _cvpcPeerOwnerId,
+               toQuery
+                 (toQueryList "TagSpecification" <$>
+                    _cvpcTagSpecifications),
                "PeerRegion" =: _cvpcPeerRegion,
                "DryRun" =: _cvpcDryRun]
 
--- | Contains the output of CreateVpcPeeringConnection.
---
---
---
--- /See:/ 'createVPCPeeringConnectionResponse' smart constructor.
+-- | /See:/ 'createVPCPeeringConnectionResponse' smart constructor.
 data CreateVPCPeeringConnectionResponse = CreateVPCPeeringConnectionResponse'
   { _cvpcrsVPCPeeringConnection :: !(Maybe VPCPeeringConnection)
   , _cvpcrsResponseStatus       :: !Int

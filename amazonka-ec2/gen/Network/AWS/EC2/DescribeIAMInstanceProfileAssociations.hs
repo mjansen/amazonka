@@ -64,11 +64,11 @@ data DescribeIAMInstanceProfileAssociations = DescribeIAMInstanceProfileAssociat
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'diapaFilters' - One or more filters.     * @instance-id@ - The ID of the instance.     * @state@ - The state of the association (@associating@ | @associated@ | @disassociating@ | @disassociated@ ).
+-- * 'diapaFilters' - The filters.     * @instance-id@ - The ID of the instance.     * @state@ - The state of the association (@associating@ | @associated@ | @disassociating@ ).
 --
 -- * 'diapaNextToken' - The token to request the next page of results.
 --
--- * 'diapaAssociationIds' - One or more IAM instance profile associations.
+-- * 'diapaAssociationIds' - The IAM instance profile associations.
 --
 -- * 'diapaMaxResults' - The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned @NextToken@ value.
 describeIAMInstanceProfileAssociations
@@ -82,7 +82,7 @@ describeIAMInstanceProfileAssociations =
     }
 
 
--- | One or more filters.     * @instance-id@ - The ID of the instance.     * @state@ - The state of the association (@associating@ | @associated@ | @disassociating@ | @disassociated@ ).
+-- | The filters.     * @instance-id@ - The ID of the instance.     * @state@ - The state of the association (@associating@ | @associated@ | @disassociating@ ).
 diapaFilters :: Lens' DescribeIAMInstanceProfileAssociations [Filter]
 diapaFilters = lens _diapaFilters (\ s a -> s{_diapaFilters = a}) . _Default . _Coerce
 
@@ -90,7 +90,7 @@ diapaFilters = lens _diapaFilters (\ s a -> s{_diapaFilters = a}) . _Default . _
 diapaNextToken :: Lens' DescribeIAMInstanceProfileAssociations (Maybe Text)
 diapaNextToken = lens _diapaNextToken (\ s a -> s{_diapaNextToken = a})
 
--- | One or more IAM instance profile associations.
+-- | The IAM instance profile associations.
 diapaAssociationIds :: Lens' DescribeIAMInstanceProfileAssociations [Text]
 diapaAssociationIds = lens _diapaAssociationIds (\ s a -> s{_diapaAssociationIds = a}) . _Default . _Coerce
 
@@ -169,7 +169,7 @@ data DescribeIAMInstanceProfileAssociationsResponse = DescribeIAMInstanceProfile
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'diaparsIAMInstanceProfileAssociations' - Information about one or more IAM instance profile associations.
+-- * 'diaparsIAMInstanceProfileAssociations' - Information about the IAM instance profile associations.
 --
 -- * 'diaparsNextToken' - The token to use to retrieve the next page of results. This value is @null@ when there are no more results to return.
 --
@@ -185,7 +185,7 @@ describeIAMInstanceProfileAssociationsResponse pResponseStatus_ =
     }
 
 
--- | Information about one or more IAM instance profile associations.
+-- | Information about the IAM instance profile associations.
 diaparsIAMInstanceProfileAssociations :: Lens' DescribeIAMInstanceProfileAssociationsResponse [IAMInstanceProfileAssociation]
 diaparsIAMInstanceProfileAssociations = lens _diaparsIAMInstanceProfileAssociations (\ s a -> s{_diaparsIAMInstanceProfileAssociations = a}) . _Default . _Coerce
 

@@ -40,6 +40,7 @@ module Network.AWS.EC2.DescribeInstanceAttribute
     , desrsEnaSupport
     , desrsSourceDestCheck
     , desrsDisableAPITermination
+    , desrsEnclaveOptions
     , desrsRAMDiskId
     , desrsKernelId
     , desrsRootDeviceName
@@ -60,11 +61,7 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for DescribeInstanceAttribute.
---
---
---
--- /See:/ 'describeInstanceAttribute' smart constructor.
+-- | /See:/ 'describeInstanceAttribute' smart constructor.
 data DescribeInstanceAttribute = DescribeInstanceAttribute'
   { _diaDryRun     :: !(Maybe Bool)
   , _diaAttribute  :: !InstanceAttributeName
@@ -119,6 +116,7 @@ instance AWSRequest DescribeInstanceAttribute where
                      <*> (x .@? "enaSupport")
                      <*> (x .@? "sourceDestCheck")
                      <*> (x .@? "disableApiTermination")
+                     <*> (x .@? "enclaveOptions")
                      <*> (x .@? "ramdisk")
                      <*> (x .@? "kernel")
                      <*> (x .@? "rootDeviceName")
@@ -165,6 +163,7 @@ data DescribeInstanceAttributeResponse = DescribeInstanceAttributeResponse'
   , _desrsEnaSupport :: !(Maybe AttributeBooleanValue)
   , _desrsSourceDestCheck :: !(Maybe AttributeBooleanValue)
   , _desrsDisableAPITermination :: !(Maybe AttributeBooleanValue)
+  , _desrsEnclaveOptions :: !(Maybe EnclaveOptions)
   , _desrsRAMDiskId :: !(Maybe AttributeValue)
   , _desrsKernelId :: !(Maybe AttributeValue)
   , _desrsRootDeviceName :: !(Maybe AttributeValue)
@@ -192,6 +191,8 @@ data DescribeInstanceAttributeResponse = DescribeInstanceAttributeResponse'
 -- * 'desrsSourceDestCheck' - Indicates whether source/destination checking is enabled. A value of @true@ means that checking is enabled, and @false@ means that checking is disabled. This value must be @false@ for a NAT instance to perform NAT.
 --
 -- * 'desrsDisableAPITermination' - If the value is @true@ , you can't terminate the instance through the Amazon EC2 console, CLI, or API; otherwise, you can.
+--
+-- * 'desrsEnclaveOptions' - To enable the instance for AWS Nitro Enclaves, set this parameter to @true@ ; otherwise, set it to @false@ .
 --
 -- * 'desrsRAMDiskId' - The RAM disk ID.
 --
@@ -224,6 +225,7 @@ describeInstanceAttributeResponse pResponseStatus_ =
     , _desrsEnaSupport = Nothing
     , _desrsSourceDestCheck = Nothing
     , _desrsDisableAPITermination = Nothing
+    , _desrsEnclaveOptions = Nothing
     , _desrsRAMDiskId = Nothing
     , _desrsKernelId = Nothing
     , _desrsRootDeviceName = Nothing
@@ -257,6 +259,10 @@ desrsSourceDestCheck = lens _desrsSourceDestCheck (\ s a -> s{_desrsSourceDestCh
 -- | If the value is @true@ , you can't terminate the instance through the Amazon EC2 console, CLI, or API; otherwise, you can.
 desrsDisableAPITermination :: Lens' DescribeInstanceAttributeResponse (Maybe AttributeBooleanValue)
 desrsDisableAPITermination = lens _desrsDisableAPITermination (\ s a -> s{_desrsDisableAPITermination = a})
+
+-- | To enable the instance for AWS Nitro Enclaves, set this parameter to @true@ ; otherwise, set it to @false@ .
+desrsEnclaveOptions :: Lens' DescribeInstanceAttributeResponse (Maybe EnclaveOptions)
+desrsEnclaveOptions = lens _desrsEnclaveOptions (\ s a -> s{_desrsEnclaveOptions = a})
 
 -- | The RAM disk ID.
 desrsRAMDiskId :: Lens' DescribeInstanceAttributeResponse (Maybe AttributeValue)

@@ -39,9 +39,9 @@ module Network.AWS.EC2.DescribeSpotFleetInstances
     , DescribeSpotFleetInstancesResponse
     -- * Response Lenses
     , dsfirsNextToken
-    , dsfirsResponseStatus
-    , dsfirsActiveInstances
     , dsfirsSpotFleetRequestId
+    , dsfirsActiveInstances
+    , dsfirsResponseStatus
     ) where
 
 import Network.AWS.EC2.Types
@@ -60,7 +60,7 @@ import Network.AWS.Response
 data DescribeSpotFleetInstances = DescribeSpotFleetInstances'
   { _dsfiNextToken          :: !(Maybe Text)
   , _dsfiDryRun             :: !(Maybe Bool)
-  , _dsfiMaxResults         :: !(Maybe Int)
+  , _dsfiMaxResults         :: !(Maybe Nat)
   , _dsfiSpotFleetRequestId :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
@@ -97,8 +97,8 @@ dsfiDryRun :: Lens' DescribeSpotFleetInstances (Maybe Bool)
 dsfiDryRun = lens _dsfiDryRun (\ s a -> s{_dsfiDryRun = a})
 
 -- | The maximum number of results to return in a single call. Specify a value between 1 and 1000. The default value is 1000. To retrieve the remaining results, make another call with the returned @NextToken@ value.
-dsfiMaxResults :: Lens' DescribeSpotFleetInstances (Maybe Int)
-dsfiMaxResults = lens _dsfiMaxResults (\ s a -> s{_dsfiMaxResults = a})
+dsfiMaxResults :: Lens' DescribeSpotFleetInstances (Maybe Natural)
+dsfiMaxResults = lens _dsfiMaxResults (\ s a -> s{_dsfiMaxResults = a}) . mapping _Nat
 
 -- | The ID of the Spot Fleet request.
 dsfiSpotFleetRequestId :: Lens' DescribeSpotFleetInstances Text
@@ -119,10 +119,11 @@ instance AWSRequest DescribeSpotFleetInstances where
           = receiveXML
               (\ s h x ->
                  DescribeSpotFleetInstancesResponse' <$>
-                   (x .@? "nextToken") <*> (pure (fromEnum s)) <*>
+                   (x .@? "nextToken") <*> (x .@? "spotFleetRequestId")
+                     <*>
                      (x .@? "activeInstanceSet" .!@ mempty >>=
-                        parseXMLList "item")
-                     <*> (x .@ "spotFleetRequestId"))
+                        may (parseXMLList "item"))
+                     <*> (pure (fromEnum s)))
 
 instance Hashable DescribeSpotFleetInstances where
 
@@ -152,9 +153,9 @@ instance ToQuery DescribeSpotFleetInstances where
 -- /See:/ 'describeSpotFleetInstancesResponse' smart constructor.
 data DescribeSpotFleetInstancesResponse = DescribeSpotFleetInstancesResponse'
   { _dsfirsNextToken          :: !(Maybe Text)
+  , _dsfirsSpotFleetRequestId :: !(Maybe Text)
+  , _dsfirsActiveInstances    :: !(Maybe [ActiveInstance])
   , _dsfirsResponseStatus     :: !Int
-  , _dsfirsActiveInstances    :: ![ActiveInstance]
-  , _dsfirsSpotFleetRequestId :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -164,21 +165,20 @@ data DescribeSpotFleetInstancesResponse = DescribeSpotFleetInstancesResponse'
 --
 -- * 'dsfirsNextToken' - The token required to retrieve the next set of results. This value is @null@ when there are no more results to return.
 --
--- * 'dsfirsResponseStatus' - -- | The response status code.
+-- * 'dsfirsSpotFleetRequestId' - The ID of the Spot Fleet request.
 --
 -- * 'dsfirsActiveInstances' - The running instances. This list is refreshed periodically and might be out of date.
 --
--- * 'dsfirsSpotFleetRequestId' - The ID of the Spot Fleet request.
+-- * 'dsfirsResponseStatus' - -- | The response status code.
 describeSpotFleetInstancesResponse
     :: Int -- ^ 'dsfirsResponseStatus'
-    -> Text -- ^ 'dsfirsSpotFleetRequestId'
     -> DescribeSpotFleetInstancesResponse
-describeSpotFleetInstancesResponse pResponseStatus_ pSpotFleetRequestId_ =
+describeSpotFleetInstancesResponse pResponseStatus_ =
   DescribeSpotFleetInstancesResponse'
     { _dsfirsNextToken = Nothing
+    , _dsfirsSpotFleetRequestId = Nothing
+    , _dsfirsActiveInstances = Nothing
     , _dsfirsResponseStatus = pResponseStatus_
-    , _dsfirsActiveInstances = mempty
-    , _dsfirsSpotFleetRequestId = pSpotFleetRequestId_
     }
 
 
@@ -186,17 +186,17 @@ describeSpotFleetInstancesResponse pResponseStatus_ pSpotFleetRequestId_ =
 dsfirsNextToken :: Lens' DescribeSpotFleetInstancesResponse (Maybe Text)
 dsfirsNextToken = lens _dsfirsNextToken (\ s a -> s{_dsfirsNextToken = a})
 
--- | -- | The response status code.
-dsfirsResponseStatus :: Lens' DescribeSpotFleetInstancesResponse Int
-dsfirsResponseStatus = lens _dsfirsResponseStatus (\ s a -> s{_dsfirsResponseStatus = a})
+-- | The ID of the Spot Fleet request.
+dsfirsSpotFleetRequestId :: Lens' DescribeSpotFleetInstancesResponse (Maybe Text)
+dsfirsSpotFleetRequestId = lens _dsfirsSpotFleetRequestId (\ s a -> s{_dsfirsSpotFleetRequestId = a})
 
 -- | The running instances. This list is refreshed periodically and might be out of date.
 dsfirsActiveInstances :: Lens' DescribeSpotFleetInstancesResponse [ActiveInstance]
-dsfirsActiveInstances = lens _dsfirsActiveInstances (\ s a -> s{_dsfirsActiveInstances = a}) . _Coerce
+dsfirsActiveInstances = lens _dsfirsActiveInstances (\ s a -> s{_dsfirsActiveInstances = a}) . _Default . _Coerce
 
--- | The ID of the Spot Fleet request.
-dsfirsSpotFleetRequestId :: Lens' DescribeSpotFleetInstancesResponse Text
-dsfirsSpotFleetRequestId = lens _dsfirsSpotFleetRequestId (\ s a -> s{_dsfirsSpotFleetRequestId = a})
+-- | -- | The response status code.
+dsfirsResponseStatus :: Lens' DescribeSpotFleetInstancesResponse Int
+dsfirsResponseStatus = lens _dsfirsResponseStatus (\ s a -> s{_dsfirsResponseStatus = a})
 
 instance NFData DescribeSpotFleetInstancesResponse
          where

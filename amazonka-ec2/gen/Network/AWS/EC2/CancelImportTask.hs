@@ -48,11 +48,7 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for CancelImportTask.
---
---
---
--- /See:/ 'cancelImportTask' smart constructor.
+-- | /See:/ 'cancelImportTask' smart constructor.
 data CancelImportTask = CancelImportTask'
   { _citCancelReason :: !(Maybe Text)
   , _citImportTaskId :: !(Maybe Text)
@@ -121,11 +117,7 @@ instance ToQuery CancelImportTask where
                "ImportTaskId" =: _citImportTaskId,
                "DryRun" =: _citDryRun]
 
--- | Contains the output for CancelImportTask.
---
---
---
--- /See:/ 'cancelImportTaskResponse' smart constructor.
+-- | /See:/ 'cancelImportTaskResponse' smart constructor.
 data CancelImportTaskResponse = CancelImportTaskResponse'
   { _citrsState          :: !(Maybe Text)
   , _citrsImportTaskId   :: !(Maybe Text)

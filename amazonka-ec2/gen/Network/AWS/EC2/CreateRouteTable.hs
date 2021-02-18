@@ -21,7 +21,7 @@
 -- Creates a route table for the specified VPC. After you create a route table, you can add routes and associate the table with a subnet.
 --
 --
--- For more information about route tables, see <http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html Route Tables> in the /Amazon Virtual Private Cloud User Guide/ .
+-- For more information, see <https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html Route Tables> in the /Amazon Virtual Private Cloud User Guide/ .
 --
 module Network.AWS.EC2.CreateRouteTable
     (
@@ -29,6 +29,7 @@ module Network.AWS.EC2.CreateRouteTable
       createRouteTable
     , CreateRouteTable
     -- * Request Lenses
+    , crtTagSpecifications
     , crtDryRun
     , crtVPCId
 
@@ -47,20 +48,19 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for CreateRouteTable.
---
---
---
--- /See:/ 'createRouteTable' smart constructor.
+-- | /See:/ 'createRouteTable' smart constructor.
 data CreateRouteTable = CreateRouteTable'
-  { _crtDryRun :: !(Maybe Bool)
-  , _crtVPCId  :: !Text
+  { _crtTagSpecifications :: !(Maybe [TagSpecification])
+  , _crtDryRun            :: !(Maybe Bool)
+  , _crtVPCId             :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
 -- | Creates a value of 'CreateRouteTable' with the minimum fields required to make a request.
 --
 -- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'crtTagSpecifications' - The tags to assign to the route table.
 --
 -- * 'crtDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
@@ -69,8 +69,13 @@ createRouteTable
     :: Text -- ^ 'crtVPCId'
     -> CreateRouteTable
 createRouteTable pVPCId_ =
-  CreateRouteTable' {_crtDryRun = Nothing, _crtVPCId = pVPCId_}
+  CreateRouteTable'
+    {_crtTagSpecifications = Nothing, _crtDryRun = Nothing, _crtVPCId = pVPCId_}
 
+
+-- | The tags to assign to the route table.
+crtTagSpecifications :: Lens' CreateRouteTable [TagSpecification]
+crtTagSpecifications = lens _crtTagSpecifications (\ s a -> s{_crtTagSpecifications = a}) . _Default . _Coerce
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 crtDryRun :: Lens' CreateRouteTable (Maybe Bool)
@@ -104,13 +109,12 @@ instance ToQuery CreateRouteTable where
           = mconcat
               ["Action" =: ("CreateRouteTable" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
+               toQuery
+                 (toQueryList "TagSpecification" <$>
+                    _crtTagSpecifications),
                "DryRun" =: _crtDryRun, "VpcId" =: _crtVPCId]
 
--- | Contains the output of CreateRouteTable.
---
---
---
--- /See:/ 'createRouteTableResponse' smart constructor.
+-- | /See:/ 'createRouteTableResponse' smart constructor.
 data CreateRouteTableResponse = CreateRouteTableResponse'
   { _crtrsRouteTable     :: !(Maybe RouteTable)
   , _crtrsResponseStatus :: !Int

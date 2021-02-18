@@ -27,6 +27,7 @@ module Network.AWS.EC2.EnableVGWRoutePropagation
       enableVGWRoutePropagation
     , EnableVGWRoutePropagation
     -- * Request Lenses
+    , evrpDryRun
     , evrpGatewayId
     , evrpRouteTableId
 
@@ -48,7 +49,8 @@ import Network.AWS.Response
 --
 -- /See:/ 'enableVGWRoutePropagation' smart constructor.
 data EnableVGWRoutePropagation = EnableVGWRoutePropagation'
-  { _evrpGatewayId    :: !Text
+  { _evrpDryRun       :: !(Maybe Bool)
+  , _evrpGatewayId    :: !Text
   , _evrpRouteTableId :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
@@ -57,23 +59,32 @@ data EnableVGWRoutePropagation = EnableVGWRoutePropagation'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'evrpGatewayId' - The ID of the virtual private gateway.
+-- * 'evrpDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'evrpRouteTableId' - The ID of the route table.
+-- * 'evrpGatewayId' - The ID of the virtual private gateway that is attached to a VPC. The virtual private gateway must be attached to the same VPC that the routing tables are associated with.
+--
+-- * 'evrpRouteTableId' - The ID of the route table. The routing table must be associated with the same VPC that the virtual private gateway is attached to.
 enableVGWRoutePropagation
     :: Text -- ^ 'evrpGatewayId'
     -> Text -- ^ 'evrpRouteTableId'
     -> EnableVGWRoutePropagation
 enableVGWRoutePropagation pGatewayId_ pRouteTableId_ =
   EnableVGWRoutePropagation'
-    {_evrpGatewayId = pGatewayId_, _evrpRouteTableId = pRouteTableId_}
+    { _evrpDryRun = Nothing
+    , _evrpGatewayId = pGatewayId_
+    , _evrpRouteTableId = pRouteTableId_
+    }
 
 
--- | The ID of the virtual private gateway.
+-- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
+evrpDryRun :: Lens' EnableVGWRoutePropagation (Maybe Bool)
+evrpDryRun = lens _evrpDryRun (\ s a -> s{_evrpDryRun = a})
+
+-- | The ID of the virtual private gateway that is attached to a VPC. The virtual private gateway must be attached to the same VPC that the routing tables are associated with.
 evrpGatewayId :: Lens' EnableVGWRoutePropagation Text
 evrpGatewayId = lens _evrpGatewayId (\ s a -> s{_evrpGatewayId = a})
 
--- | The ID of the route table.
+-- | The ID of the route table. The routing table must be associated with the same VPC that the virtual private gateway is attached to.
 evrpRouteTableId :: Lens' EnableVGWRoutePropagation Text
 evrpRouteTableId = lens _evrpRouteTableId (\ s a -> s{_evrpRouteTableId = a})
 
@@ -100,6 +111,7 @@ instance ToQuery EnableVGWRoutePropagation where
               ["Action" =:
                  ("EnableVgwRoutePropagation" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
+               "DryRun" =: _evrpDryRun,
                "GatewayId" =: _evrpGatewayId,
                "RouteTableId" =: _evrpRouteTableId]
 

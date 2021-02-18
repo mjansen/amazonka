@@ -18,14 +18,14 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway's external interface. The IP address must be static and may be behind a device performing network address translation (NAT).
+-- Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the internet-routable IP address of the customer gateway's external interface. The IP address must be static and can be behind a device performing network address translation (NAT).
 --
 --
 -- For devices that use Border Gateway Protocol (BGP), you can also provide the device's BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don't have an ASN already, you can use a private ASN (in the 64512 - 65534 range).
 --
--- For more information about VPN customer gateways, see <http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html AWS Managed VPN Connections> in the /Amazon Virtual Private Cloud User Guide/ .
+-- For more information, see <https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html AWS Site-to-Site VPN> in the /AWS Site-to-Site VPN User Guide/ .
 --
--- /Important:/ You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.
+-- /Important:/ To create more than one customer gateway with the same VPN type, IP address, and BGP ASN, specify a unique device name for each customer gateway. Identical requests return information about the existing customer gateway and do not create new customer gateways.
 --
 module Network.AWS.EC2.CreateCustomerGateway
     (
@@ -33,9 +33,12 @@ module Network.AWS.EC2.CreateCustomerGateway
       createCustomerGateway
     , CreateCustomerGateway
     -- * Request Lenses
+    , ccgCertificateARN
+    , ccgTagSpecifications
+    , ccgDeviceName
+    , ccgPublicIP
     , ccgDryRun
     , ccgBGPASN
-    , ccgPublicIP
     , ccgType
 
     -- * Destructuring the Response
@@ -59,10 +62,13 @@ import Network.AWS.Response
 --
 -- /See:/ 'createCustomerGateway' smart constructor.
 data CreateCustomerGateway = CreateCustomerGateway'
-  { _ccgDryRun   :: !(Maybe Bool)
-  , _ccgBGPASN   :: !Int
-  , _ccgPublicIP :: !Text
-  , _ccgType     :: !GatewayType
+  { _ccgCertificateARN    :: !(Maybe Text)
+  , _ccgTagSpecifications :: !(Maybe [TagSpecification])
+  , _ccgDeviceName        :: !(Maybe Text)
+  , _ccgPublicIP          :: !(Maybe Text)
+  , _ccgDryRun            :: !(Maybe Bool)
+  , _ccgBGPASN            :: !Int
+  , _ccgType              :: !GatewayType
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -70,26 +76,50 @@ data CreateCustomerGateway = CreateCustomerGateway'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
+-- * 'ccgCertificateARN' - The Amazon Resource Name (ARN) for the customer gateway certificate.
+--
+-- * 'ccgTagSpecifications' - The tags to apply to the customer gateway.
+--
+-- * 'ccgDeviceName' - A name for the customer gateway device. Length Constraints: Up to 255 characters.
+--
+-- * 'ccgPublicIP' - The Internet-routable IP address for the customer gateway's outside interface. The address must be static.
+--
 -- * 'ccgDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
 -- * 'ccgBGPASN' - For devices that support BGP, the customer gateway's BGP ASN. Default: 65000
 --
--- * 'ccgPublicIP' - The Internet-routable IP address for the customer gateway's outside interface. The address must be static.
---
 -- * 'ccgType' - The type of VPN connection that this customer gateway supports (@ipsec.1@ ).
 createCustomerGateway
     :: Int -- ^ 'ccgBGPASN'
-    -> Text -- ^ 'ccgPublicIP'
     -> GatewayType -- ^ 'ccgType'
     -> CreateCustomerGateway
-createCustomerGateway pBGPASN_ pPublicIP_ pType_ =
+createCustomerGateway pBGPASN_ pType_ =
   CreateCustomerGateway'
-    { _ccgDryRun = Nothing
+    { _ccgCertificateARN = Nothing
+    , _ccgTagSpecifications = Nothing
+    , _ccgDeviceName = Nothing
+    , _ccgPublicIP = Nothing
+    , _ccgDryRun = Nothing
     , _ccgBGPASN = pBGPASN_
-    , _ccgPublicIP = pPublicIP_
     , _ccgType = pType_
     }
 
+
+-- | The Amazon Resource Name (ARN) for the customer gateway certificate.
+ccgCertificateARN :: Lens' CreateCustomerGateway (Maybe Text)
+ccgCertificateARN = lens _ccgCertificateARN (\ s a -> s{_ccgCertificateARN = a})
+
+-- | The tags to apply to the customer gateway.
+ccgTagSpecifications :: Lens' CreateCustomerGateway [TagSpecification]
+ccgTagSpecifications = lens _ccgTagSpecifications (\ s a -> s{_ccgTagSpecifications = a}) . _Default . _Coerce
+
+-- | A name for the customer gateway device. Length Constraints: Up to 255 characters.
+ccgDeviceName :: Lens' CreateCustomerGateway (Maybe Text)
+ccgDeviceName = lens _ccgDeviceName (\ s a -> s{_ccgDeviceName = a})
+
+-- | The Internet-routable IP address for the customer gateway's outside interface. The address must be static.
+ccgPublicIP :: Lens' CreateCustomerGateway (Maybe Text)
+ccgPublicIP = lens _ccgPublicIP (\ s a -> s{_ccgPublicIP = a})
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 ccgDryRun :: Lens' CreateCustomerGateway (Maybe Bool)
@@ -98,10 +128,6 @@ ccgDryRun = lens _ccgDryRun (\ s a -> s{_ccgDryRun = a})
 -- | For devices that support BGP, the customer gateway's BGP ASN. Default: 65000
 ccgBGPASN :: Lens' CreateCustomerGateway Int
 ccgBGPASN = lens _ccgBGPASN (\ s a -> s{_ccgBGPASN = a})
-
--- | The Internet-routable IP address for the customer gateway's outside interface. The address must be static.
-ccgPublicIP :: Lens' CreateCustomerGateway Text
-ccgPublicIP = lens _ccgPublicIP (\ s a -> s{_ccgPublicIP = a})
 
 -- | The type of VPN connection that this customer gateway supports (@ipsec.1@ ).
 ccgType :: Lens' CreateCustomerGateway GatewayType
@@ -132,8 +158,13 @@ instance ToQuery CreateCustomerGateway where
           = mconcat
               ["Action" =: ("CreateCustomerGateway" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
-               "DryRun" =: _ccgDryRun, "BgpAsn" =: _ccgBGPASN,
-               "IpAddress" =: _ccgPublicIP, "Type" =: _ccgType]
+               "CertificateArn" =: _ccgCertificateARN,
+               toQuery
+                 (toQueryList "TagSpecification" <$>
+                    _ccgTagSpecifications),
+               "DeviceName" =: _ccgDeviceName,
+               "IpAddress" =: _ccgPublicIP, "DryRun" =: _ccgDryRun,
+               "BgpAsn" =: _ccgBGPASN, "Type" =: _ccgType]
 
 -- | Contains the output of CreateCustomerGateway.
 --

@@ -18,7 +18,7 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Creates a connection notification for a specified VPC endpoint or VPC endpoint service. A connection notification notifies you of specific endpoint events. You must create an SNS topic to receive notifications. For more information, see <http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html Create a Topic> in the /Amazon Simple Notification Service Developer Guide/ .
+-- Creates a connection notification for a specified VPC endpoint or VPC endpoint service. A connection notification notifies you of specific endpoint events. You must create an SNS topic to receive notifications. For more information, see <https://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html Create a Topic> in the /Amazon Simple Notification Service Developer Guide/ .
 --
 --
 -- You can create a connection notification for interface endpoints only.
@@ -67,7 +67,7 @@ data CreateVPCEndpointConnectionNotification = CreateVPCEndpointConnectionNotifi
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'cvecnClientToken' - Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html How to Ensure Idempotency> .
+-- * 'cvecnClientToken' - Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html How to Ensure Idempotency> .
 --
 -- * 'cvecnServiceId' - The ID of the endpoint service.
 --
@@ -92,7 +92,7 @@ createVPCEndpointConnectionNotification pConnectionNotificationARN_ =
     }
 
 
--- | Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html How to Ensure Idempotency> .
+-- | Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html How to Ensure Idempotency> .
 cvecnClientToken :: Lens' CreateVPCEndpointConnectionNotification (Maybe Text)
 cvecnClientToken = lens _cvecnClientToken (\ s a -> s{_cvecnClientToken = a})
 
@@ -178,7 +178,7 @@ data CreateVPCEndpointConnectionNotificationResponse = CreateVPCEndpointConnecti
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'cvecnrsClientToken' - Unique, case-sensitive identifier you provide to ensure the idempotency of the request.
+-- * 'cvecnrsClientToken' - Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.
 --
 -- * 'cvecnrsConnectionNotification' - Information about the notification.
 --
@@ -194,7 +194,7 @@ createVPCEndpointConnectionNotificationResponse pResponseStatus_ =
     }
 
 
--- | Unique, case-sensitive identifier you provide to ensure the idempotency of the request.
+-- | Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.
 cvecnrsClientToken :: Lens' CreateVPCEndpointConnectionNotificationResponse (Maybe Text)
 cvecnrsClientToken = lens _cvecnrsClientToken (\ s a -> s{_cvecnrsClientToken = a})
 

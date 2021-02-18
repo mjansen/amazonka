@@ -27,6 +27,7 @@ module Network.AWS.EC2.AttachNetworkInterface
       attachNetworkInterface
     , AttachNetworkInterface
     -- * Request Lenses
+    , aniNetworkCardIndex
     , aniDryRun
     , aniDeviceIndex
     , aniInstanceId
@@ -37,6 +38,7 @@ module Network.AWS.EC2.AttachNetworkInterface
     , AttachNetworkInterfaceResponse
     -- * Response Lenses
     , anirsAttachmentId
+    , anirsNetworkCardIndex
     , anirsResponseStatus
     ) where
 
@@ -53,7 +55,8 @@ import Network.AWS.Response
 --
 -- /See:/ 'attachNetworkInterface' smart constructor.
 data AttachNetworkInterface = AttachNetworkInterface'
-  { _aniDryRun             :: !(Maybe Bool)
+  { _aniNetworkCardIndex   :: !(Maybe Int)
+  , _aniDryRun             :: !(Maybe Bool)
   , _aniDeviceIndex        :: !Int
   , _aniInstanceId         :: !Text
   , _aniNetworkInterfaceId :: !Text
@@ -63,6 +66,8 @@ data AttachNetworkInterface = AttachNetworkInterface'
 -- | Creates a value of 'AttachNetworkInterface' with the minimum fields required to make a request.
 --
 -- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'aniNetworkCardIndex' - The index of the network card. Some instance types support multiple network cards. The primary network interface must be assigned to network card index 0. The default is network card index 0.
 --
 -- * 'aniDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
@@ -78,12 +83,17 @@ attachNetworkInterface
     -> AttachNetworkInterface
 attachNetworkInterface pDeviceIndex_ pInstanceId_ pNetworkInterfaceId_ =
   AttachNetworkInterface'
-    { _aniDryRun = Nothing
+    { _aniNetworkCardIndex = Nothing
+    , _aniDryRun = Nothing
     , _aniDeviceIndex = pDeviceIndex_
     , _aniInstanceId = pInstanceId_
     , _aniNetworkInterfaceId = pNetworkInterfaceId_
     }
 
+
+-- | The index of the network card. Some instance types support multiple network cards. The primary network interface must be assigned to network card index 0. The default is network card index 0.
+aniNetworkCardIndex :: Lens' AttachNetworkInterface (Maybe Int)
+aniNetworkCardIndex = lens _aniNetworkCardIndex (\ s a -> s{_aniNetworkCardIndex = a})
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 aniDryRun :: Lens' AttachNetworkInterface (Maybe Bool)
@@ -109,7 +119,8 @@ instance AWSRequest AttachNetworkInterface where
           = receiveXML
               (\ s h x ->
                  AttachNetworkInterfaceResponse' <$>
-                   (x .@? "attachmentId") <*> (pure (fromEnum s)))
+                   (x .@? "attachmentId") <*> (x .@? "networkCardIndex")
+                     <*> (pure (fromEnum s)))
 
 instance Hashable AttachNetworkInterface where
 
@@ -127,6 +138,7 @@ instance ToQuery AttachNetworkInterface where
               ["Action" =:
                  ("AttachNetworkInterface" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
+               "NetworkCardIndex" =: _aniNetworkCardIndex,
                "DryRun" =: _aniDryRun,
                "DeviceIndex" =: _aniDeviceIndex,
                "InstanceId" =: _aniInstanceId,
@@ -138,8 +150,9 @@ instance ToQuery AttachNetworkInterface where
 --
 -- /See:/ 'attachNetworkInterfaceResponse' smart constructor.
 data AttachNetworkInterfaceResponse = AttachNetworkInterfaceResponse'
-  { _anirsAttachmentId   :: !(Maybe Text)
-  , _anirsResponseStatus :: !Int
+  { _anirsAttachmentId     :: !(Maybe Text)
+  , _anirsNetworkCardIndex :: !(Maybe Int)
+  , _anirsResponseStatus   :: !Int
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -149,18 +162,27 @@ data AttachNetworkInterfaceResponse = AttachNetworkInterfaceResponse'
 --
 -- * 'anirsAttachmentId' - The ID of the network interface attachment.
 --
+-- * 'anirsNetworkCardIndex' - The index of the network card.
+--
 -- * 'anirsResponseStatus' - -- | The response status code.
 attachNetworkInterfaceResponse
     :: Int -- ^ 'anirsResponseStatus'
     -> AttachNetworkInterfaceResponse
 attachNetworkInterfaceResponse pResponseStatus_ =
   AttachNetworkInterfaceResponse'
-    {_anirsAttachmentId = Nothing, _anirsResponseStatus = pResponseStatus_}
+    { _anirsAttachmentId = Nothing
+    , _anirsNetworkCardIndex = Nothing
+    , _anirsResponseStatus = pResponseStatus_
+    }
 
 
 -- | The ID of the network interface attachment.
 anirsAttachmentId :: Lens' AttachNetworkInterfaceResponse (Maybe Text)
 anirsAttachmentId = lens _anirsAttachmentId (\ s a -> s{_anirsAttachmentId = a})
+
+-- | The index of the network card.
+anirsNetworkCardIndex :: Lens' AttachNetworkInterfaceResponse (Maybe Int)
+anirsNetworkCardIndex = lens _anirsNetworkCardIndex (\ s a -> s{_anirsNetworkCardIndex = a})
 
 -- | -- | The response status code.
 anirsResponseStatus :: Lens' AttachNetworkInterfaceResponse Int

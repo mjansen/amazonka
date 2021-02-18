@@ -74,9 +74,9 @@ data ModifyFpgaImageAttribute = ModifyFpgaImageAttribute'
 --
 -- * 'mfiaAttribute' - The name of the attribute.
 --
--- * 'mfiaUserIds' - One or more AWS account IDs. This parameter is valid only when modifying the @loadPermission@ attribute.
+-- * 'mfiaUserIds' - The AWS account IDs. This parameter is valid only when modifying the @loadPermission@ attribute.
 --
--- * 'mfiaUserGroups' - One or more user groups. This parameter is valid only when modifying the @loadPermission@ attribute.
+-- * 'mfiaUserGroups' - The user groups. This parameter is valid only when modifying the @loadPermission@ attribute.
 --
 -- * 'mfiaLoadPermission' - The load permission for the AFI.
 --
@@ -84,7 +84,7 @@ data ModifyFpgaImageAttribute = ModifyFpgaImageAttribute'
 --
 -- * 'mfiaOperationType' - The operation type.
 --
--- * 'mfiaProductCodes' - One or more product codes. After you add a product code to an AFI, it can't be removed. This parameter is valid only when modifying the @productCodes@ attribute.
+-- * 'mfiaProductCodes' - The product codes. After you add a product code to an AFI, it can't be removed. This parameter is valid only when modifying the @productCodes@ attribute.
 --
 -- * 'mfiaDescription' - A description for the AFI.
 --
@@ -113,11 +113,11 @@ modifyFpgaImageAttribute pFpgaImageId_ =
 mfiaAttribute :: Lens' ModifyFpgaImageAttribute (Maybe FpgaImageAttributeName)
 mfiaAttribute = lens _mfiaAttribute (\ s a -> s{_mfiaAttribute = a})
 
--- | One or more AWS account IDs. This parameter is valid only when modifying the @loadPermission@ attribute.
+-- | The AWS account IDs. This parameter is valid only when modifying the @loadPermission@ attribute.
 mfiaUserIds :: Lens' ModifyFpgaImageAttribute [Text]
 mfiaUserIds = lens _mfiaUserIds (\ s a -> s{_mfiaUserIds = a}) . _Default . _Coerce
 
--- | One or more user groups. This parameter is valid only when modifying the @loadPermission@ attribute.
+-- | The user groups. This parameter is valid only when modifying the @loadPermission@ attribute.
 mfiaUserGroups :: Lens' ModifyFpgaImageAttribute [Text]
 mfiaUserGroups = lens _mfiaUserGroups (\ s a -> s{_mfiaUserGroups = a}) . _Default . _Coerce
 
@@ -133,7 +133,7 @@ mfiaName = lens _mfiaName (\ s a -> s{_mfiaName = a})
 mfiaOperationType :: Lens' ModifyFpgaImageAttribute (Maybe OperationType)
 mfiaOperationType = lens _mfiaOperationType (\ s a -> s{_mfiaOperationType = a})
 
--- | One or more product codes. After you add a product code to an AFI, it can't be removed. This parameter is valid only when modifying the @productCodes@ attribute.
+-- | The product codes. After you add a product code to an AFI, it can't be removed. This parameter is valid only when modifying the @productCodes@ attribute.
 mfiaProductCodes :: Lens' ModifyFpgaImageAttribute [Text]
 mfiaProductCodes = lens _mfiaProductCodes (\ s a -> s{_mfiaProductCodes = a}) . _Default . _Coerce
 

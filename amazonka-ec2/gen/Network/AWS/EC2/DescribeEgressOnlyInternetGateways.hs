@@ -18,9 +18,11 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Describes one or more of your egress-only Internet gateways.
+-- Describes one or more of your egress-only internet gateways.
 --
 --
+--
+-- This operation returns paginated results.
 module Network.AWS.EC2.DescribeEgressOnlyInternetGateways
     (
     -- * Creating a Request
@@ -28,6 +30,7 @@ module Network.AWS.EC2.DescribeEgressOnlyInternetGateways
     , DescribeEgressOnlyInternetGateways
     -- * Request Lenses
     , deoigEgressOnlyInternetGatewayIds
+    , deoigFilters
     , deoigNextToken
     , deoigDryRun
     , deoigMaxResults
@@ -44,6 +47,7 @@ module Network.AWS.EC2.DescribeEgressOnlyInternetGateways
 import Network.AWS.EC2.Types
 import Network.AWS.EC2.Types.Product
 import Network.AWS.Lens
+import Network.AWS.Pager
 import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
@@ -51,9 +55,10 @@ import Network.AWS.Response
 -- | /See:/ 'describeEgressOnlyInternetGateways' smart constructor.
 data DescribeEgressOnlyInternetGateways = DescribeEgressOnlyInternetGateways'
   { _deoigEgressOnlyInternetGatewayIds :: !(Maybe [Text])
+  , _deoigFilters                      :: !(Maybe [Filter])
   , _deoigNextToken                    :: !(Maybe Text)
   , _deoigDryRun                       :: !(Maybe Bool)
-  , _deoigMaxResults                   :: !(Maybe Int)
+  , _deoigMaxResults                   :: !(Maybe Nat)
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -61,29 +66,36 @@ data DescribeEgressOnlyInternetGateways = DescribeEgressOnlyInternetGateways'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'deoigEgressOnlyInternetGatewayIds' - One or more egress-only Internet gateway IDs.
+-- * 'deoigEgressOnlyInternetGatewayIds' - One or more egress-only internet gateway IDs.
 --
--- * 'deoigNextToken' - The token to retrieve the next page of results.
+-- * 'deoigFilters' - One or more filters.     * @tag@ :<key> - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key @Owner@ and the value @TeamA@ , specify @tag:Owner@ for the filter name and @TeamA@ for the filter value.     * @tag-key@ - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.
+--
+-- * 'deoigNextToken' - The token for the next page of results.
 --
 -- * 'deoigDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'deoigMaxResults' - The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned @NextToken@ value. This value can be between 5 and 1000; if @MaxResults@ is given a value larger than 1000, only 1000 results are returned.
+-- * 'deoigMaxResults' - The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned @nextToken@ value.
 describeEgressOnlyInternetGateways
     :: DescribeEgressOnlyInternetGateways
 describeEgressOnlyInternetGateways =
   DescribeEgressOnlyInternetGateways'
     { _deoigEgressOnlyInternetGatewayIds = Nothing
+    , _deoigFilters = Nothing
     , _deoigNextToken = Nothing
     , _deoigDryRun = Nothing
     , _deoigMaxResults = Nothing
     }
 
 
--- | One or more egress-only Internet gateway IDs.
+-- | One or more egress-only internet gateway IDs.
 deoigEgressOnlyInternetGatewayIds :: Lens' DescribeEgressOnlyInternetGateways [Text]
 deoigEgressOnlyInternetGatewayIds = lens _deoigEgressOnlyInternetGatewayIds (\ s a -> s{_deoigEgressOnlyInternetGatewayIds = a}) . _Default . _Coerce
 
--- | The token to retrieve the next page of results.
+-- | One or more filters.     * @tag@ :<key> - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key @Owner@ and the value @TeamA@ , specify @tag:Owner@ for the filter name and @TeamA@ for the filter value.     * @tag-key@ - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.
+deoigFilters :: Lens' DescribeEgressOnlyInternetGateways [Filter]
+deoigFilters = lens _deoigFilters (\ s a -> s{_deoigFilters = a}) . _Default . _Coerce
+
+-- | The token for the next page of results.
 deoigNextToken :: Lens' DescribeEgressOnlyInternetGateways (Maybe Text)
 deoigNextToken = lens _deoigNextToken (\ s a -> s{_deoigNextToken = a})
 
@@ -91,9 +103,18 @@ deoigNextToken = lens _deoigNextToken (\ s a -> s{_deoigNextToken = a})
 deoigDryRun :: Lens' DescribeEgressOnlyInternetGateways (Maybe Bool)
 deoigDryRun = lens _deoigDryRun (\ s a -> s{_deoigDryRun = a})
 
--- | The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned @NextToken@ value. This value can be between 5 and 1000; if @MaxResults@ is given a value larger than 1000, only 1000 results are returned.
-deoigMaxResults :: Lens' DescribeEgressOnlyInternetGateways (Maybe Int)
-deoigMaxResults = lens _deoigMaxResults (\ s a -> s{_deoigMaxResults = a})
+-- | The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned @nextToken@ value.
+deoigMaxResults :: Lens' DescribeEgressOnlyInternetGateways (Maybe Natural)
+deoigMaxResults = lens _deoigMaxResults (\ s a -> s{_deoigMaxResults = a}) . mapping _Nat
+
+instance AWSPager DescribeEgressOnlyInternetGateways
+         where
+        page rq rs
+          | stop (rs ^. deoigrsNextToken) = Nothing
+          | stop (rs ^. deoigrsEgressOnlyInternetGateways) =
+            Nothing
+          | otherwise =
+            Just $ rq & deoigNextToken .~ rs ^. deoigrsNextToken
 
 instance AWSRequest
            DescribeEgressOnlyInternetGateways
@@ -134,6 +155,7 @@ instance ToQuery DescribeEgressOnlyInternetGateways
                toQuery
                  (toQueryList "EgressOnlyInternetGatewayId" <$>
                     _deoigEgressOnlyInternetGatewayIds),
+               toQuery (toQueryList "Filter" <$> _deoigFilters),
                "NextToken" =: _deoigNextToken,
                "DryRun" =: _deoigDryRun,
                "MaxResults" =: _deoigMaxResults]
@@ -150,9 +172,9 @@ data DescribeEgressOnlyInternetGatewaysResponse = DescribeEgressOnlyInternetGate
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'deoigrsEgressOnlyInternetGateways' - Information about the egress-only Internet gateways.
+-- * 'deoigrsEgressOnlyInternetGateways' - Information about the egress-only internet gateways.
 --
--- * 'deoigrsNextToken' - The token to use to retrieve the next page of results.
+-- * 'deoigrsNextToken' - The token to use to retrieve the next page of results. This value is @null@ when there are no more results to return.
 --
 -- * 'deoigrsResponseStatus' - -- | The response status code.
 describeEgressOnlyInternetGatewaysResponse
@@ -166,11 +188,11 @@ describeEgressOnlyInternetGatewaysResponse pResponseStatus_ =
     }
 
 
--- | Information about the egress-only Internet gateways.
+-- | Information about the egress-only internet gateways.
 deoigrsEgressOnlyInternetGateways :: Lens' DescribeEgressOnlyInternetGatewaysResponse [EgressOnlyInternetGateway]
 deoigrsEgressOnlyInternetGateways = lens _deoigrsEgressOnlyInternetGateways (\ s a -> s{_deoigrsEgressOnlyInternetGateways = a}) . _Default . _Coerce
 
--- | The token to use to retrieve the next page of results.
+-- | The token to use to retrieve the next page of results. This value is @null@ when there are no more results to return.
 deoigrsNextToken :: Lens' DescribeEgressOnlyInternetGatewaysResponse (Maybe Text)
 deoigrsNextToken = lens _deoigrsNextToken (\ s a -> s{_deoigrsNextToken = a})
 

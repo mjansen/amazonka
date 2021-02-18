@@ -18,7 +18,7 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Describes the ID format settings for your resources on a per-region basis, for example, to view which resource types are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types.
+-- Describes the ID format settings for your resources on a per-Region basis, for example, to view which resource types are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types.
 --
 --
 -- The following resource types support longer IDs: @bundle@ | @conversion-task@ | @customer-gateway@ | @dhcp-options@ | @elastic-ip-allocation@ | @elastic-ip-association@ | @export-task@ | @flow-log@ | @image@ | @import-task@ | @instance@ | @internet-gateway@ | @network-acl@ | @network-acl-association@ | @network-interface@ | @network-interface-attachment@ | @prefix-list@ | @reservation@ | @route-table@ | @route-table-association@ | @security-group@ | @snapshot@ | @subnet@ | @subnet-cidr-block-association@ | @volume@ | @vpc@ | @vpc-cidr-block-association@ | @vpc-endpoint@ | @vpc-peering-connection@ | @vpn-connection@ | @vpn-gateway@ .
@@ -48,11 +48,7 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for DescribeIdFormat.
---
---
---
--- /See:/ 'describeIdFormat' smart constructor.
+-- | /See:/ 'describeIdFormat' smart constructor.
 newtype DescribeIdFormat = DescribeIdFormat'
   { _difResource :: Maybe Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
@@ -100,11 +96,7 @@ instance ToQuery DescribeIdFormat where
                "Version" =: ("2016-11-15" :: ByteString),
                "Resource" =: _difResource]
 
--- | Contains the output of DescribeIdFormat.
---
---
---
--- /See:/ 'describeIdFormatResponse' smart constructor.
+-- | /See:/ 'describeIdFormatResponse' smart constructor.
 data DescribeIdFormatResponse = DescribeIdFormatResponse'
   { _difrsStatuses       :: !(Maybe [IdFormat])
   , _difrsResponseStatus :: !Int

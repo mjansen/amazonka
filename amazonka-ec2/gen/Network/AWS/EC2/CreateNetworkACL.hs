@@ -21,7 +21,7 @@
 -- Creates a network ACL in a VPC. Network ACLs provide an optional layer of security (in addition to security groups) for the instances in your VPC.
 --
 --
--- For more information about network ACLs, see <http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html Network ACLs> in the /Amazon Virtual Private Cloud User Guide/ .
+-- For more information, see <https://docs.aws.amazon.com/vpc/latest/userguide/VPC_ACLs.html Network ACLs> in the /Amazon Virtual Private Cloud User Guide/ .
 --
 module Network.AWS.EC2.CreateNetworkACL
     (
@@ -29,6 +29,7 @@ module Network.AWS.EC2.CreateNetworkACL
       createNetworkACL
     , CreateNetworkACL
     -- * Request Lenses
+    , cnaTagSpecifications
     , cnaDryRun
     , cnaVPCId
 
@@ -47,20 +48,19 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for CreateNetworkAcl.
---
---
---
--- /See:/ 'createNetworkACL' smart constructor.
+-- | /See:/ 'createNetworkACL' smart constructor.
 data CreateNetworkACL = CreateNetworkACL'
-  { _cnaDryRun :: !(Maybe Bool)
-  , _cnaVPCId  :: !Text
+  { _cnaTagSpecifications :: !(Maybe [TagSpecification])
+  , _cnaDryRun            :: !(Maybe Bool)
+  , _cnaVPCId             :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
 -- | Creates a value of 'CreateNetworkACL' with the minimum fields required to make a request.
 --
 -- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'cnaTagSpecifications' - The tags to assign to the network ACL.
 --
 -- * 'cnaDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
@@ -69,8 +69,13 @@ createNetworkACL
     :: Text -- ^ 'cnaVPCId'
     -> CreateNetworkACL
 createNetworkACL pVPCId_ =
-  CreateNetworkACL' {_cnaDryRun = Nothing, _cnaVPCId = pVPCId_}
+  CreateNetworkACL'
+    {_cnaTagSpecifications = Nothing, _cnaDryRun = Nothing, _cnaVPCId = pVPCId_}
 
+
+-- | The tags to assign to the network ACL.
+cnaTagSpecifications :: Lens' CreateNetworkACL [TagSpecification]
+cnaTagSpecifications = lens _cnaTagSpecifications (\ s a -> s{_cnaTagSpecifications = a}) . _Default . _Coerce
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 cnaDryRun :: Lens' CreateNetworkACL (Maybe Bool)
@@ -104,13 +109,12 @@ instance ToQuery CreateNetworkACL where
           = mconcat
               ["Action" =: ("CreateNetworkAcl" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
+               toQuery
+                 (toQueryList "TagSpecification" <$>
+                    _cnaTagSpecifications),
                "DryRun" =: _cnaDryRun, "VpcId" =: _cnaVPCId]
 
--- | Contains the output of CreateNetworkAcl.
---
---
---
--- /See:/ 'createNetworkACLResponse' smart constructor.
+-- | /See:/ 'createNetworkACLResponse' smart constructor.
 data CreateNetworkACLResponse = CreateNetworkACLResponse'
   { _cnarsNetworkACL     :: !(Maybe NetworkACL)
   , _cnarsResponseStatus :: !Int

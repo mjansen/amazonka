@@ -18,7 +18,7 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Describes one or more of your placement groups. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html Placement Groups> in the /Amazon Elastic Compute Cloud User Guide/ .
+-- Describes the specified placement groups or all of your placement groups. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html Placement groups> in the /Amazon EC2 User Guide/ .
 --
 --
 module Network.AWS.EC2.DescribePlacementGroups
@@ -29,6 +29,7 @@ module Network.AWS.EC2.DescribePlacementGroups
     -- * Request Lenses
     , dpgsFilters
     , dpgsGroupNames
+    , dpgsGroupIds
     , dpgsDryRun
 
     -- * Destructuring the Response
@@ -46,14 +47,11 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for DescribePlacementGroups.
---
---
---
--- /See:/ 'describePlacementGroups' smart constructor.
+-- | /See:/ 'describePlacementGroups' smart constructor.
 data DescribePlacementGroups = DescribePlacementGroups'
   { _dpgsFilters    :: !(Maybe [Filter])
   , _dpgsGroupNames :: !(Maybe [Text])
+  , _dpgsGroupIds   :: !(Maybe [Text])
   , _dpgsDryRun     :: !(Maybe Bool)
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
@@ -62,25 +60,35 @@ data DescribePlacementGroups = DescribePlacementGroups'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dpgsFilters' - One or more filters.     * @group-name@ - The name of the placement group.     * @state@ - The state of the placement group (@pending@ | @available@ | @deleting@ | @deleted@ ).     * @strategy@ - The strategy of the placement group (@cluster@ | @spread@ ).
+-- * 'dpgsFilters' - The filters.     * @group-name@ - The name of the placement group.     * @state@ - The state of the placement group (@pending@ | @available@ | @deleting@ | @deleted@ ).     * @strategy@ - The strategy of the placement group (@cluster@ | @spread@ | @partition@ ).     * @tag@ :<key> - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key @Owner@ and the value @TeamA@ , specify @tag:Owner@ for the filter name and @TeamA@ for the filter value.     * @tag-key@ - The key of a tag assigned to the resource. Use this filter to find all resources that have a tag with a specific key, regardless of the tag value.
 --
--- * 'dpgsGroupNames' - One or more placement group names. Default: Describes all your placement groups, or only those otherwise specified.
+-- * 'dpgsGroupNames' - The names of the placement groups. Default: Describes all your placement groups, or only those otherwise specified.
+--
+-- * 'dpgsGroupIds' - The IDs of the placement groups.
 --
 -- * 'dpgsDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 describePlacementGroups
     :: DescribePlacementGroups
 describePlacementGroups =
   DescribePlacementGroups'
-    {_dpgsFilters = Nothing, _dpgsGroupNames = Nothing, _dpgsDryRun = Nothing}
+    { _dpgsFilters = Nothing
+    , _dpgsGroupNames = Nothing
+    , _dpgsGroupIds = Nothing
+    , _dpgsDryRun = Nothing
+    }
 
 
--- | One or more filters.     * @group-name@ - The name of the placement group.     * @state@ - The state of the placement group (@pending@ | @available@ | @deleting@ | @deleted@ ).     * @strategy@ - The strategy of the placement group (@cluster@ | @spread@ ).
+-- | The filters.     * @group-name@ - The name of the placement group.     * @state@ - The state of the placement group (@pending@ | @available@ | @deleting@ | @deleted@ ).     * @strategy@ - The strategy of the placement group (@cluster@ | @spread@ | @partition@ ).     * @tag@ :<key> - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key @Owner@ and the value @TeamA@ , specify @tag:Owner@ for the filter name and @TeamA@ for the filter value.     * @tag-key@ - The key of a tag assigned to the resource. Use this filter to find all resources that have a tag with a specific key, regardless of the tag value.
 dpgsFilters :: Lens' DescribePlacementGroups [Filter]
 dpgsFilters = lens _dpgsFilters (\ s a -> s{_dpgsFilters = a}) . _Default . _Coerce
 
--- | One or more placement group names. Default: Describes all your placement groups, or only those otherwise specified.
+-- | The names of the placement groups. Default: Describes all your placement groups, or only those otherwise specified.
 dpgsGroupNames :: Lens' DescribePlacementGroups [Text]
 dpgsGroupNames = lens _dpgsGroupNames (\ s a -> s{_dpgsGroupNames = a}) . _Default . _Coerce
+
+-- | The IDs of the placement groups.
+dpgsGroupIds :: Lens' DescribePlacementGroups [Text]
+dpgsGroupIds = lens _dpgsGroupIds (\ s a -> s{_dpgsGroupIds = a}) . _Default . _Coerce
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 dpgsDryRun :: Lens' DescribePlacementGroups (Maybe Bool)
@@ -117,13 +125,10 @@ instance ToQuery DescribePlacementGroups where
                toQuery (toQueryList "Filter" <$> _dpgsFilters),
                toQuery
                  (toQueryList "GroupName" <$> _dpgsGroupNames),
+               toQuery (toQueryList "GroupId" <$> _dpgsGroupIds),
                "DryRun" =: _dpgsDryRun]
 
--- | Contains the output of DescribePlacementGroups.
---
---
---
--- /See:/ 'describePlacementGroupsResponse' smart constructor.
+-- | /See:/ 'describePlacementGroupsResponse' smart constructor.
 data DescribePlacementGroupsResponse = DescribePlacementGroupsResponse'
   { _dpgrsPlacementGroups :: !(Maybe [PlacementGroup])
   , _dpgrsResponseStatus  :: !Int
@@ -134,7 +139,7 @@ data DescribePlacementGroupsResponse = DescribePlacementGroupsResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dpgrsPlacementGroups' - One or more placement groups.
+-- * 'dpgrsPlacementGroups' - Information about the placement groups.
 --
 -- * 'dpgrsResponseStatus' - -- | The response status code.
 describePlacementGroupsResponse
@@ -145,7 +150,7 @@ describePlacementGroupsResponse pResponseStatus_ =
     {_dpgrsPlacementGroups = Nothing, _dpgrsResponseStatus = pResponseStatus_}
 
 
--- | One or more placement groups.
+-- | Information about the placement groups.
 dpgrsPlacementGroups :: Lens' DescribePlacementGroupsResponse [PlacementGroup]
 dpgrsPlacementGroups = lens _dpgrsPlacementGroups (\ s a -> s{_dpgrsPlacementGroups = a}) . _Default . _Coerce
 

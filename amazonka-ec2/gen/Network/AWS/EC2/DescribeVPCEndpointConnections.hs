@@ -21,6 +21,8 @@
 -- Describes the VPC endpoint connections to your VPC endpoint services, including any endpoints that are pending your acceptance.
 --
 --
+--
+-- This operation returns paginated results.
 module Network.AWS.EC2.DescribeVPCEndpointConnections
     (
     -- * Creating a Request
@@ -44,6 +46,7 @@ module Network.AWS.EC2.DescribeVPCEndpointConnections
 import Network.AWS.EC2.Types
 import Network.AWS.EC2.Types.Product
 import Network.AWS.Lens
+import Network.AWS.Pager
 import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
@@ -67,7 +70,7 @@ data DescribeVPCEndpointConnections = DescribeVPCEndpointConnections'
 --
 -- * 'dvecDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'dvecMaxResults' - The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned @NextToken@ value. This value can be between 5 and 1000; if @MaxResults@ is given a value larger than 1000, only 1000 results are returned.
+-- * 'dvecMaxResults' - The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned @NextToken@ value. This value can be between 5 and 1,000; if @MaxResults@ is given a value larger than 1,000, only 1,000 results are returned.
 describeVPCEndpointConnections
     :: DescribeVPCEndpointConnections
 describeVPCEndpointConnections =
@@ -91,9 +94,17 @@ dvecNextToken = lens _dvecNextToken (\ s a -> s{_dvecNextToken = a})
 dvecDryRun :: Lens' DescribeVPCEndpointConnections (Maybe Bool)
 dvecDryRun = lens _dvecDryRun (\ s a -> s{_dvecDryRun = a})
 
--- | The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned @NextToken@ value. This value can be between 5 and 1000; if @MaxResults@ is given a value larger than 1000, only 1000 results are returned.
+-- | The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned @NextToken@ value. This value can be between 5 and 1,000; if @MaxResults@ is given a value larger than 1,000, only 1,000 results are returned.
 dvecMaxResults :: Lens' DescribeVPCEndpointConnections (Maybe Int)
 dvecMaxResults = lens _dvecMaxResults (\ s a -> s{_dvecMaxResults = a})
+
+instance AWSPager DescribeVPCEndpointConnections
+         where
+        page rq rs
+          | stop (rs ^. dvecrsNextToken) = Nothing
+          | stop (rs ^. dvecrsVPCEndpointConnections) = Nothing
+          | otherwise =
+            Just $ rq & dvecNextToken .~ rs ^. dvecrsNextToken
 
 instance AWSRequest DescribeVPCEndpointConnections
          where

@@ -27,20 +27,20 @@ module Network.AWS.EC2.DescribeNetworkInterfaceAttribute
       describeNetworkInterfaceAttribute
     , DescribeNetworkInterfaceAttribute
     -- * Request Lenses
-    , dniaAttribute
-    , dniaDryRun
-    , dniaNetworkInterfaceId
+    , dnianAttribute
+    , dnianDryRun
+    , dnianNetworkInterfaceId
 
     -- * Destructuring the Response
     , describeNetworkInterfaceAttributeResponse
     , DescribeNetworkInterfaceAttributeResponse
     -- * Response Lenses
-    , dniarsGroups
-    , dniarsSourceDestCheck
-    , dniarsNetworkInterfaceId
-    , dniarsAttachment
-    , dniarsDescription
-    , dniarsResponseStatus
+    , dnianrsGroups
+    , dnianrsSourceDestCheck
+    , dnianrsNetworkInterfaceId
+    , dnianrsAttachment
+    , dnianrsDescription
+    , dnianrsResponseStatus
     ) where
 
 import Network.AWS.EC2.Types
@@ -56,9 +56,9 @@ import Network.AWS.Response
 --
 -- /See:/ 'describeNetworkInterfaceAttribute' smart constructor.
 data DescribeNetworkInterfaceAttribute = DescribeNetworkInterfaceAttribute'
-  { _dniaAttribute          :: !(Maybe NetworkInterfaceAttribute)
-  , _dniaDryRun             :: !(Maybe Bool)
-  , _dniaNetworkInterfaceId :: !Text
+  { _dnianAttribute          :: !(Maybe NetworkInterfaceAttribute)
+  , _dnianDryRun             :: !(Maybe Bool)
+  , _dnianNetworkInterfaceId :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -66,33 +66,33 @@ data DescribeNetworkInterfaceAttribute = DescribeNetworkInterfaceAttribute'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dniaAttribute' - The attribute of the network interface. This parameter is required.
+-- * 'dnianAttribute' - The attribute of the network interface. This parameter is required.
 --
--- * 'dniaDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
+-- * 'dnianDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'dniaNetworkInterfaceId' - The ID of the network interface.
+-- * 'dnianNetworkInterfaceId' - The ID of the network interface.
 describeNetworkInterfaceAttribute
-    :: Text -- ^ 'dniaNetworkInterfaceId'
+    :: Text -- ^ 'dnianNetworkInterfaceId'
     -> DescribeNetworkInterfaceAttribute
 describeNetworkInterfaceAttribute pNetworkInterfaceId_ =
   DescribeNetworkInterfaceAttribute'
-    { _dniaAttribute = Nothing
-    , _dniaDryRun = Nothing
-    , _dniaNetworkInterfaceId = pNetworkInterfaceId_
+    { _dnianAttribute = Nothing
+    , _dnianDryRun = Nothing
+    , _dnianNetworkInterfaceId = pNetworkInterfaceId_
     }
 
 
 -- | The attribute of the network interface. This parameter is required.
-dniaAttribute :: Lens' DescribeNetworkInterfaceAttribute (Maybe NetworkInterfaceAttribute)
-dniaAttribute = lens _dniaAttribute (\ s a -> s{_dniaAttribute = a})
+dnianAttribute :: Lens' DescribeNetworkInterfaceAttribute (Maybe NetworkInterfaceAttribute)
+dnianAttribute = lens _dnianAttribute (\ s a -> s{_dnianAttribute = a})
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
-dniaDryRun :: Lens' DescribeNetworkInterfaceAttribute (Maybe Bool)
-dniaDryRun = lens _dniaDryRun (\ s a -> s{_dniaDryRun = a})
+dnianDryRun :: Lens' DescribeNetworkInterfaceAttribute (Maybe Bool)
+dnianDryRun = lens _dnianDryRun (\ s a -> s{_dnianDryRun = a})
 
 -- | The ID of the network interface.
-dniaNetworkInterfaceId :: Lens' DescribeNetworkInterfaceAttribute Text
-dniaNetworkInterfaceId = lens _dniaNetworkInterfaceId (\ s a -> s{_dniaNetworkInterfaceId = a})
+dnianNetworkInterfaceId :: Lens' DescribeNetworkInterfaceAttribute Text
+dnianNetworkInterfaceId = lens _dnianNetworkInterfaceId (\ s a -> s{_dnianNetworkInterfaceId = a})
 
 instance AWSRequest DescribeNetworkInterfaceAttribute
          where
@@ -132,9 +132,9 @@ instance ToQuery DescribeNetworkInterfaceAttribute
               ["Action" =:
                  ("DescribeNetworkInterfaceAttribute" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
-               "Attribute" =: _dniaAttribute,
-               "DryRun" =: _dniaDryRun,
-               "NetworkInterfaceId" =: _dniaNetworkInterfaceId]
+               "Attribute" =: _dnianAttribute,
+               "DryRun" =: _dnianDryRun,
+               "NetworkInterfaceId" =: _dnianNetworkInterfaceId]
 
 -- | Contains the output of DescribeNetworkInterfaceAttribute.
 --
@@ -142,12 +142,12 @@ instance ToQuery DescribeNetworkInterfaceAttribute
 --
 -- /See:/ 'describeNetworkInterfaceAttributeResponse' smart constructor.
 data DescribeNetworkInterfaceAttributeResponse = DescribeNetworkInterfaceAttributeResponse'
-  { _dniarsGroups             :: !(Maybe [GroupIdentifier])
-  , _dniarsSourceDestCheck    :: !(Maybe AttributeBooleanValue)
-  , _dniarsNetworkInterfaceId :: !(Maybe Text)
-  , _dniarsAttachment         :: !(Maybe NetworkInterfaceAttachment)
-  , _dniarsDescription        :: !(Maybe AttributeValue)
-  , _dniarsResponseStatus     :: !Int
+  { _dnianrsGroups             :: !(Maybe [GroupIdentifier])
+  , _dnianrsSourceDestCheck    :: !(Maybe AttributeBooleanValue)
+  , _dnianrsNetworkInterfaceId :: !(Maybe Text)
+  , _dnianrsAttachment         :: !(Maybe NetworkInterfaceAttachment)
+  , _dnianrsDescription        :: !(Maybe AttributeValue)
+  , _dnianrsResponseStatus     :: !Int
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -155,54 +155,54 @@ data DescribeNetworkInterfaceAttributeResponse = DescribeNetworkInterfaceAttribu
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dniarsGroups' - The security groups associated with the network interface.
+-- * 'dnianrsGroups' - The security groups associated with the network interface.
 --
--- * 'dniarsSourceDestCheck' - Indicates whether source/destination checking is enabled.
+-- * 'dnianrsSourceDestCheck' - Indicates whether source/destination checking is enabled.
 --
--- * 'dniarsNetworkInterfaceId' - The ID of the network interface.
+-- * 'dnianrsNetworkInterfaceId' - The ID of the network interface.
 --
--- * 'dniarsAttachment' - The attachment (if any) of the network interface.
+-- * 'dnianrsAttachment' - The attachment (if any) of the network interface.
 --
--- * 'dniarsDescription' - The description of the network interface.
+-- * 'dnianrsDescription' - The description of the network interface.
 --
--- * 'dniarsResponseStatus' - -- | The response status code.
+-- * 'dnianrsResponseStatus' - -- | The response status code.
 describeNetworkInterfaceAttributeResponse
-    :: Int -- ^ 'dniarsResponseStatus'
+    :: Int -- ^ 'dnianrsResponseStatus'
     -> DescribeNetworkInterfaceAttributeResponse
 describeNetworkInterfaceAttributeResponse pResponseStatus_ =
   DescribeNetworkInterfaceAttributeResponse'
-    { _dniarsGroups = Nothing
-    , _dniarsSourceDestCheck = Nothing
-    , _dniarsNetworkInterfaceId = Nothing
-    , _dniarsAttachment = Nothing
-    , _dniarsDescription = Nothing
-    , _dniarsResponseStatus = pResponseStatus_
+    { _dnianrsGroups = Nothing
+    , _dnianrsSourceDestCheck = Nothing
+    , _dnianrsNetworkInterfaceId = Nothing
+    , _dnianrsAttachment = Nothing
+    , _dnianrsDescription = Nothing
+    , _dnianrsResponseStatus = pResponseStatus_
     }
 
 
 -- | The security groups associated with the network interface.
-dniarsGroups :: Lens' DescribeNetworkInterfaceAttributeResponse [GroupIdentifier]
-dniarsGroups = lens _dniarsGroups (\ s a -> s{_dniarsGroups = a}) . _Default . _Coerce
+dnianrsGroups :: Lens' DescribeNetworkInterfaceAttributeResponse [GroupIdentifier]
+dnianrsGroups = lens _dnianrsGroups (\ s a -> s{_dnianrsGroups = a}) . _Default . _Coerce
 
 -- | Indicates whether source/destination checking is enabled.
-dniarsSourceDestCheck :: Lens' DescribeNetworkInterfaceAttributeResponse (Maybe AttributeBooleanValue)
-dniarsSourceDestCheck = lens _dniarsSourceDestCheck (\ s a -> s{_dniarsSourceDestCheck = a})
+dnianrsSourceDestCheck :: Lens' DescribeNetworkInterfaceAttributeResponse (Maybe AttributeBooleanValue)
+dnianrsSourceDestCheck = lens _dnianrsSourceDestCheck (\ s a -> s{_dnianrsSourceDestCheck = a})
 
 -- | The ID of the network interface.
-dniarsNetworkInterfaceId :: Lens' DescribeNetworkInterfaceAttributeResponse (Maybe Text)
-dniarsNetworkInterfaceId = lens _dniarsNetworkInterfaceId (\ s a -> s{_dniarsNetworkInterfaceId = a})
+dnianrsNetworkInterfaceId :: Lens' DescribeNetworkInterfaceAttributeResponse (Maybe Text)
+dnianrsNetworkInterfaceId = lens _dnianrsNetworkInterfaceId (\ s a -> s{_dnianrsNetworkInterfaceId = a})
 
 -- | The attachment (if any) of the network interface.
-dniarsAttachment :: Lens' DescribeNetworkInterfaceAttributeResponse (Maybe NetworkInterfaceAttachment)
-dniarsAttachment = lens _dniarsAttachment (\ s a -> s{_dniarsAttachment = a})
+dnianrsAttachment :: Lens' DescribeNetworkInterfaceAttributeResponse (Maybe NetworkInterfaceAttachment)
+dnianrsAttachment = lens _dnianrsAttachment (\ s a -> s{_dnianrsAttachment = a})
 
 -- | The description of the network interface.
-dniarsDescription :: Lens' DescribeNetworkInterfaceAttributeResponse (Maybe AttributeValue)
-dniarsDescription = lens _dniarsDescription (\ s a -> s{_dniarsDescription = a})
+dnianrsDescription :: Lens' DescribeNetworkInterfaceAttributeResponse (Maybe AttributeValue)
+dnianrsDescription = lens _dnianrsDescription (\ s a -> s{_dnianrsDescription = a})
 
 -- | -- | The response status code.
-dniarsResponseStatus :: Lens' DescribeNetworkInterfaceAttributeResponse Int
-dniarsResponseStatus = lens _dniarsResponseStatus (\ s a -> s{_dniarsResponseStatus = a})
+dnianrsResponseStatus :: Lens' DescribeNetworkInterfaceAttributeResponse Int
+dnianrsResponseStatus = lens _dnianrsResponseStatus (\ s a -> s{_dnianrsResponseStatus = a})
 
 instance NFData
            DescribeNetworkInterfaceAttributeResponse

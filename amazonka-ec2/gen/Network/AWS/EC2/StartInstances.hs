@@ -27,7 +27,7 @@
 --
 -- Performing this operation on an instance that uses an instance store as its root device returns an error.
 --
--- For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html Stopping Instances> in the /Amazon Elastic Compute Cloud User Guide/ .
+-- For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html Stopping instances> in the /Amazon EC2 User Guide/ .
 --
 module Network.AWS.EC2.StartInstances
     (
@@ -54,11 +54,7 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for StartInstances.
---
---
---
--- /See:/ 'startInstances' smart constructor.
+-- | /See:/ 'startInstances' smart constructor.
 data StartInstances = StartInstances'
   { _sAdditionalInfo :: !(Maybe Text)
   , _sDryRun         :: !(Maybe Bool)
@@ -74,7 +70,7 @@ data StartInstances = StartInstances'
 --
 -- * 'sDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'sInstanceIds' - One or more instance IDs.
+-- * 'sInstanceIds' - The IDs of the instances.
 startInstances
     :: StartInstances
 startInstances =
@@ -90,7 +86,7 @@ sAdditionalInfo = lens _sAdditionalInfo (\ s a -> s{_sAdditionalInfo = a})
 sDryRun :: Lens' StartInstances (Maybe Bool)
 sDryRun = lens _sDryRun (\ s a -> s{_sDryRun = a})
 
--- | One or more instance IDs.
+-- | The IDs of the instances.
 sInstanceIds :: Lens' StartInstances [Text]
 sInstanceIds = lens _sInstanceIds (\ s a -> s{_sInstanceIds = a}) . _Coerce
 
@@ -124,11 +120,7 @@ instance ToQuery StartInstances where
                "DryRun" =: _sDryRun,
                toQueryList "InstanceId" _sInstanceIds]
 
--- | Contains the output of StartInstances.
---
---
---
--- /See:/ 'startInstancesResponse' smart constructor.
+-- | /See:/ 'startInstancesResponse' smart constructor.
 data StartInstancesResponse = StartInstancesResponse'
   { _srsStartingInstances :: !(Maybe [InstanceStateChange])
   , _srsResponseStatus    :: !Int
@@ -139,7 +131,7 @@ data StartInstancesResponse = StartInstancesResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'srsStartingInstances' - Information about one or more started instances.
+-- * 'srsStartingInstances' - Information about the started instances.
 --
 -- * 'srsResponseStatus' - -- | The response status code.
 startInstancesResponse
@@ -150,7 +142,7 @@ startInstancesResponse pResponseStatus_ =
     {_srsStartingInstances = Nothing, _srsResponseStatus = pResponseStatus_}
 
 
--- | Information about one or more started instances.
+-- | Information about the started instances.
 srsStartingInstances :: Lens' StartInstancesResponse [InstanceStateChange]
 srsStartingInstances = lens _srsStartingInstances (\ s a -> s{_srsStartingInstances = a}) . _Default . _Coerce
 

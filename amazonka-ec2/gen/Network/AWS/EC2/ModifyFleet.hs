@@ -21,7 +21,15 @@
 -- Modifies the specified EC2 Fleet.
 --
 --
+-- You can only modify an EC2 Fleet request of type @maintain@ .
+--
 -- While the EC2 Fleet is being modified, it is in the @modifying@ state.
+--
+-- To scale up your EC2 Fleet, increase its target capacity. The EC2 Fleet launches the additional Spot Instances according to the allocation strategy for the EC2 Fleet request. If the allocation strategy is @lowest-price@ , the EC2 Fleet launches instances using the Spot Instance pool with the lowest price. If the allocation strategy is @diversified@ , the EC2 Fleet distributes the instances across the Spot Instance pools. If the allocation strategy is @capacity-optimized@ , EC2 Fleet launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching.
+--
+-- To scale down your EC2 Fleet, decrease its target capacity. First, the EC2 Fleet cancels any open requests that exceed the new target capacity. You can request that the EC2 Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is @lowest-price@ , the EC2 Fleet terminates the instances with the highest price per unit. If the allocation strategy is @capacity-optimized@ , the EC2 Fleet terminates the instances in the Spot Instance pools that have the least available Spot Instance capacity. If the allocation strategy is @diversified@ , the EC2 Fleet terminates instances across the Spot Instance pools. Alternatively, you can request that the EC2 Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.
+--
+-- If you are finished with your EC2 Fleet for now, but will use it again later, you can set the target capacity to 0.
 --
 module Network.AWS.EC2.ModifyFleet
     (
@@ -29,10 +37,11 @@ module Network.AWS.EC2.ModifyFleet
       modifyFleet
     , ModifyFleet
     -- * Request Lenses
+    , mfTargetCapacitySpecification
     , mfExcessCapacityTerminationPolicy
+    , mfLaunchTemplateConfigs
     , mfDryRun
     , mfFleetId
-    , mfTargetCapacitySpecification
 
     -- * Destructuring the Response
     , modifyFleetResponse
@@ -51,10 +60,11 @@ import Network.AWS.Response
 
 -- | /See:/ 'modifyFleet' smart constructor.
 data ModifyFleet = ModifyFleet'
-  { _mfExcessCapacityTerminationPolicy :: !(Maybe FleetExcessCapacityTerminationPolicy)
+  { _mfTargetCapacitySpecification :: !(Maybe TargetCapacitySpecificationRequest)
+  , _mfExcessCapacityTerminationPolicy :: !(Maybe FleetExcessCapacityTerminationPolicy)
+  , _mfLaunchTemplateConfigs :: !(Maybe [FleetLaunchTemplateConfigRequest])
   , _mfDryRun :: !(Maybe Bool)
   , _mfFleetId :: !Text
-  , _mfTargetCapacitySpecification :: !TargetCapacitySpecificationRequest
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -62,29 +72,39 @@ data ModifyFleet = ModifyFleet'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
+-- * 'mfTargetCapacitySpecification' - The size of the EC2 Fleet.
+--
 -- * 'mfExcessCapacityTerminationPolicy' - Indicates whether running instances should be terminated if the total target capacity of the EC2 Fleet is decreased below the current size of the EC2 Fleet.
+--
+-- * 'mfLaunchTemplateConfigs' - The launch template and overrides.
 --
 -- * 'mfDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
 -- * 'mfFleetId' - The ID of the EC2 Fleet.
---
--- * 'mfTargetCapacitySpecification' - The size of the EC2 Fleet.
 modifyFleet
     :: Text -- ^ 'mfFleetId'
-    -> TargetCapacitySpecificationRequest -- ^ 'mfTargetCapacitySpecification'
     -> ModifyFleet
-modifyFleet pFleetId_ pTargetCapacitySpecification_ =
+modifyFleet pFleetId_ =
   ModifyFleet'
-    { _mfExcessCapacityTerminationPolicy = Nothing
+    { _mfTargetCapacitySpecification = Nothing
+    , _mfExcessCapacityTerminationPolicy = Nothing
+    , _mfLaunchTemplateConfigs = Nothing
     , _mfDryRun = Nothing
     , _mfFleetId = pFleetId_
-    , _mfTargetCapacitySpecification = pTargetCapacitySpecification_
     }
 
+
+-- | The size of the EC2 Fleet.
+mfTargetCapacitySpecification :: Lens' ModifyFleet (Maybe TargetCapacitySpecificationRequest)
+mfTargetCapacitySpecification = lens _mfTargetCapacitySpecification (\ s a -> s{_mfTargetCapacitySpecification = a})
 
 -- | Indicates whether running instances should be terminated if the total target capacity of the EC2 Fleet is decreased below the current size of the EC2 Fleet.
 mfExcessCapacityTerminationPolicy :: Lens' ModifyFleet (Maybe FleetExcessCapacityTerminationPolicy)
 mfExcessCapacityTerminationPolicy = lens _mfExcessCapacityTerminationPolicy (\ s a -> s{_mfExcessCapacityTerminationPolicy = a})
+
+-- | The launch template and overrides.
+mfLaunchTemplateConfigs :: Lens' ModifyFleet [FleetLaunchTemplateConfigRequest]
+mfLaunchTemplateConfigs = lens _mfLaunchTemplateConfigs (\ s a -> s{_mfLaunchTemplateConfigs = a}) . _Default . _Coerce
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 mfDryRun :: Lens' ModifyFleet (Maybe Bool)
@@ -93,10 +113,6 @@ mfDryRun = lens _mfDryRun (\ s a -> s{_mfDryRun = a})
 -- | The ID of the EC2 Fleet.
 mfFleetId :: Lens' ModifyFleet Text
 mfFleetId = lens _mfFleetId (\ s a -> s{_mfFleetId = a})
-
--- | The size of the EC2 Fleet.
-mfTargetCapacitySpecification :: Lens' ModifyFleet TargetCapacitySpecificationRequest
-mfTargetCapacitySpecification = lens _mfTargetCapacitySpecification (\ s a -> s{_mfTargetCapacitySpecification = a})
 
 instance AWSRequest ModifyFleet where
         type Rs ModifyFleet = ModifyFleetResponse
@@ -122,11 +138,14 @@ instance ToQuery ModifyFleet where
           = mconcat
               ["Action" =: ("ModifyFleet" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
+               "TargetCapacitySpecification" =:
+                 _mfTargetCapacitySpecification,
                "ExcessCapacityTerminationPolicy" =:
                  _mfExcessCapacityTerminationPolicy,
-               "DryRun" =: _mfDryRun, "FleetId" =: _mfFleetId,
-               "TargetCapacitySpecification" =:
-                 _mfTargetCapacitySpecification]
+               toQuery
+                 (toQueryList "LaunchTemplateConfig" <$>
+                    _mfLaunchTemplateConfigs),
+               "DryRun" =: _mfDryRun, "FleetId" =: _mfFleetId]
 
 -- | /See:/ 'modifyFleetResponse' smart constructor.
 data ModifyFleetResponse = ModifyFleetResponse'

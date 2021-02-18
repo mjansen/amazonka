@@ -18,7 +18,7 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Describes one or more of your export tasks.
+-- Describes the specified export instance tasks or all of your export instance tasks.
 --
 --
 module Network.AWS.EC2.DescribeExportTasks
@@ -27,6 +27,7 @@ module Network.AWS.EC2.DescribeExportTasks
       describeExportTasks
     , DescribeExportTasks
     -- * Request Lenses
+    , detFilters
     , detExportTaskIds
 
     -- * Destructuring the Response
@@ -44,13 +45,10 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for DescribeExportTasks.
---
---
---
--- /See:/ 'describeExportTasks' smart constructor.
-newtype DescribeExportTasks = DescribeExportTasks'
-  { _detExportTaskIds :: Maybe [Text]
+-- | /See:/ 'describeExportTasks' smart constructor.
+data DescribeExportTasks = DescribeExportTasks'
+  { _detFilters       :: !(Maybe [Filter])
+  , _detExportTaskIds :: !(Maybe [Text])
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -58,13 +56,20 @@ newtype DescribeExportTasks = DescribeExportTasks'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'detExportTaskIds' - One or more export task IDs.
+-- * 'detFilters' - the filters for the export tasks.
+--
+-- * 'detExportTaskIds' - The export task IDs.
 describeExportTasks
     :: DescribeExportTasks
-describeExportTasks = DescribeExportTasks' {_detExportTaskIds = Nothing}
+describeExportTasks =
+  DescribeExportTasks' {_detFilters = Nothing, _detExportTaskIds = Nothing}
 
 
--- | One or more export task IDs.
+-- | the filters for the export tasks.
+detFilters :: Lens' DescribeExportTasks [Filter]
+detFilters = lens _detFilters (\ s a -> s{_detFilters = a}) . _Default . _Coerce
+
+-- | The export task IDs.
 detExportTaskIds :: Lens' DescribeExportTasks [Text]
 detExportTaskIds = lens _detExportTaskIds (\ s a -> s{_detExportTaskIds = a}) . _Default . _Coerce
 
@@ -95,14 +100,11 @@ instance ToQuery DescribeExportTasks where
           = mconcat
               ["Action" =: ("DescribeExportTasks" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
+               toQuery (toQueryList "Filter" <$> _detFilters),
                toQuery
                  (toQueryList "ExportTaskId" <$> _detExportTaskIds)]
 
--- | Contains the output for DescribeExportTasks.
---
---
---
--- /See:/ 'describeExportTasksResponse' smart constructor.
+-- | /See:/ 'describeExportTasksResponse' smart constructor.
 data DescribeExportTasksResponse = DescribeExportTasksResponse'
   { _detrsExportTasks    :: !(Maybe [ExportTask])
   , _detrsResponseStatus :: !Int

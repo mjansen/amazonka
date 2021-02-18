@@ -21,6 +21,8 @@
 -- Describes the principals (service consumers) that are permitted to discover your VPC endpoint service.
 --
 --
+--
+-- This operation returns paginated results.
 module Network.AWS.EC2.DescribeVPCEndpointServicePermissions
     (
     -- * Creating a Request
@@ -45,6 +47,7 @@ module Network.AWS.EC2.DescribeVPCEndpointServicePermissions
 import Network.AWS.EC2.Types
 import Network.AWS.EC2.Types.Product
 import Network.AWS.Lens
+import Network.AWS.Pager
 import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
@@ -69,7 +72,7 @@ data DescribeVPCEndpointServicePermissions = DescribeVPCEndpointServicePermissio
 --
 -- * 'dvespDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'dvespMaxResults' - The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned @NextToken@ value. This value can be between 5 and 1000; if @MaxResults@ is given a value larger than 1000, only 1000 results are returned.
+-- * 'dvespMaxResults' - The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned @NextToken@ value. This value can be between 5 and 1,000; if @MaxResults@ is given a value larger than 1,000, only 1,000 results are returned.
 --
 -- * 'dvespServiceId' - The ID of the service.
 describeVPCEndpointServicePermissions
@@ -97,13 +100,22 @@ dvespNextToken = lens _dvespNextToken (\ s a -> s{_dvespNextToken = a})
 dvespDryRun :: Lens' DescribeVPCEndpointServicePermissions (Maybe Bool)
 dvespDryRun = lens _dvespDryRun (\ s a -> s{_dvespDryRun = a})
 
--- | The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned @NextToken@ value. This value can be between 5 and 1000; if @MaxResults@ is given a value larger than 1000, only 1000 results are returned.
+-- | The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned @NextToken@ value. This value can be between 5 and 1,000; if @MaxResults@ is given a value larger than 1,000, only 1,000 results are returned.
 dvespMaxResults :: Lens' DescribeVPCEndpointServicePermissions (Maybe Int)
 dvespMaxResults = lens _dvespMaxResults (\ s a -> s{_dvespMaxResults = a})
 
 -- | The ID of the service.
 dvespServiceId :: Lens' DescribeVPCEndpointServicePermissions Text
 dvespServiceId = lens _dvespServiceId (\ s a -> s{_dvespServiceId = a})
+
+instance AWSPager
+           DescribeVPCEndpointServicePermissions
+         where
+        page rq rs
+          | stop (rs ^. dvesprsNextToken) = Nothing
+          | stop (rs ^. dvesprsAllowedPrincipals) = Nothing
+          | otherwise =
+            Just $ rq & dvespNextToken .~ rs ^. dvesprsNextToken
 
 instance AWSRequest
            DescribeVPCEndpointServicePermissions

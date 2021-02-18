@@ -34,8 +34,8 @@ module Network.AWS.EC2.DeleteFpgaImage
     , deleteFpgaImageResponse
     , DeleteFpgaImageResponse
     -- * Response Lenses
-    , delrsReturn
-    , delrsResponseStatus
+    , dfifrsReturn
+    , dfifrsResponseStatus
     ) where
 
 import Network.AWS.EC2.Types
@@ -103,8 +103,8 @@ instance ToQuery DeleteFpgaImage where
 
 -- | /See:/ 'deleteFpgaImageResponse' smart constructor.
 data DeleteFpgaImageResponse = DeleteFpgaImageResponse'
-  { _delrsReturn         :: !(Maybe Bool)
-  , _delrsResponseStatus :: !Int
+  { _dfifrsReturn         :: !(Maybe Bool)
+  , _dfifrsResponseStatus :: !Int
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -112,23 +112,23 @@ data DeleteFpgaImageResponse = DeleteFpgaImageResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'delrsReturn' - Is @true@ if the request succeeds, and an error otherwise.
+-- * 'dfifrsReturn' - Is @true@ if the request succeeds, and an error otherwise.
 --
--- * 'delrsResponseStatus' - -- | The response status code.
+-- * 'dfifrsResponseStatus' - -- | The response status code.
 deleteFpgaImageResponse
-    :: Int -- ^ 'delrsResponseStatus'
+    :: Int -- ^ 'dfifrsResponseStatus'
     -> DeleteFpgaImageResponse
 deleteFpgaImageResponse pResponseStatus_ =
   DeleteFpgaImageResponse'
-    {_delrsReturn = Nothing, _delrsResponseStatus = pResponseStatus_}
+    {_dfifrsReturn = Nothing, _dfifrsResponseStatus = pResponseStatus_}
 
 
 -- | Is @true@ if the request succeeds, and an error otherwise.
-delrsReturn :: Lens' DeleteFpgaImageResponse (Maybe Bool)
-delrsReturn = lens _delrsReturn (\ s a -> s{_delrsReturn = a})
+dfifrsReturn :: Lens' DeleteFpgaImageResponse (Maybe Bool)
+dfifrsReturn = lens _dfifrsReturn (\ s a -> s{_dfifrsReturn = a})
 
 -- | -- | The response status code.
-delrsResponseStatus :: Lens' DeleteFpgaImageResponse Int
-delrsResponseStatus = lens _delrsResponseStatus (\ s a -> s{_delrsResponseStatus = a})
+dfifrsResponseStatus :: Lens' DeleteFpgaImageResponse Int
+dfifrsResponseStatus = lens _dfifrsResponseStatus (\ s a -> s{_dfifrsResponseStatus = a})
 
 instance NFData DeleteFpgaImageResponse where

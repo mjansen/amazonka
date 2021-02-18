@@ -18,10 +18,10 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Replaces an existing route within a route table in a VPC. You must provide only one of the following: Internet gateway or virtual private gateway, NAT instance, NAT gateway, VPC peering connection, network interface, or egress-only Internet gateway.
+-- Replaces an existing route within a route table in a VPC. You must provide only one of the following: internet gateway, virtual private gateway, NAT instance, NAT gateway, VPC peering connection, network interface, egress-only internet gateway, or transit gateway.
 --
 --
--- For more information about route tables, see <http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html Route Tables> in the /Amazon Virtual Private Cloud User Guide/ .
+-- For more information, see <https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html Route Tables> in the /Amazon Virtual Private Cloud User Guide/ .
 --
 module Network.AWS.EC2.ReplaceRoute
     (
@@ -33,10 +33,16 @@ module Network.AWS.EC2.ReplaceRoute
     , rrInstanceId
     , rrEgressOnlyInternetGatewayId
     , rrDestinationIPv6CidrBlock
+    , rrLocalGatewayId
     , rrNatGatewayId
     , rrNetworkInterfaceId
+    , rrLocalTarget
+    , rrTransitGatewayId
     , rrGatewayId
+    , rrVPCEndpointId
+    , rrDestinationPrefixListId
     , rrDryRun
+    , rrCarrierGatewayId
     , rrDestinationCidrBlock
     , rrRouteTableId
 
@@ -52,20 +58,22 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for ReplaceRoute.
---
---
---
--- /See:/ 'replaceRoute' smart constructor.
+-- | /See:/ 'replaceRoute' smart constructor.
 data ReplaceRoute = ReplaceRoute'
   { _rrVPCPeeringConnectionId      :: !(Maybe Text)
   , _rrInstanceId                  :: !(Maybe Text)
   , _rrEgressOnlyInternetGatewayId :: !(Maybe Text)
   , _rrDestinationIPv6CidrBlock    :: !(Maybe Text)
+  , _rrLocalGatewayId              :: !(Maybe Text)
   , _rrNatGatewayId                :: !(Maybe Text)
   , _rrNetworkInterfaceId          :: !(Maybe Text)
+  , _rrLocalTarget                 :: !(Maybe Bool)
+  , _rrTransitGatewayId            :: !(Maybe Text)
   , _rrGatewayId                   :: !(Maybe Text)
+  , _rrVPCEndpointId               :: !(Maybe Text)
+  , _rrDestinationPrefixListId     :: !(Maybe Text)
   , _rrDryRun                      :: !(Maybe Bool)
+  , _rrCarrierGatewayId            :: !(Maybe Text)
   , _rrDestinationCidrBlock        :: !(Maybe Text)
   , _rrRouteTableId                :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
@@ -79,19 +87,31 @@ data ReplaceRoute = ReplaceRoute'
 --
 -- * 'rrInstanceId' - The ID of a NAT instance in your VPC.
 --
--- * 'rrEgressOnlyInternetGatewayId' - [IPv6 traffic only] The ID of an egress-only Internet gateway.
+-- * 'rrEgressOnlyInternetGatewayId' - [IPv6 traffic only] The ID of an egress-only internet gateway.
 --
--- * 'rrDestinationIPv6CidrBlock' - The IPv6 CIDR address block used for the destination match. The value you provide must match the CIDR of an existing route in the table.
+-- * 'rrDestinationIPv6CidrBlock' - The IPv6 CIDR address block used for the destination match. The value that you provide must match the CIDR of an existing route in the table.
+--
+-- * 'rrLocalGatewayId' - The ID of the local gateway.
 --
 -- * 'rrNatGatewayId' - [IPv4 traffic only] The ID of a NAT gateway.
 --
 -- * 'rrNetworkInterfaceId' - The ID of a network interface.
 --
--- * 'rrGatewayId' - The ID of an Internet gateway or virtual private gateway.
+-- * 'rrLocalTarget' - Specifies whether to reset the local route to its default target (@local@ ).
+--
+-- * 'rrTransitGatewayId' - The ID of a transit gateway.
+--
+-- * 'rrGatewayId' - The ID of an internet gateway or virtual private gateway.
+--
+-- * 'rrVPCEndpointId' - The ID of a VPC endpoint. Supported for Gateway Load Balancer endpoints only.
+--
+-- * 'rrDestinationPrefixListId' - The ID of the prefix list for the route.
 --
 -- * 'rrDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'rrDestinationCidrBlock' - The IPv4 CIDR address block used for the destination match. The value you provide must match the CIDR of an existing route in the table.
+-- * 'rrCarrierGatewayId' - [IPv4 traffic only] The ID of a carrier gateway.
+--
+-- * 'rrDestinationCidrBlock' - The IPv4 CIDR address block used for the destination match. The value that you provide must match the CIDR of an existing route in the table.
 --
 -- * 'rrRouteTableId' - The ID of the route table.
 replaceRoute
@@ -103,10 +123,16 @@ replaceRoute pRouteTableId_ =
     , _rrInstanceId = Nothing
     , _rrEgressOnlyInternetGatewayId = Nothing
     , _rrDestinationIPv6CidrBlock = Nothing
+    , _rrLocalGatewayId = Nothing
     , _rrNatGatewayId = Nothing
     , _rrNetworkInterfaceId = Nothing
+    , _rrLocalTarget = Nothing
+    , _rrTransitGatewayId = Nothing
     , _rrGatewayId = Nothing
+    , _rrVPCEndpointId = Nothing
+    , _rrDestinationPrefixListId = Nothing
     , _rrDryRun = Nothing
+    , _rrCarrierGatewayId = Nothing
     , _rrDestinationCidrBlock = Nothing
     , _rrRouteTableId = pRouteTableId_
     }
@@ -120,13 +146,17 @@ rrVPCPeeringConnectionId = lens _rrVPCPeeringConnectionId (\ s a -> s{_rrVPCPeer
 rrInstanceId :: Lens' ReplaceRoute (Maybe Text)
 rrInstanceId = lens _rrInstanceId (\ s a -> s{_rrInstanceId = a})
 
--- | [IPv6 traffic only] The ID of an egress-only Internet gateway.
+-- | [IPv6 traffic only] The ID of an egress-only internet gateway.
 rrEgressOnlyInternetGatewayId :: Lens' ReplaceRoute (Maybe Text)
 rrEgressOnlyInternetGatewayId = lens _rrEgressOnlyInternetGatewayId (\ s a -> s{_rrEgressOnlyInternetGatewayId = a})
 
--- | The IPv6 CIDR address block used for the destination match. The value you provide must match the CIDR of an existing route in the table.
+-- | The IPv6 CIDR address block used for the destination match. The value that you provide must match the CIDR of an existing route in the table.
 rrDestinationIPv6CidrBlock :: Lens' ReplaceRoute (Maybe Text)
 rrDestinationIPv6CidrBlock = lens _rrDestinationIPv6CidrBlock (\ s a -> s{_rrDestinationIPv6CidrBlock = a})
+
+-- | The ID of the local gateway.
+rrLocalGatewayId :: Lens' ReplaceRoute (Maybe Text)
+rrLocalGatewayId = lens _rrLocalGatewayId (\ s a -> s{_rrLocalGatewayId = a})
 
 -- | [IPv4 traffic only] The ID of a NAT gateway.
 rrNatGatewayId :: Lens' ReplaceRoute (Maybe Text)
@@ -136,15 +166,35 @@ rrNatGatewayId = lens _rrNatGatewayId (\ s a -> s{_rrNatGatewayId = a})
 rrNetworkInterfaceId :: Lens' ReplaceRoute (Maybe Text)
 rrNetworkInterfaceId = lens _rrNetworkInterfaceId (\ s a -> s{_rrNetworkInterfaceId = a})
 
--- | The ID of an Internet gateway or virtual private gateway.
+-- | Specifies whether to reset the local route to its default target (@local@ ).
+rrLocalTarget :: Lens' ReplaceRoute (Maybe Bool)
+rrLocalTarget = lens _rrLocalTarget (\ s a -> s{_rrLocalTarget = a})
+
+-- | The ID of a transit gateway.
+rrTransitGatewayId :: Lens' ReplaceRoute (Maybe Text)
+rrTransitGatewayId = lens _rrTransitGatewayId (\ s a -> s{_rrTransitGatewayId = a})
+
+-- | The ID of an internet gateway or virtual private gateway.
 rrGatewayId :: Lens' ReplaceRoute (Maybe Text)
 rrGatewayId = lens _rrGatewayId (\ s a -> s{_rrGatewayId = a})
+
+-- | The ID of a VPC endpoint. Supported for Gateway Load Balancer endpoints only.
+rrVPCEndpointId :: Lens' ReplaceRoute (Maybe Text)
+rrVPCEndpointId = lens _rrVPCEndpointId (\ s a -> s{_rrVPCEndpointId = a})
+
+-- | The ID of the prefix list for the route.
+rrDestinationPrefixListId :: Lens' ReplaceRoute (Maybe Text)
+rrDestinationPrefixListId = lens _rrDestinationPrefixListId (\ s a -> s{_rrDestinationPrefixListId = a})
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 rrDryRun :: Lens' ReplaceRoute (Maybe Bool)
 rrDryRun = lens _rrDryRun (\ s a -> s{_rrDryRun = a})
 
--- | The IPv4 CIDR address block used for the destination match. The value you provide must match the CIDR of an existing route in the table.
+-- | [IPv4 traffic only] The ID of a carrier gateway.
+rrCarrierGatewayId :: Lens' ReplaceRoute (Maybe Text)
+rrCarrierGatewayId = lens _rrCarrierGatewayId (\ s a -> s{_rrCarrierGatewayId = a})
+
+-- | The IPv4 CIDR address block used for the destination match. The value that you provide must match the CIDR of an existing route in the table.
 rrDestinationCidrBlock :: Lens' ReplaceRoute (Maybe Text)
 rrDestinationCidrBlock = lens _rrDestinationCidrBlock (\ s a -> s{_rrDestinationCidrBlock = a})
 
@@ -179,9 +229,17 @@ instance ToQuery ReplaceRoute where
                  _rrEgressOnlyInternetGatewayId,
                "DestinationIpv6CidrBlock" =:
                  _rrDestinationIPv6CidrBlock,
+               "LocalGatewayId" =: _rrLocalGatewayId,
                "NatGatewayId" =: _rrNatGatewayId,
                "NetworkInterfaceId" =: _rrNetworkInterfaceId,
-               "GatewayId" =: _rrGatewayId, "DryRun" =: _rrDryRun,
+               "LocalTarget" =: _rrLocalTarget,
+               "TransitGatewayId" =: _rrTransitGatewayId,
+               "GatewayId" =: _rrGatewayId,
+               "VpcEndpointId" =: _rrVPCEndpointId,
+               "DestinationPrefixListId" =:
+                 _rrDestinationPrefixListId,
+               "DryRun" =: _rrDryRun,
+               "CarrierGatewayId" =: _rrCarrierGatewayId,
                "DestinationCidrBlock" =: _rrDestinationCidrBlock,
                "RouteTableId" =: _rrRouteTableId]
 

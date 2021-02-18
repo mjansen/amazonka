@@ -18,10 +18,10 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Associates a subnet with a route table. The subnet and route table must be in the same VPC. This association causes traffic originating from the subnet to be routed according to the routes in the route table. The action returns an association ID, which you need in order to disassociate the route table from the subnet later. A route table can be associated with multiple subnets.
+-- Associates a subnet in your VPC or an internet gateway or virtual private gateway attached to your VPC with a route table in your VPC. This association causes traffic from the subnet or gateway to be routed according to the routes in the route table. The action returns an association ID, which you need in order to disassociate the route table later. A route table can be associated with multiple subnets.
 --
 --
--- For more information about route tables, see <http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html Route Tables> in the /Amazon Virtual Private Cloud User Guide/ .
+-- For more information, see <https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html Route Tables> in the /Amazon Virtual Private Cloud User Guide/ .
 --
 module Network.AWS.EC2.AssociateRouteTable
     (
@@ -29,15 +29,17 @@ module Network.AWS.EC2.AssociateRouteTable
       associateRouteTable
     , AssociateRouteTable
     -- * Request Lenses
+    , artSubnetId
+    , artGatewayId
     , artDryRun
     , artRouteTableId
-    , artSubnetId
 
     -- * Destructuring the Response
     , associateRouteTableResponse
     , AssociateRouteTableResponse
     -- * Response Lenses
     , artrsAssociationId
+    , artrsAssociationState
     , artrsResponseStatus
     ) where
 
@@ -48,15 +50,12 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for AssociateRouteTable.
---
---
---
--- /See:/ 'associateRouteTable' smart constructor.
+-- | /See:/ 'associateRouteTable' smart constructor.
 data AssociateRouteTable = AssociateRouteTable'
-  { _artDryRun       :: !(Maybe Bool)
+  { _artSubnetId     :: !(Maybe Text)
+  , _artGatewayId    :: !(Maybe Text)
+  , _artDryRun       :: !(Maybe Bool)
   , _artRouteTableId :: !Text
-  , _artSubnetId     :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -64,22 +63,32 @@ data AssociateRouteTable = AssociateRouteTable'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
+-- * 'artSubnetId' - The ID of the subnet.
+--
+-- * 'artGatewayId' - The ID of the internet gateway or virtual private gateway.
+--
 -- * 'artDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
 -- * 'artRouteTableId' - The ID of the route table.
---
--- * 'artSubnetId' - The ID of the subnet.
 associateRouteTable
     :: Text -- ^ 'artRouteTableId'
-    -> Text -- ^ 'artSubnetId'
     -> AssociateRouteTable
-associateRouteTable pRouteTableId_ pSubnetId_ =
+associateRouteTable pRouteTableId_ =
   AssociateRouteTable'
-    { _artDryRun = Nothing
+    { _artSubnetId = Nothing
+    , _artGatewayId = Nothing
+    , _artDryRun = Nothing
     , _artRouteTableId = pRouteTableId_
-    , _artSubnetId = pSubnetId_
     }
 
+
+-- | The ID of the subnet.
+artSubnetId :: Lens' AssociateRouteTable (Maybe Text)
+artSubnetId = lens _artSubnetId (\ s a -> s{_artSubnetId = a})
+
+-- | The ID of the internet gateway or virtual private gateway.
+artGatewayId :: Lens' AssociateRouteTable (Maybe Text)
+artGatewayId = lens _artGatewayId (\ s a -> s{_artGatewayId = a})
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 artDryRun :: Lens' AssociateRouteTable (Maybe Bool)
@@ -89,10 +98,6 @@ artDryRun = lens _artDryRun (\ s a -> s{_artDryRun = a})
 artRouteTableId :: Lens' AssociateRouteTable Text
 artRouteTableId = lens _artRouteTableId (\ s a -> s{_artRouteTableId = a})
 
--- | The ID of the subnet.
-artSubnetId :: Lens' AssociateRouteTable Text
-artSubnetId = lens _artSubnetId (\ s a -> s{_artSubnetId = a})
-
 instance AWSRequest AssociateRouteTable where
         type Rs AssociateRouteTable =
              AssociateRouteTableResponse
@@ -101,7 +106,9 @@ instance AWSRequest AssociateRouteTable where
           = receiveXML
               (\ s h x ->
                  AssociateRouteTableResponse' <$>
-                   (x .@? "associationId") <*> (pure (fromEnum s)))
+                   (x .@? "associationId") <*>
+                     (x .@? "associationState")
+                     <*> (pure (fromEnum s)))
 
 instance Hashable AssociateRouteTable where
 
@@ -118,18 +125,15 @@ instance ToQuery AssociateRouteTable where
           = mconcat
               ["Action" =: ("AssociateRouteTable" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
-               "DryRun" =: _artDryRun,
-               "RouteTableId" =: _artRouteTableId,
-               "SubnetId" =: _artSubnetId]
+               "SubnetId" =: _artSubnetId,
+               "GatewayId" =: _artGatewayId, "DryRun" =: _artDryRun,
+               "RouteTableId" =: _artRouteTableId]
 
--- | Contains the output of AssociateRouteTable.
---
---
---
--- /See:/ 'associateRouteTableResponse' smart constructor.
+-- | /See:/ 'associateRouteTableResponse' smart constructor.
 data AssociateRouteTableResponse = AssociateRouteTableResponse'
-  { _artrsAssociationId  :: !(Maybe Text)
-  , _artrsResponseStatus :: !Int
+  { _artrsAssociationId    :: !(Maybe Text)
+  , _artrsAssociationState :: !(Maybe RouteTableAssociationState)
+  , _artrsResponseStatus   :: !Int
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -137,7 +141,9 @@ data AssociateRouteTableResponse = AssociateRouteTableResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'artrsAssociationId' - The route table association ID (needed to disassociate the route table).
+-- * 'artrsAssociationId' - The route table association ID. This ID is required for disassociating the route table.
+--
+-- * 'artrsAssociationState' - The state of the association.
 --
 -- * 'artrsResponseStatus' - -- | The response status code.
 associateRouteTableResponse
@@ -145,12 +151,19 @@ associateRouteTableResponse
     -> AssociateRouteTableResponse
 associateRouteTableResponse pResponseStatus_ =
   AssociateRouteTableResponse'
-    {_artrsAssociationId = Nothing, _artrsResponseStatus = pResponseStatus_}
+    { _artrsAssociationId = Nothing
+    , _artrsAssociationState = Nothing
+    , _artrsResponseStatus = pResponseStatus_
+    }
 
 
--- | The route table association ID (needed to disassociate the route table).
+-- | The route table association ID. This ID is required for disassociating the route table.
 artrsAssociationId :: Lens' AssociateRouteTableResponse (Maybe Text)
 artrsAssociationId = lens _artrsAssociationId (\ s a -> s{_artrsAssociationId = a})
+
+-- | The state of the association.
+artrsAssociationState :: Lens' AssociateRouteTableResponse (Maybe RouteTableAssociationState)
+artrsAssociationState = lens _artrsAssociationState (\ s a -> s{_artrsAssociationState = a})
 
 -- | -- | The response status code.
 artrsResponseStatus :: Lens' AssociateRouteTableResponse Int

@@ -18,7 +18,7 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Copies the specified Amazon FPGA Image (AFI) to the current region.
+-- Copies the specified Amazon FPGA Image (AFI) to the current Region.
 --
 --
 module Network.AWS.EC2.CopyFpgaImage
@@ -38,8 +38,8 @@ module Network.AWS.EC2.CopyFpgaImage
     , copyFpgaImageResponse
     , CopyFpgaImageResponse
     -- * Response Lenses
-    , crsFpgaImageId
-    , crsResponseStatus
+    , coprsFpgaImageId
+    , coprsResponseStatus
     ) where
 
 import Network.AWS.EC2.Types
@@ -64,7 +64,7 @@ data CopyFpgaImage = CopyFpgaImage'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'cfiClientToken' - Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html Ensuring Idempotency> .
+-- * 'cfiClientToken' - Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html Ensuring Idempotency> .
 --
 -- * 'cfiName' - The name for the new AFI. The default is the name of the source AFI.
 --
@@ -74,7 +74,7 @@ data CopyFpgaImage = CopyFpgaImage'
 --
 -- * 'cfiSourceFpgaImageId' - The ID of the source AFI.
 --
--- * 'cfiSourceRegion' - The region that contains the source AFI.
+-- * 'cfiSourceRegion' - The Region that contains the source AFI.
 copyFpgaImage
     :: Text -- ^ 'cfiSourceFpgaImageId'
     -> Text -- ^ 'cfiSourceRegion'
@@ -90,7 +90,7 @@ copyFpgaImage pSourceFpgaImageId_ pSourceRegion_ =
     }
 
 
--- | Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html Ensuring Idempotency> .
+-- | Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html Ensuring Idempotency> .
 cfiClientToken :: Lens' CopyFpgaImage (Maybe Text)
 cfiClientToken = lens _cfiClientToken (\ s a -> s{_cfiClientToken = a})
 
@@ -110,7 +110,7 @@ cfiDryRun = lens _cfiDryRun (\ s a -> s{_cfiDryRun = a})
 cfiSourceFpgaImageId :: Lens' CopyFpgaImage Text
 cfiSourceFpgaImageId = lens _cfiSourceFpgaImageId (\ s a -> s{_cfiSourceFpgaImageId = a})
 
--- | The region that contains the source AFI.
+-- | The Region that contains the source AFI.
 cfiSourceRegion :: Lens' CopyFpgaImage Text
 cfiSourceRegion = lens _cfiSourceRegion (\ s a -> s{_cfiSourceRegion = a})
 
@@ -146,8 +146,8 @@ instance ToQuery CopyFpgaImage where
 
 -- | /See:/ 'copyFpgaImageResponse' smart constructor.
 data CopyFpgaImageResponse = CopyFpgaImageResponse'
-  { _crsFpgaImageId    :: !(Maybe Text)
-  , _crsResponseStatus :: !Int
+  { _coprsFpgaImageId    :: !(Maybe Text)
+  , _coprsResponseStatus :: !Int
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -155,23 +155,23 @@ data CopyFpgaImageResponse = CopyFpgaImageResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'crsFpgaImageId' - The ID of the new AFI.
+-- * 'coprsFpgaImageId' - The ID of the new AFI.
 --
--- * 'crsResponseStatus' - -- | The response status code.
+-- * 'coprsResponseStatus' - -- | The response status code.
 copyFpgaImageResponse
-    :: Int -- ^ 'crsResponseStatus'
+    :: Int -- ^ 'coprsResponseStatus'
     -> CopyFpgaImageResponse
 copyFpgaImageResponse pResponseStatus_ =
   CopyFpgaImageResponse'
-    {_crsFpgaImageId = Nothing, _crsResponseStatus = pResponseStatus_}
+    {_coprsFpgaImageId = Nothing, _coprsResponseStatus = pResponseStatus_}
 
 
 -- | The ID of the new AFI.
-crsFpgaImageId :: Lens' CopyFpgaImageResponse (Maybe Text)
-crsFpgaImageId = lens _crsFpgaImageId (\ s a -> s{_crsFpgaImageId = a})
+coprsFpgaImageId :: Lens' CopyFpgaImageResponse (Maybe Text)
+coprsFpgaImageId = lens _coprsFpgaImageId (\ s a -> s{_coprsFpgaImageId = a})
 
 -- | -- | The response status code.
-crsResponseStatus :: Lens' CopyFpgaImageResponse Int
-crsResponseStatus = lens _crsResponseStatus (\ s a -> s{_crsResponseStatus = a})
+coprsResponseStatus :: Lens' CopyFpgaImageResponse Int
+coprsResponseStatus = lens _coprsResponseStatus (\ s a -> s{_coprsResponseStatus = a})
 
 instance NFData CopyFpgaImageResponse where

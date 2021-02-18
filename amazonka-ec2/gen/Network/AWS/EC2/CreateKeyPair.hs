@@ -21,11 +21,11 @@
 -- Creates a 2048-bit RSA key pair with the specified name. Amazon EC2 stores the public key and displays the private key for you to save to a file. The private key is returned as an unencrypted PEM encoded PKCS#1 private key. If a key with the specified name already exists, Amazon EC2 returns an error.
 --
 --
--- You can have up to five thousand key pairs per region.
+-- You can have up to five thousand key pairs per Region.
 --
--- The key pair returned to you is available only in the region in which you create it. If you prefer, you can create your own key pair using a third-party tool and upload it to any region using 'ImportKeyPair' .
+-- The key pair returned to you is available only in the Region in which you create it. If you prefer, you can create your own key pair using a third-party tool and upload it to any Region using 'ImportKeyPair' .
 --
--- For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html Key Pairs> in the /Amazon Elastic Compute Cloud User Guide/ .
+-- For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html Key Pairs> in the /Amazon Elastic Compute Cloud User Guide/ .
 --
 module Network.AWS.EC2.CreateKeyPair
     (
@@ -33,6 +33,7 @@ module Network.AWS.EC2.CreateKeyPair
       createKeyPair
     , CreateKeyPair
     -- * Request Lenses
+    , ckpTagSpecifications
     , ckpDryRun
     , ckpKeyName
 
@@ -40,6 +41,8 @@ module Network.AWS.EC2.CreateKeyPair
     , createKeyPairResponse
     , CreateKeyPairResponse
     -- * Response Lenses
+    , ckprsKeyPairId
+    , ckprsTags
     , ckprsResponseStatus
     , ckprsKeyName
     , ckprsKeyFingerprint
@@ -53,20 +56,19 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for CreateKeyPair.
---
---
---
--- /See:/ 'createKeyPair' smart constructor.
+-- | /See:/ 'createKeyPair' smart constructor.
 data CreateKeyPair = CreateKeyPair'
-  { _ckpDryRun  :: !(Maybe Bool)
-  , _ckpKeyName :: !Text
+  { _ckpTagSpecifications :: !(Maybe [TagSpecification])
+  , _ckpDryRun            :: !(Maybe Bool)
+  , _ckpKeyName           :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
 -- | Creates a value of 'CreateKeyPair' with the minimum fields required to make a request.
 --
 -- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'ckpTagSpecifications' - The tags to apply to the new key pair.
 --
 -- * 'ckpDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
@@ -75,8 +77,16 @@ createKeyPair
     :: Text -- ^ 'ckpKeyName'
     -> CreateKeyPair
 createKeyPair pKeyName_ =
-  CreateKeyPair' {_ckpDryRun = Nothing, _ckpKeyName = pKeyName_}
+  CreateKeyPair'
+    { _ckpTagSpecifications = Nothing
+    , _ckpDryRun = Nothing
+    , _ckpKeyName = pKeyName_
+    }
 
+
+-- | The tags to apply to the new key pair.
+ckpTagSpecifications :: Lens' CreateKeyPair [TagSpecification]
+ckpTagSpecifications = lens _ckpTagSpecifications (\ s a -> s{_ckpTagSpecifications = a}) . _Default . _Coerce
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 ckpDryRun :: Lens' CreateKeyPair (Maybe Bool)
@@ -93,8 +103,12 @@ instance AWSRequest CreateKeyPair where
           = receiveXML
               (\ s h x ->
                  CreateKeyPairResponse' <$>
-                   (pure (fromEnum s)) <*> (x .@ "keyName") <*>
-                     (x .@ "keyFingerprint")
+                   (x .@? "keyPairId") <*>
+                     (x .@? "tagSet" .!@ mempty >>=
+                        may (parseXMLList "item"))
+                     <*> (pure (fromEnum s))
+                     <*> (x .@ "keyName")
+                     <*> (x .@ "keyFingerprint")
                      <*> (x .@ "keyMaterial"))
 
 instance Hashable CreateKeyPair where
@@ -112,6 +126,9 @@ instance ToQuery CreateKeyPair where
           = mconcat
               ["Action" =: ("CreateKeyPair" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
+               toQuery
+                 (toQueryList "TagSpecification" <$>
+                    _ckpTagSpecifications),
                "DryRun" =: _ckpDryRun, "KeyName" =: _ckpKeyName]
 
 -- | Describes a key pair.
@@ -120,16 +137,22 @@ instance ToQuery CreateKeyPair where
 --
 -- /See:/ 'createKeyPairResponse' smart constructor.
 data CreateKeyPairResponse = CreateKeyPairResponse'
-  { _ckprsResponseStatus :: !Int
+  { _ckprsKeyPairId      :: !(Maybe Text)
+  , _ckprsTags           :: !(Maybe [Tag])
+  , _ckprsResponseStatus :: !Int
   , _ckprsKeyName        :: !Text
   , _ckprsKeyFingerprint :: !Text
-  , _ckprsKeyMaterial    :: !Text
-  } deriving (Eq, Read, Show, Data, Typeable, Generic)
+  , _ckprsKeyMaterial    :: !(Sensitive Text)
+  } deriving (Eq, Show, Data, Typeable, Generic)
 
 
 -- | Creates a value of 'CreateKeyPairResponse' with the minimum fields required to make a request.
 --
 -- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'ckprsKeyPairId' - The ID of the key pair.
+--
+-- * 'ckprsTags' - Any tags applied to the key pair.
 --
 -- * 'ckprsResponseStatus' - -- | The response status code.
 --
@@ -146,12 +169,22 @@ createKeyPairResponse
     -> CreateKeyPairResponse
 createKeyPairResponse pResponseStatus_ pKeyName_ pKeyFingerprint_ pKeyMaterial_ =
   CreateKeyPairResponse'
-    { _ckprsResponseStatus = pResponseStatus_
+    { _ckprsKeyPairId = Nothing
+    , _ckprsTags = Nothing
+    , _ckprsResponseStatus = pResponseStatus_
     , _ckprsKeyName = pKeyName_
     , _ckprsKeyFingerprint = pKeyFingerprint_
-    , _ckprsKeyMaterial = pKeyMaterial_
+    , _ckprsKeyMaterial = _Sensitive # pKeyMaterial_
     }
 
+
+-- | The ID of the key pair.
+ckprsKeyPairId :: Lens' CreateKeyPairResponse (Maybe Text)
+ckprsKeyPairId = lens _ckprsKeyPairId (\ s a -> s{_ckprsKeyPairId = a})
+
+-- | Any tags applied to the key pair.
+ckprsTags :: Lens' CreateKeyPairResponse [Tag]
+ckprsTags = lens _ckprsTags (\ s a -> s{_ckprsTags = a}) . _Default . _Coerce
 
 -- | -- | The response status code.
 ckprsResponseStatus :: Lens' CreateKeyPairResponse Int
@@ -167,6 +200,6 @@ ckprsKeyFingerprint = lens _ckprsKeyFingerprint (\ s a -> s{_ckprsKeyFingerprint
 
 -- | An unencrypted PEM encoded RSA private key.
 ckprsKeyMaterial :: Lens' CreateKeyPairResponse Text
-ckprsKeyMaterial = lens _ckprsKeyMaterial (\ s a -> s{_ckprsKeyMaterial = a})
+ckprsKeyMaterial = lens _ckprsKeyMaterial (\ s a -> s{_ckprsKeyMaterial = a}) . _Sensitive
 
 instance NFData CreateKeyPairResponse where

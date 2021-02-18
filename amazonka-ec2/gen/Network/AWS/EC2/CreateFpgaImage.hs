@@ -23,7 +23,7 @@
 --
 -- The create operation is asynchronous. To verify that the AFI is ready for use, check the output logs.
 --
--- An AFI contains the FPGA bitstream that is ready to download to an FPGA. You can securely deploy an AFI on one or more FPGA-accelerated instances. For more information, see the <https://github.com/aws/aws-fpga/ AWS FPGA Hardware Development Kit> .
+-- An AFI contains the FPGA bitstream that is ready to download to an FPGA. You can securely deploy an AFI on multiple FPGA-accelerated instances. For more information, see the <https://github.com/aws/aws-fpga/ AWS FPGA Hardware Development Kit> .
 --
 module Network.AWS.EC2.CreateFpgaImage
     (
@@ -33,6 +33,7 @@ module Network.AWS.EC2.CreateFpgaImage
     -- * Request Lenses
     , creClientToken
     , creLogsStorageLocation
+    , creTagSpecifications
     , creName
     , creDescription
     , creDryRun
@@ -58,6 +59,7 @@ import Network.AWS.Response
 data CreateFpgaImage = CreateFpgaImage'
   { _creClientToken          :: !(Maybe Text)
   , _creLogsStorageLocation  :: !(Maybe StorageLocation)
+  , _creTagSpecifications    :: !(Maybe [TagSpecification])
   , _creName                 :: !(Maybe Text)
   , _creDescription          :: !(Maybe Text)
   , _creDryRun               :: !(Maybe Bool)
@@ -69,9 +71,11 @@ data CreateFpgaImage = CreateFpgaImage'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'creClientToken' - Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html Ensuring Idempotency> .
+-- * 'creClientToken' - Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html Ensuring Idempotency> .
 --
 -- * 'creLogsStorageLocation' - The location in Amazon S3 for the output logs.
+--
+-- * 'creTagSpecifications' - The tags to apply to the FPGA image during creation.
 --
 -- * 'creName' - A name for the AFI.
 --
@@ -87,6 +91,7 @@ createFpgaImage pInputStorageLocation_ =
   CreateFpgaImage'
     { _creClientToken = Nothing
     , _creLogsStorageLocation = Nothing
+    , _creTagSpecifications = Nothing
     , _creName = Nothing
     , _creDescription = Nothing
     , _creDryRun = Nothing
@@ -94,13 +99,17 @@ createFpgaImage pInputStorageLocation_ =
     }
 
 
--- | Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html Ensuring Idempotency> .
+-- | Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html Ensuring Idempotency> .
 creClientToken :: Lens' CreateFpgaImage (Maybe Text)
 creClientToken = lens _creClientToken (\ s a -> s{_creClientToken = a})
 
 -- | The location in Amazon S3 for the output logs.
 creLogsStorageLocation :: Lens' CreateFpgaImage (Maybe StorageLocation)
 creLogsStorageLocation = lens _creLogsStorageLocation (\ s a -> s{_creLogsStorageLocation = a})
+
+-- | The tags to apply to the FPGA image during creation.
+creTagSpecifications :: Lens' CreateFpgaImage [TagSpecification]
+creTagSpecifications = lens _creTagSpecifications (\ s a -> s{_creTagSpecifications = a}) . _Default . _Coerce
 
 -- | A name for the AFI.
 creName :: Lens' CreateFpgaImage (Maybe Text)
@@ -145,6 +154,9 @@ instance ToQuery CreateFpgaImage where
                "Version" =: ("2016-11-15" :: ByteString),
                "ClientToken" =: _creClientToken,
                "LogsStorageLocation" =: _creLogsStorageLocation,
+               toQuery
+                 (toQueryList "TagSpecification" <$>
+                    _creTagSpecifications),
                "Name" =: _creName, "Description" =: _creDescription,
                "DryRun" =: _creDryRun,
                "InputStorageLocation" =: _creInputStorageLocation]

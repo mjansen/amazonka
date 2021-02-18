@@ -21,17 +21,15 @@
 -- Creates a security group.
 --
 --
--- A security group is for use with instances either in the EC2-Classic platform or in a specific VPC. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html Amazon EC2 Security Groups> in the /Amazon Elastic Compute Cloud User Guide/ and <http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html Security Groups for Your VPC> in the /Amazon Virtual Private Cloud User Guide/ .
---
--- /Important:/ EC2-Classic: You can have up to 500 security groups.
---
--- EC2-VPC: You can create up to 500 security groups per VPC.
+-- A security group acts as a virtual firewall for your instance to control inbound and outbound traffic. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html Amazon EC2 Security Groups> in the /Amazon Elastic Compute Cloud User Guide/ and <https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html Security Groups for Your VPC> in the /Amazon Virtual Private Cloud User Guide/ .
 --
 -- When you create a security group, you specify a friendly name of your choice. You can have a security group for use in EC2-Classic with the same name as a security group for use in a VPC. However, you can't have two security groups for use in EC2-Classic with the same name or two security groups for use in a VPC with the same name.
 --
 -- You have a default security group for use in EC2-Classic and a default security group for use in your VPC. If you don't specify a security group when you launch an instance, the instance is launched into the appropriate default security group. A default security group includes a default rule that grants instances unrestricted network access to each other.
 --
 -- You can add or remove rules from your security groups using 'AuthorizeSecurityGroupIngress' , 'AuthorizeSecurityGroupEgress' , 'RevokeSecurityGroupIngress' , and 'RevokeSecurityGroupEgress' .
+--
+-- For more information about VPC security group limits, see <https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html Amazon VPC Limits> .
 --
 module Network.AWS.EC2.CreateSecurityGroup
     (
@@ -40,6 +38,7 @@ module Network.AWS.EC2.CreateSecurityGroup
     , CreateSecurityGroup
     -- * Request Lenses
     , csgVPCId
+    , csgTagSpecifications
     , csgDryRun
     , csgDescription
     , csgGroupName
@@ -48,6 +47,7 @@ module Network.AWS.EC2.CreateSecurityGroup
     , createSecurityGroupResponse
     , CreateSecurityGroupResponse
     -- * Response Lenses
+    , csgrsTags
     , csgrsResponseStatus
     , csgrsGroupId
     ) where
@@ -59,16 +59,13 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for CreateSecurityGroup.
---
---
---
--- /See:/ 'createSecurityGroup' smart constructor.
+-- | /See:/ 'createSecurityGroup' smart constructor.
 data CreateSecurityGroup = CreateSecurityGroup'
-  { _csgVPCId       :: !(Maybe Text)
-  , _csgDryRun      :: !(Maybe Bool)
-  , _csgDescription :: !Text
-  , _csgGroupName   :: !Text
+  { _csgVPCId             :: !(Maybe Text)
+  , _csgTagSpecifications :: !(Maybe [TagSpecification])
+  , _csgDryRun            :: !(Maybe Bool)
+  , _csgDescription       :: !Text
+  , _csgGroupName         :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -77,6 +74,8 @@ data CreateSecurityGroup = CreateSecurityGroup'
 -- Use one of the following lenses to modify other fields as desired:
 --
 -- * 'csgVPCId' - [EC2-VPC] The ID of the VPC. Required for EC2-VPC.
+--
+-- * 'csgTagSpecifications' - The tags to assign to the security group.
 --
 -- * 'csgDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
@@ -90,6 +89,7 @@ createSecurityGroup
 createSecurityGroup pDescription_ pGroupName_ =
   CreateSecurityGroup'
     { _csgVPCId = Nothing
+    , _csgTagSpecifications = Nothing
     , _csgDryRun = Nothing
     , _csgDescription = pDescription_
     , _csgGroupName = pGroupName_
@@ -99,6 +99,10 @@ createSecurityGroup pDescription_ pGroupName_ =
 -- | [EC2-VPC] The ID of the VPC. Required for EC2-VPC.
 csgVPCId :: Lens' CreateSecurityGroup (Maybe Text)
 csgVPCId = lens _csgVPCId (\ s a -> s{_csgVPCId = a})
+
+-- | The tags to assign to the security group.
+csgTagSpecifications :: Lens' CreateSecurityGroup [TagSpecification]
+csgTagSpecifications = lens _csgTagSpecifications (\ s a -> s{_csgTagSpecifications = a}) . _Default . _Coerce
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 csgDryRun :: Lens' CreateSecurityGroup (Maybe Bool)
@@ -120,7 +124,10 @@ instance AWSRequest CreateSecurityGroup where
           = receiveXML
               (\ s h x ->
                  CreateSecurityGroupResponse' <$>
-                   (pure (fromEnum s)) <*> (x .@ "groupId"))
+                   (x .@? "tagSet" .!@ mempty >>=
+                      may (parseXMLList "item"))
+                     <*> (pure (fromEnum s))
+                     <*> (x .@ "groupId"))
 
 instance Hashable CreateSecurityGroup where
 
@@ -137,17 +144,18 @@ instance ToQuery CreateSecurityGroup where
           = mconcat
               ["Action" =: ("CreateSecurityGroup" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
-               "VpcId" =: _csgVPCId, "DryRun" =: _csgDryRun,
+               "VpcId" =: _csgVPCId,
+               toQuery
+                 (toQueryList "TagSpecification" <$>
+                    _csgTagSpecifications),
+               "DryRun" =: _csgDryRun,
                "GroupDescription" =: _csgDescription,
                "GroupName" =: _csgGroupName]
 
--- | Contains the output of CreateSecurityGroup.
---
---
---
--- /See:/ 'createSecurityGroupResponse' smart constructor.
+-- | /See:/ 'createSecurityGroupResponse' smart constructor.
 data CreateSecurityGroupResponse = CreateSecurityGroupResponse'
-  { _csgrsResponseStatus :: !Int
+  { _csgrsTags           :: !(Maybe [Tag])
+  , _csgrsResponseStatus :: !Int
   , _csgrsGroupId        :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
@@ -155,6 +163,8 @@ data CreateSecurityGroupResponse = CreateSecurityGroupResponse'
 -- | Creates a value of 'CreateSecurityGroupResponse' with the minimum fields required to make a request.
 --
 -- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'csgrsTags' - The tags assigned to the security group.
 --
 -- * 'csgrsResponseStatus' - -- | The response status code.
 --
@@ -165,8 +175,15 @@ createSecurityGroupResponse
     -> CreateSecurityGroupResponse
 createSecurityGroupResponse pResponseStatus_ pGroupId_ =
   CreateSecurityGroupResponse'
-    {_csgrsResponseStatus = pResponseStatus_, _csgrsGroupId = pGroupId_}
+    { _csgrsTags = Nothing
+    , _csgrsResponseStatus = pResponseStatus_
+    , _csgrsGroupId = pGroupId_
+    }
 
+
+-- | The tags assigned to the security group.
+csgrsTags :: Lens' CreateSecurityGroupResponse [Tag]
+csgrsTags = lens _csgrsTags (\ s a -> s{_csgrsTags = a}) . _Default . _Coerce
 
 -- | -- | The response status code.
 csgrsResponseStatus :: Lens' CreateSecurityGroupResponse Int

@@ -18,10 +18,16 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Assigns one or more secondary private IP addresses to the specified network interface. You can specify one or more specific secondary IP addresses, or you can specify the number of secondary IP addresses to be automatically assigned within the subnet's CIDR block range. The number of secondary IP addresses that you can assign to an instance varies by instance type. For information about instance types, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html Instance Types> in the /Amazon Elastic Compute Cloud User Guide/ . For more information about Elastic IP addresses, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html Elastic IP Addresses> in the /Amazon Elastic Compute Cloud User Guide/ .
+-- Assigns one or more secondary private IP addresses to the specified network interface.
 --
 --
--- AssignPrivateIpAddresses is available only in EC2-VPC.
+-- You can specify one or more specific secondary IP addresses, or you can specify the number of secondary IP addresses to be automatically assigned within the subnet's CIDR block range. The number of secondary IP addresses that you can assign to an instance varies by instance type. For information about instance types, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html Instance Types> in the /Amazon Elastic Compute Cloud User Guide/ . For more information about Elastic IP addresses, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html Elastic IP Addresses> in the /Amazon Elastic Compute Cloud User Guide/ .
+--
+-- When you move a secondary private IP address to another network interface, any Elastic IP address that is associated with the IP address is also moved.
+--
+-- Remapping an IP address is an asynchronous operation. When you move an IP address from one network interface to another, check @network/interfaces/macs/mac/local-ipv4s@ in the instance metadata to confirm that the remapping is complete.
+--
+-- You must specify either the IP addresses or the IP address count in the request.
 --
 module Network.AWS.EC2.AssignPrivateIPAddresses
     (
@@ -37,6 +43,10 @@ module Network.AWS.EC2.AssignPrivateIPAddresses
     -- * Destructuring the Response
     , assignPrivateIPAddressesResponse
     , AssignPrivateIPAddressesResponse
+    -- * Response Lenses
+    , apiarsAssignedPrivateIPAddresses
+    , apiarsNetworkInterfaceId
+    , apiarsResponseStatus
     ) where
 
 import Network.AWS.EC2.Types
@@ -103,7 +113,13 @@ instance AWSRequest AssignPrivateIPAddresses where
              AssignPrivateIPAddressesResponse
         request = postQuery ec2
         response
-          = receiveNull AssignPrivateIPAddressesResponse'
+          = receiveXML
+              (\ s h x ->
+                 AssignPrivateIPAddressesResponse' <$>
+                   (x .@? "assignedPrivateIpAddressesSet" .!@ mempty >>=
+                      may (parseXMLList "item"))
+                     <*> (x .@? "networkInterfaceId")
+                     <*> (pure (fromEnum s)))
 
 instance Hashable AssignPrivateIPAddresses where
 
@@ -130,17 +146,44 @@ instance ToQuery AssignPrivateIPAddresses where
                "NetworkInterfaceId" =: _apiaNetworkInterfaceId]
 
 -- | /See:/ 'assignPrivateIPAddressesResponse' smart constructor.
-data AssignPrivateIPAddressesResponse =
-  AssignPrivateIPAddressesResponse'
-  deriving (Eq, Read, Show, Data, Typeable, Generic)
+data AssignPrivateIPAddressesResponse = AssignPrivateIPAddressesResponse'
+  { _apiarsAssignedPrivateIPAddresses :: !(Maybe [AssignedPrivateIPAddress])
+  , _apiarsNetworkInterfaceId         :: !(Maybe Text)
+  , _apiarsResponseStatus             :: !Int
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
 -- | Creates a value of 'AssignPrivateIPAddressesResponse' with the minimum fields required to make a request.
 --
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'apiarsAssignedPrivateIPAddresses' - The private IP addresses assigned to the network interface.
+--
+-- * 'apiarsNetworkInterfaceId' - The ID of the network interface.
+--
+-- * 'apiarsResponseStatus' - -- | The response status code.
 assignPrivateIPAddressesResponse
-    :: AssignPrivateIPAddressesResponse
-assignPrivateIPAddressesResponse = AssignPrivateIPAddressesResponse'
+    :: Int -- ^ 'apiarsResponseStatus'
+    -> AssignPrivateIPAddressesResponse
+assignPrivateIPAddressesResponse pResponseStatus_ =
+  AssignPrivateIPAddressesResponse'
+    { _apiarsAssignedPrivateIPAddresses = Nothing
+    , _apiarsNetworkInterfaceId = Nothing
+    , _apiarsResponseStatus = pResponseStatus_
+    }
 
+
+-- | The private IP addresses assigned to the network interface.
+apiarsAssignedPrivateIPAddresses :: Lens' AssignPrivateIPAddressesResponse [AssignedPrivateIPAddress]
+apiarsAssignedPrivateIPAddresses = lens _apiarsAssignedPrivateIPAddresses (\ s a -> s{_apiarsAssignedPrivateIPAddresses = a}) . _Default . _Coerce
+
+-- | The ID of the network interface.
+apiarsNetworkInterfaceId :: Lens' AssignPrivateIPAddressesResponse (Maybe Text)
+apiarsNetworkInterfaceId = lens _apiarsNetworkInterfaceId (\ s a -> s{_apiarsNetworkInterfaceId = a})
+
+-- | -- | The response status code.
+apiarsResponseStatus :: Lens' AssignPrivateIPAddressesResponse Int
+apiarsResponseStatus = lens _apiarsResponseStatus (\ s a -> s{_apiarsResponseStatus = a})
 
 instance NFData AssignPrivateIPAddressesResponse
          where

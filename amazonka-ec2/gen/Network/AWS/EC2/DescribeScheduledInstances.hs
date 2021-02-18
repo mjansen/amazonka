@@ -18,9 +18,11 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Describes one or more of your Scheduled Instances.
+-- Describes the specified Scheduled Instances or all your Scheduled Instances.
 --
 --
+--
+-- This operation returns paginated results.
 module Network.AWS.EC2.DescribeScheduledInstances
     (
     -- * Creating a Request
@@ -46,6 +48,7 @@ module Network.AWS.EC2.DescribeScheduledInstances
 import Network.AWS.EC2.Types
 import Network.AWS.EC2.Types.Product
 import Network.AWS.Lens
+import Network.AWS.Pager
 import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
@@ -69,13 +72,13 @@ data DescribeScheduledInstances = DescribeScheduledInstances'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dsiFilters' - One or more filters.     * @availability-zone@ - The Availability Zone (for example, @us-west-2a@ ).     * @instance-type@ - The instance type (for example, @c4.large@ ).     * @network-platform@ - The network platform (@EC2-Classic@ or @EC2-VPC@ ).     * @platform@ - The platform (@Linux/UNIX@ or @Windows@ ).
+-- * 'dsiFilters' - The filters.     * @availability-zone@ - The Availability Zone (for example, @us-west-2a@ ).     * @instance-type@ - The instance type (for example, @c4.large@ ).     * @network-platform@ - The network platform (@EC2-Classic@ or @EC2-VPC@ ).     * @platform@ - The platform (@Linux/UNIX@ or @Windows@ ).
 --
 -- * 'dsiSlotStartTimeRange' - The time period for the first schedule to start.
 --
 -- * 'dsiNextToken' - The token for the next set of results.
 --
--- * 'dsiScheduledInstanceIds' - One or more Scheduled Instance IDs.
+-- * 'dsiScheduledInstanceIds' - The Scheduled Instance IDs.
 --
 -- * 'dsiDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
@@ -93,7 +96,7 @@ describeScheduledInstances =
     }
 
 
--- | One or more filters.     * @availability-zone@ - The Availability Zone (for example, @us-west-2a@ ).     * @instance-type@ - The instance type (for example, @c4.large@ ).     * @network-platform@ - The network platform (@EC2-Classic@ or @EC2-VPC@ ).     * @platform@ - The platform (@Linux/UNIX@ or @Windows@ ).
+-- | The filters.     * @availability-zone@ - The Availability Zone (for example, @us-west-2a@ ).     * @instance-type@ - The instance type (for example, @c4.large@ ).     * @network-platform@ - The network platform (@EC2-Classic@ or @EC2-VPC@ ).     * @platform@ - The platform (@Linux/UNIX@ or @Windows@ ).
 dsiFilters :: Lens' DescribeScheduledInstances [Filter]
 dsiFilters = lens _dsiFilters (\ s a -> s{_dsiFilters = a}) . _Default . _Coerce
 
@@ -105,7 +108,7 @@ dsiSlotStartTimeRange = lens _dsiSlotStartTimeRange (\ s a -> s{_dsiSlotStartTim
 dsiNextToken :: Lens' DescribeScheduledInstances (Maybe Text)
 dsiNextToken = lens _dsiNextToken (\ s a -> s{_dsiNextToken = a})
 
--- | One or more Scheduled Instance IDs.
+-- | The Scheduled Instance IDs.
 dsiScheduledInstanceIds :: Lens' DescribeScheduledInstances [Text]
 dsiScheduledInstanceIds = lens _dsiScheduledInstanceIds (\ s a -> s{_dsiScheduledInstanceIds = a}) . _Default . _Coerce
 
@@ -116,6 +119,13 @@ dsiDryRun = lens _dsiDryRun (\ s a -> s{_dsiDryRun = a})
 -- | The maximum number of results to return in a single call. This value can be between 5 and 300. The default value is 100. To retrieve the remaining results, make another call with the returned @NextToken@ value.
 dsiMaxResults :: Lens' DescribeScheduledInstances (Maybe Int)
 dsiMaxResults = lens _dsiMaxResults (\ s a -> s{_dsiMaxResults = a})
+
+instance AWSPager DescribeScheduledInstances where
+        page rq rs
+          | stop (rs ^. dsirsNextToken) = Nothing
+          | stop (rs ^. dsirsScheduledInstanceSet) = Nothing
+          | otherwise =
+            Just $ rq & dsiNextToken .~ rs ^. dsirsNextToken
 
 instance AWSRequest DescribeScheduledInstances where
         type Rs DescribeScheduledInstances =

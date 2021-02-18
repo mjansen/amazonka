@@ -60,7 +60,7 @@ data AcceptVPCEndpointConnections = AcceptVPCEndpointConnections'
 --
 -- * 'avecDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'avecServiceId' - The ID of the endpoint service.
+-- * 'avecServiceId' - The ID of the VPC endpoint service.
 --
 -- * 'avecVPCEndpointIds' - The IDs of one or more interface VPC endpoints.
 acceptVPCEndpointConnections
@@ -78,7 +78,7 @@ acceptVPCEndpointConnections pServiceId_ =
 avecDryRun :: Lens' AcceptVPCEndpointConnections (Maybe Bool)
 avecDryRun = lens _avecDryRun (\ s a -> s{_avecDryRun = a})
 
--- | The ID of the endpoint service.
+-- | The ID of the VPC endpoint service.
 avecServiceId :: Lens' AcceptVPCEndpointConnections Text
 avecServiceId = lens _avecServiceId (\ s a -> s{_avecServiceId = a})
 

@@ -21,6 +21,10 @@
 -- Describes available services to which you can create a VPC endpoint.
 --
 --
+-- When the service provider and the consumer have different accounts in multiple Availability Zones, and the consumer views the VPC endpoint service information, the response only includes the common Availability Zones. For example, when the service provider account uses @us-east-1a@ and @us-east-1c@ and the consumer uses @us-east-1a@ and @us-east-1b@ , the response includes the VPC endpoint services in the common Availability Zone, @us-east-1a@ .
+--
+--
+-- This operation returns paginated results.
 module Network.AWS.EC2.DescribeVPCEndpointServices
     (
     -- * Creating a Request
@@ -46,6 +50,7 @@ module Network.AWS.EC2.DescribeVPCEndpointServices
 import Network.AWS.EC2.Types
 import Network.AWS.EC2.Types.Product
 import Network.AWS.Lens
+import Network.AWS.Pager
 import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
@@ -68,7 +73,7 @@ data DescribeVPCEndpointServices = DescribeVPCEndpointServices'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dvesFilters' - One or more filters.     * @service-name@ : The name of the service.
+-- * 'dvesFilters' - One or more filters.     * @service-name@ - The name of the service.     * @tag@ :<key> - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key @Owner@ and the value @TeamA@ , specify @tag:Owner@ for the filter name and @TeamA@ for the filter value.     * @tag-key@ - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.
 --
 -- * 'dvesServiceNames' - One or more service names.
 --
@@ -76,7 +81,7 @@ data DescribeVPCEndpointServices = DescribeVPCEndpointServices'
 --
 -- * 'dvesDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'dvesMaxResults' - The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results. Constraint: If the value is greater than 1000, we return only 1000 items.
+-- * 'dvesMaxResults' - The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results. Constraint: If the value is greater than 1,000, we return only 1,000 items.
 describeVPCEndpointServices
     :: DescribeVPCEndpointServices
 describeVPCEndpointServices =
@@ -89,7 +94,7 @@ describeVPCEndpointServices =
     }
 
 
--- | One or more filters.     * @service-name@ : The name of the service.
+-- | One or more filters.     * @service-name@ - The name of the service.     * @tag@ :<key> - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key @Owner@ and the value @TeamA@ , specify @tag:Owner@ for the filter name and @TeamA@ for the filter value.     * @tag-key@ - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.
 dvesFilters :: Lens' DescribeVPCEndpointServices [Filter]
 dvesFilters = lens _dvesFilters (\ s a -> s{_dvesFilters = a}) . _Default . _Coerce
 
@@ -105,9 +110,17 @@ dvesNextToken = lens _dvesNextToken (\ s a -> s{_dvesNextToken = a})
 dvesDryRun :: Lens' DescribeVPCEndpointServices (Maybe Bool)
 dvesDryRun = lens _dvesDryRun (\ s a -> s{_dvesDryRun = a})
 
--- | The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results. Constraint: If the value is greater than 1000, we return only 1000 items.
+-- | The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results. Constraint: If the value is greater than 1,000, we return only 1,000 items.
 dvesMaxResults :: Lens' DescribeVPCEndpointServices (Maybe Int)
 dvesMaxResults = lens _dvesMaxResults (\ s a -> s{_dvesMaxResults = a})
+
+instance AWSPager DescribeVPCEndpointServices where
+        page rq rs
+          | stop (rs ^. dvesrsNextToken) = Nothing
+          | stop (rs ^. dvesrsServiceDetails) = Nothing
+          | stop (rs ^. dvesrsServiceNames) = Nothing
+          | otherwise =
+            Just $ rq & dvesNextToken .~ rs ^. dvesrsNextToken
 
 instance AWSRequest DescribeVPCEndpointServices where
         type Rs DescribeVPCEndpointServices =

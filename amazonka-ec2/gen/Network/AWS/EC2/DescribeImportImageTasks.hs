@@ -21,6 +21,8 @@
 -- Displays details about an import virtual machine or import snapshot tasks that are already created.
 --
 --
+--
+-- This operation returns paginated results.
 module Network.AWS.EC2.DescribeImportImageTasks
     (
     -- * Creating a Request
@@ -45,15 +47,12 @@ module Network.AWS.EC2.DescribeImportImageTasks
 import Network.AWS.EC2.Types
 import Network.AWS.EC2.Types.Product
 import Network.AWS.Lens
+import Network.AWS.Pager
 import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for DescribeImportImageTasks.
---
---
---
--- /See:/ 'describeImportImageTasks' smart constructor.
+-- | /See:/ 'describeImportImageTasks' smart constructor.
 data DescribeImportImageTasks = DescribeImportImageTasks'
   { _diitFilters       :: !(Maybe [Filter])
   , _diitImportTaskIds :: !(Maybe [Text])
@@ -67,15 +66,15 @@ data DescribeImportImageTasks = DescribeImportImageTasks'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'diitFilters' - Filter tasks using the @task-state@ filter and one of the following values: active, completed, deleting, deleted.
+-- * 'diitFilters' - Filter tasks using the @task-state@ filter and one of the following values: @active@ , @completed@ , @deleting@ , or @deleted@ .
 --
--- * 'diitImportTaskIds' - A list of import image task IDs.
+-- * 'diitImportTaskIds' - The IDs of the import image tasks.
 --
 -- * 'diitNextToken' - A token that indicates the next page of results.
 --
 -- * 'diitDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'diitMaxResults' - The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned @NextToken@ value.
+-- * 'diitMaxResults' - The maximum number of results to return in a single call.
 describeImportImageTasks
     :: DescribeImportImageTasks
 describeImportImageTasks =
@@ -88,11 +87,11 @@ describeImportImageTasks =
     }
 
 
--- | Filter tasks using the @task-state@ filter and one of the following values: active, completed, deleting, deleted.
+-- | Filter tasks using the @task-state@ filter and one of the following values: @active@ , @completed@ , @deleting@ , or @deleted@ .
 diitFilters :: Lens' DescribeImportImageTasks [Filter]
 diitFilters = lens _diitFilters (\ s a -> s{_diitFilters = a}) . _Default . _Coerce
 
--- | A list of import image task IDs.
+-- | The IDs of the import image tasks.
 diitImportTaskIds :: Lens' DescribeImportImageTasks [Text]
 diitImportTaskIds = lens _diitImportTaskIds (\ s a -> s{_diitImportTaskIds = a}) . _Default . _Coerce
 
@@ -104,9 +103,16 @@ diitNextToken = lens _diitNextToken (\ s a -> s{_diitNextToken = a})
 diitDryRun :: Lens' DescribeImportImageTasks (Maybe Bool)
 diitDryRun = lens _diitDryRun (\ s a -> s{_diitDryRun = a})
 
--- | The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned @NextToken@ value.
+-- | The maximum number of results to return in a single call.
 diitMaxResults :: Lens' DescribeImportImageTasks (Maybe Int)
 diitMaxResults = lens _diitMaxResults (\ s a -> s{_diitMaxResults = a})
+
+instance AWSPager DescribeImportImageTasks where
+        page rq rs
+          | stop (rs ^. diitrsNextToken) = Nothing
+          | stop (rs ^. diitrsImportImageTasks) = Nothing
+          | otherwise =
+            Just $ rq & diitNextToken .~ rs ^. diitrsNextToken
 
 instance AWSRequest DescribeImportImageTasks where
         type Rs DescribeImportImageTasks =
@@ -144,11 +150,7 @@ instance ToQuery DescribeImportImageTasks where
                "DryRun" =: _diitDryRun,
                "MaxResults" =: _diitMaxResults]
 
--- | Contains the output for DescribeImportImageTasks.
---
---
---
--- /See:/ 'describeImportImageTasksResponse' smart constructor.
+-- | /See:/ 'describeImportImageTasksResponse' smart constructor.
 data DescribeImportImageTasksResponse = DescribeImportImageTasksResponse'
   { _diitrsNextToken        :: !(Maybe Text)
   , _diitrsImportImageTasks :: !(Maybe [ImportImageTask])

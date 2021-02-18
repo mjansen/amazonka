@@ -27,8 +27,9 @@ module Network.AWS.EC2.DeleteKeyPair
       deleteKeyPair
     , DeleteKeyPair
     -- * Request Lenses
-    , dkpDryRun
     , dkpKeyName
+    , dkpKeyPairId
+    , dkpDryRun
 
     -- * Destructuring the Response
     , deleteKeyPairResponse
@@ -42,14 +43,11 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for DeleteKeyPair.
---
---
---
--- /See:/ 'deleteKeyPair' smart constructor.
+-- | /See:/ 'deleteKeyPair' smart constructor.
 data DeleteKeyPair = DeleteKeyPair'
-  { _dkpDryRun  :: !(Maybe Bool)
-  , _dkpKeyName :: !Text
+  { _dkpKeyName   :: !(Maybe Text)
+  , _dkpKeyPairId :: !(Maybe Text)
+  , _dkpDryRun    :: !(Maybe Bool)
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -57,23 +55,29 @@ data DeleteKeyPair = DeleteKeyPair'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dkpDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
---
 -- * 'dkpKeyName' - The name of the key pair.
+--
+-- * 'dkpKeyPairId' - The ID of the key pair.
+--
+-- * 'dkpDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 deleteKeyPair
-    :: Text -- ^ 'dkpKeyName'
-    -> DeleteKeyPair
-deleteKeyPair pKeyName_ =
-  DeleteKeyPair' {_dkpDryRun = Nothing, _dkpKeyName = pKeyName_}
+    :: DeleteKeyPair
+deleteKeyPair =
+  DeleteKeyPair'
+    {_dkpKeyName = Nothing, _dkpKeyPairId = Nothing, _dkpDryRun = Nothing}
 
+
+-- | The name of the key pair.
+dkpKeyName :: Lens' DeleteKeyPair (Maybe Text)
+dkpKeyName = lens _dkpKeyName (\ s a -> s{_dkpKeyName = a})
+
+-- | The ID of the key pair.
+dkpKeyPairId :: Lens' DeleteKeyPair (Maybe Text)
+dkpKeyPairId = lens _dkpKeyPairId (\ s a -> s{_dkpKeyPairId = a})
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 dkpDryRun :: Lens' DeleteKeyPair (Maybe Bool)
 dkpDryRun = lens _dkpDryRun (\ s a -> s{_dkpDryRun = a})
-
--- | The name of the key pair.
-dkpKeyName :: Lens' DeleteKeyPair Text
-dkpKeyName = lens _dkpKeyName (\ s a -> s{_dkpKeyName = a})
 
 instance AWSRequest DeleteKeyPair where
         type Rs DeleteKeyPair = DeleteKeyPairResponse
@@ -95,7 +99,8 @@ instance ToQuery DeleteKeyPair where
           = mconcat
               ["Action" =: ("DeleteKeyPair" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
-               "DryRun" =: _dkpDryRun, "KeyName" =: _dkpKeyName]
+               "KeyName" =: _dkpKeyName,
+               "KeyPairId" =: _dkpKeyPairId, "DryRun" =: _dkpDryRun]
 
 -- | /See:/ 'deleteKeyPairResponse' smart constructor.
 data DeleteKeyPairResponse =

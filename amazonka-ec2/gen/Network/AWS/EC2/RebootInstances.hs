@@ -18,12 +18,12 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Requests a reboot of one or more instances. This operation is asynchronous; it only queues a request to reboot the specified instances. The operation succeeds if the instances are valid and belong to you. Requests to reboot terminated instances are ignored.
+-- Requests a reboot of the specified instances. This operation is asynchronous; it only queues a request to reboot the specified instances. The operation succeeds if the instances are valid and belong to you. Requests to reboot terminated instances are ignored.
 --
 --
--- If an instance does not cleanly shut down within four minutes, Amazon EC2 performs a hard reboot.
+-- If an instance does not cleanly shut down within a few minutes, Amazon EC2 performs a hard reboot.
 --
--- For more information about troubleshooting, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-console.html Getting Console Output and Rebooting Instances> in the /Amazon Elastic Compute Cloud User Guide/ .
+-- For more information about troubleshooting, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-console.html Getting console output and rebooting instances> in the /Amazon EC2 User Guide/ .
 --
 module Network.AWS.EC2.RebootInstances
     (
@@ -31,8 +31,8 @@ module Network.AWS.EC2.RebootInstances
       rebootInstances
     , RebootInstances
     -- * Request Lenses
-    , rebDryRun
-    , rebInstanceIds
+    , rDryRun
+    , rInstanceIds
 
     -- * Destructuring the Response
     , rebootInstancesResponse
@@ -46,14 +46,10 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for RebootInstances.
---
---
---
--- /See:/ 'rebootInstances' smart constructor.
+-- | /See:/ 'rebootInstances' smart constructor.
 data RebootInstances = RebootInstances'
-  { _rebDryRun      :: !(Maybe Bool)
-  , _rebInstanceIds :: ![Text]
+  { _rDryRun      :: !(Maybe Bool)
+  , _rInstanceIds :: ![Text]
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -61,22 +57,21 @@ data RebootInstances = RebootInstances'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'rebDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
+-- * 'rDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'rebInstanceIds' - One or more instance IDs.
+-- * 'rInstanceIds' - The instance IDs.
 rebootInstances
     :: RebootInstances
-rebootInstances =
-  RebootInstances' {_rebDryRun = Nothing, _rebInstanceIds = mempty}
+rebootInstances = RebootInstances' {_rDryRun = Nothing, _rInstanceIds = mempty}
 
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
-rebDryRun :: Lens' RebootInstances (Maybe Bool)
-rebDryRun = lens _rebDryRun (\ s a -> s{_rebDryRun = a})
+rDryRun :: Lens' RebootInstances (Maybe Bool)
+rDryRun = lens _rDryRun (\ s a -> s{_rDryRun = a})
 
--- | One or more instance IDs.
-rebInstanceIds :: Lens' RebootInstances [Text]
-rebInstanceIds = lens _rebInstanceIds (\ s a -> s{_rebInstanceIds = a}) . _Coerce
+-- | The instance IDs.
+rInstanceIds :: Lens' RebootInstances [Text]
+rInstanceIds = lens _rInstanceIds (\ s a -> s{_rInstanceIds = a}) . _Coerce
 
 instance AWSRequest RebootInstances where
         type Rs RebootInstances = RebootInstancesResponse
@@ -98,8 +93,8 @@ instance ToQuery RebootInstances where
           = mconcat
               ["Action" =: ("RebootInstances" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
-               "DryRun" =: _rebDryRun,
-               toQueryList "InstanceId" _rebInstanceIds]
+               "DryRun" =: _rDryRun,
+               toQueryList "InstanceId" _rInstanceIds]
 
 -- | /See:/ 'rebootInstancesResponse' smart constructor.
 data RebootInstancesResponse =

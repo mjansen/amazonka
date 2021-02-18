@@ -27,7 +27,8 @@ module Network.AWS.EC2.DeleteNatGateway
       deleteNatGateway
     , DeleteNatGateway
     -- * Request Lenses
-    , dngNatGatewayId
+    , dngnDryRun
+    , dngnNatGatewayId
 
     -- * Destructuring the Response
     , deleteNatGatewayResponse
@@ -44,13 +45,10 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for DeleteNatGateway.
---
---
---
--- /See:/ 'deleteNatGateway' smart constructor.
-newtype DeleteNatGateway = DeleteNatGateway'
-  { _dngNatGatewayId :: Text
+-- | /See:/ 'deleteNatGateway' smart constructor.
+data DeleteNatGateway = DeleteNatGateway'
+  { _dngnDryRun       :: !(Maybe Bool)
+  , _dngnNatGatewayId :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -58,17 +56,23 @@ newtype DeleteNatGateway = DeleteNatGateway'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dngNatGatewayId' - The ID of the NAT gateway.
+-- * 'dngnDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
+--
+-- * 'dngnNatGatewayId' - The ID of the NAT gateway.
 deleteNatGateway
-    :: Text -- ^ 'dngNatGatewayId'
+    :: Text -- ^ 'dngnNatGatewayId'
     -> DeleteNatGateway
 deleteNatGateway pNatGatewayId_ =
-  DeleteNatGateway' {_dngNatGatewayId = pNatGatewayId_}
+  DeleteNatGateway' {_dngnDryRun = Nothing, _dngnNatGatewayId = pNatGatewayId_}
 
+
+-- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
+dngnDryRun :: Lens' DeleteNatGateway (Maybe Bool)
+dngnDryRun = lens _dngnDryRun (\ s a -> s{_dngnDryRun = a})
 
 -- | The ID of the NAT gateway.
-dngNatGatewayId :: Lens' DeleteNatGateway Text
-dngNatGatewayId = lens _dngNatGatewayId (\ s a -> s{_dngNatGatewayId = a})
+dngnNatGatewayId :: Lens' DeleteNatGateway Text
+dngnNatGatewayId = lens _dngnNatGatewayId (\ s a -> s{_dngnNatGatewayId = a})
 
 instance AWSRequest DeleteNatGateway where
         type Rs DeleteNatGateway = DeleteNatGatewayResponse
@@ -94,13 +98,10 @@ instance ToQuery DeleteNatGateway where
           = mconcat
               ["Action" =: ("DeleteNatGateway" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
-               "NatGatewayId" =: _dngNatGatewayId]
+               "DryRun" =: _dngnDryRun,
+               "NatGatewayId" =: _dngnNatGatewayId]
 
--- | Contains the output of DeleteNatGateway.
---
---
---
--- /See:/ 'deleteNatGatewayResponse' smart constructor.
+-- | /See:/ 'deleteNatGatewayResponse' smart constructor.
 data DeleteNatGatewayResponse = DeleteNatGatewayResponse'
   { _dngnrsNatGatewayId   :: !(Maybe Text)
   , _dngnrsResponseStatus :: !Int

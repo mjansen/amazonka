@@ -21,17 +21,19 @@
 -- Creates a snapshot of an EBS volume and stores it in Amazon S3. You can use snapshots for backups, to make copies of EBS volumes, and to save data before shutting down an instance.
 --
 --
+-- You can create snapshots of volumes in a Region and volumes on an Outpost. If you create a snapshot of a volume in a Region, the snapshot must be stored in the same Region as the volume. If you create a snapshot of a volume on an Outpost, the snapshot can be stored on the same Outpost as the volume, or in the Region for that Outpost.
+--
 -- When a snapshot is created, any AWS Marketplace product codes that are associated with the source volume are propagated to the snapshot.
 --
--- You can take a snapshot of an attached volume that is in use. However, snapshots only capture data that has been written to your EBS volume at the time the snapshot command is issued; this may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the volume long enough to take a snapshot, your snapshot should be complete. However, if you cannot pause all file writes to the volume, you should unmount the volume from within the instance, issue the snapshot command, and then remount the volume to ensure a consistent and complete snapshot. You may remount and use your volume while the snapshot status is @pending@ .
+-- You can take a snapshot of an attached volume that is in use. However, snapshots only capture data that has been written to your EBS volume at the time the snapshot command is issued; this might exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the volume long enough to take a snapshot, your snapshot should be complete. However, if you cannot pause all file writes to the volume, you should unmount the volume from within the instance, issue the snapshot command, and then remount the volume to ensure a consistent and complete snapshot. You may remount and use your volume while the snapshot status is @pending@ .
 --
 -- To create a snapshot for EBS volumes that serve as root devices, you should stop the instance before taking the snapshot.
 --
 -- Snapshots that are taken from encrypted volumes are automatically encrypted. Volumes that are created from encrypted snapshots are also automatically encrypted. Your encrypted volumes and any associated snapshots always remain protected.
 --
--- You can tag your snapshots during creation. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html Tagging Your Amazon EC2 Resources> .
+-- You can tag your snapshots during creation. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html Tagging your Amazon EC2 resources> in the /Amazon Elastic Compute Cloud User Guide/ .
 --
--- For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html Amazon Elastic Block Store> and <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html Amazon EBS Encryption> in the /Amazon Elastic Compute Cloud User Guide/ .
+-- For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html Amazon Elastic Block Store> and <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html Amazon EBS encryption> in the /Amazon Elastic Compute Cloud User Guide/ .
 --
 module Network.AWS.EC2.CreateSnapshot
     (
@@ -39,6 +41,7 @@ module Network.AWS.EC2.CreateSnapshot
       createSnapshot
     , CreateSnapshot
     -- * Request Lenses
+    , ccOutpostARN
     , ccTagSpecifications
     , ccDescription
     , ccDryRun
@@ -51,6 +54,7 @@ module Network.AWS.EC2.CreateSnapshot
     , sStateMessage
     , sOwnerAlias
     , sDataEncryptionKeyId
+    , sOutpostARN
     , sKMSKeyId
     , sTags
     , sSnapshotId
@@ -71,13 +75,10 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for CreateSnapshot.
---
---
---
--- /See:/ 'createSnapshot' smart constructor.
+-- | /See:/ 'createSnapshot' smart constructor.
 data CreateSnapshot = CreateSnapshot'
-  { _ccTagSpecifications :: !(Maybe [TagSpecification])
+  { _ccOutpostARN        :: !(Maybe Text)
+  , _ccTagSpecifications :: !(Maybe [TagSpecification])
   , _ccDescription       :: !(Maybe Text)
   , _ccDryRun            :: !(Maybe Bool)
   , _ccVolumeId          :: !Text
@@ -87,6 +88,8 @@ data CreateSnapshot = CreateSnapshot'
 -- | Creates a value of 'CreateSnapshot' with the minimum fields required to make a request.
 --
 -- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'ccOutpostARN' - The Amazon Resource Name (ARN) of the AWS Outpost on which to create a local snapshot.     * To create a snapshot of a volume in a Region, omit this parameter. The snapshot is created in the same Region as the volume.     * To create a snapshot of a volume on an Outpost and store the snapshot in the Region, omit this parameter. The snapshot is created in the Region for the Outpost.     * To create a snapshot of a volume on an Outpost and store the snapshot on an Outpost, specify the ARN of the destination Outpost. The snapshot must be created on the same Outpost as the volume. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshots-outposts.html#create-snapshot Creating local snapshots from volumes on an Outpost> in the /Amazon Elastic Compute Cloud User Guide/ .
 --
 -- * 'ccTagSpecifications' - The tags to apply to the snapshot during creation.
 --
@@ -100,12 +103,17 @@ createSnapshot
     -> CreateSnapshot
 createSnapshot pVolumeId_ =
   CreateSnapshot'
-    { _ccTagSpecifications = Nothing
+    { _ccOutpostARN = Nothing
+    , _ccTagSpecifications = Nothing
     , _ccDescription = Nothing
     , _ccDryRun = Nothing
     , _ccVolumeId = pVolumeId_
     }
 
+
+-- | The Amazon Resource Name (ARN) of the AWS Outpost on which to create a local snapshot.     * To create a snapshot of a volume in a Region, omit this parameter. The snapshot is created in the same Region as the volume.     * To create a snapshot of a volume on an Outpost and store the snapshot in the Region, omit this parameter. The snapshot is created in the Region for the Outpost.     * To create a snapshot of a volume on an Outpost and store the snapshot on an Outpost, specify the ARN of the destination Outpost. The snapshot must be created on the same Outpost as the volume. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshots-outposts.html#create-snapshot Creating local snapshots from volumes on an Outpost> in the /Amazon Elastic Compute Cloud User Guide/ .
+ccOutpostARN :: Lens' CreateSnapshot (Maybe Text)
+ccOutpostARN = lens _ccOutpostARN (\ s a -> s{_ccOutpostARN = a})
 
 -- | The tags to apply to the snapshot during creation.
 ccTagSpecifications :: Lens' CreateSnapshot [TagSpecification]
@@ -143,6 +151,7 @@ instance ToQuery CreateSnapshot where
           = mconcat
               ["Action" =: ("CreateSnapshot" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
+               "OutpostArn" =: _ccOutpostARN,
                toQuery
                  (toQueryList "TagSpecification" <$>
                     _ccTagSpecifications),

@@ -23,7 +23,7 @@
 --
 -- When a volume with an AWS Marketplace product code is detached from an instance, the product code is no longer associated with the instance.
 --
--- For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-detaching-volume.html Detaching an Amazon EBS Volume> in the /Amazon Elastic Compute Cloud User Guide/ .
+-- For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-detaching-volume.html Detaching an Amazon EBS volume> in the /Amazon Elastic Compute Cloud User Guide/ .
 --
 module Network.AWS.EC2.DetachVolume
     (
@@ -56,11 +56,7 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for DetachVolume.
---
---
---
--- /See:/ 'detachVolume' smart constructor.
+-- | /See:/ 'detachVolume' smart constructor.
 data DetachVolume = DetachVolume'
   { _dvInstanceId :: !(Maybe Text)
   , _dvForce      :: !(Maybe Bool)
@@ -74,7 +70,7 @@ data DetachVolume = DetachVolume'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dvInstanceId' - The ID of the instance.
+-- * 'dvInstanceId' - The ID of the instance. If you are detaching a Multi-Attach enabled volume, you must specify an instance ID.
 --
 -- * 'dvForce' - Forces detachment if the previous detachment attempt did not occur cleanly (for example, logging into an instance, unmounting the volume, and detaching normally). This option can lead to data loss or a corrupted file system. Use this option only as a last resort to detach a volume from a failed instance. The instance won't have an opportunity to flush file system caches or file system metadata. If you use this option, you must perform file system check and repair procedures.
 --
@@ -96,7 +92,7 @@ detachVolume pVolumeId_ =
     }
 
 
--- | The ID of the instance.
+-- | The ID of the instance. If you are detaching a Multi-Attach enabled volume, you must specify an instance ID.
 dvInstanceId :: Lens' DetachVolume (Maybe Text)
 dvInstanceId = lens _dvInstanceId (\ s a -> s{_dvInstanceId = a})
 

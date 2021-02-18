@@ -18,10 +18,10 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Exports a running or stopped instance to an S3 bucket.
+-- Exports a running or stopped instance to an Amazon S3 bucket.
 --
 --
--- For information about the supported operating systems, image formats, and known limitations for the types of instances you can export, see <http://docs.aws.amazon.com/vm-import/latest/userguide/vmexport.html Exporting an Instance as a VM Using VM Import/Export> in the /VM Import\/Export User Guide/ .
+-- For information about the supported operating systems, image formats, and known limitations for the types of instances you can export, see <https://docs.aws.amazon.com/vm-import/latest/userguide/vmexport.html Exporting an Instance as a VM Using VM Import/Export> in the /VM Import\/Export User Guide/ .
 --
 module Network.AWS.EC2.CreateInstanceExportTask
     (
@@ -29,10 +29,11 @@ module Network.AWS.EC2.CreateInstanceExportTask
       createInstanceExportTask
     , CreateInstanceExportTask
     -- * Request Lenses
-    , cietTargetEnvironment
-    , cietExportToS3Task
+    , cietTagSpecifications
     , cietDescription
+    , cietExportToS3Task
     , cietInstanceId
+    , cietTargetEnvironment
 
     -- * Destructuring the Response
     , createInstanceExportTaskResponse
@@ -49,16 +50,13 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for CreateInstanceExportTask.
---
---
---
--- /See:/ 'createInstanceExportTask' smart constructor.
+-- | /See:/ 'createInstanceExportTask' smart constructor.
 data CreateInstanceExportTask = CreateInstanceExportTask'
-  { _cietTargetEnvironment :: !(Maybe ExportEnvironment)
-  , _cietExportToS3Task    :: !(Maybe ExportToS3TaskSpecification)
+  { _cietTagSpecifications :: !(Maybe [TagSpecification])
   , _cietDescription       :: !(Maybe Text)
+  , _cietExportToS3Task    :: !ExportToS3TaskSpecification
   , _cietInstanceId        :: !Text
+  , _cietTargetEnvironment :: !ExportEnvironment
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -66,40 +64,49 @@ data CreateInstanceExportTask = CreateInstanceExportTask'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'cietTargetEnvironment' - The target virtualization environment.
+-- * 'cietTagSpecifications' - The tags to apply to the instance export task during creation.
+--
+-- * 'cietDescription' - A description for the conversion task or the resource being exported. The maximum length is 255 characters.
 --
 -- * 'cietExportToS3Task' - The format and location for an instance export task.
 --
--- * 'cietDescription' - A description for the conversion task or the resource being exported. The maximum length is 255 bytes.
---
 -- * 'cietInstanceId' - The ID of the instance.
+--
+-- * 'cietTargetEnvironment' - The target virtualization environment.
 createInstanceExportTask
-    :: Text -- ^ 'cietInstanceId'
+    :: ExportToS3TaskSpecification -- ^ 'cietExportToS3Task'
+    -> Text -- ^ 'cietInstanceId'
+    -> ExportEnvironment -- ^ 'cietTargetEnvironment'
     -> CreateInstanceExportTask
-createInstanceExportTask pInstanceId_ =
+createInstanceExportTask pExportToS3Task_ pInstanceId_ pTargetEnvironment_ =
   CreateInstanceExportTask'
-    { _cietTargetEnvironment = Nothing
-    , _cietExportToS3Task = Nothing
+    { _cietTagSpecifications = Nothing
     , _cietDescription = Nothing
+    , _cietExportToS3Task = pExportToS3Task_
     , _cietInstanceId = pInstanceId_
+    , _cietTargetEnvironment = pTargetEnvironment_
     }
 
 
--- | The target virtualization environment.
-cietTargetEnvironment :: Lens' CreateInstanceExportTask (Maybe ExportEnvironment)
-cietTargetEnvironment = lens _cietTargetEnvironment (\ s a -> s{_cietTargetEnvironment = a})
+-- | The tags to apply to the instance export task during creation.
+cietTagSpecifications :: Lens' CreateInstanceExportTask [TagSpecification]
+cietTagSpecifications = lens _cietTagSpecifications (\ s a -> s{_cietTagSpecifications = a}) . _Default . _Coerce
 
--- | The format and location for an instance export task.
-cietExportToS3Task :: Lens' CreateInstanceExportTask (Maybe ExportToS3TaskSpecification)
-cietExportToS3Task = lens _cietExportToS3Task (\ s a -> s{_cietExportToS3Task = a})
-
--- | A description for the conversion task or the resource being exported. The maximum length is 255 bytes.
+-- | A description for the conversion task or the resource being exported. The maximum length is 255 characters.
 cietDescription :: Lens' CreateInstanceExportTask (Maybe Text)
 cietDescription = lens _cietDescription (\ s a -> s{_cietDescription = a})
+
+-- | The format and location for an instance export task.
+cietExportToS3Task :: Lens' CreateInstanceExportTask ExportToS3TaskSpecification
+cietExportToS3Task = lens _cietExportToS3Task (\ s a -> s{_cietExportToS3Task = a})
 
 -- | The ID of the instance.
 cietInstanceId :: Lens' CreateInstanceExportTask Text
 cietInstanceId = lens _cietInstanceId (\ s a -> s{_cietInstanceId = a})
+
+-- | The target virtualization environment.
+cietTargetEnvironment :: Lens' CreateInstanceExportTask ExportEnvironment
+cietTargetEnvironment = lens _cietTargetEnvironment (\ s a -> s{_cietTargetEnvironment = a})
 
 instance AWSRequest CreateInstanceExportTask where
         type Rs CreateInstanceExportTask =
@@ -127,16 +134,15 @@ instance ToQuery CreateInstanceExportTask where
               ["Action" =:
                  ("CreateInstanceExportTask" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
-               "TargetEnvironment" =: _cietTargetEnvironment,
-               "ExportToS3" =: _cietExportToS3Task,
+               toQuery
+                 (toQueryList "TagSpecification" <$>
+                    _cietTagSpecifications),
                "Description" =: _cietDescription,
-               "InstanceId" =: _cietInstanceId]
+               "ExportToS3" =: _cietExportToS3Task,
+               "InstanceId" =: _cietInstanceId,
+               "TargetEnvironment" =: _cietTargetEnvironment]
 
--- | Contains the output for CreateInstanceExportTask.
---
---
---
--- /See:/ 'createInstanceExportTaskResponse' smart constructor.
+-- | /See:/ 'createInstanceExportTaskResponse' smart constructor.
 data CreateInstanceExportTaskResponse = CreateInstanceExportTaskResponse'
   { _cietrsExportTask     :: !(Maybe ExportTask)
   , _cietrsResponseStatus :: !Int

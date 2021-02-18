@@ -18,7 +18,7 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Describes the longer ID format settings for all resource types in a specific region. This request is useful for performing a quick audit to determine whether a specific region is fully opted in for longer IDs (17-character IDs).
+-- Describes the longer ID format settings for all resource types in a specific Region. This request is useful for performing a quick audit to determine whether a specific Region is fully opted in for longer IDs (17-character IDs).
 --
 --
 -- This request only returns information about resource types that support longer IDs.
@@ -112,7 +112,7 @@ data DescribeAggregateIdFormatResponse = DescribeAggregateIdFormatResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'daifrsUseLongIdsAggregated' - Indicates whether all resource types in the region are configured to use longer IDs. This value is only @true@ if all users are configured to use longer IDs for all resources types in the region.
+-- * 'daifrsUseLongIdsAggregated' - Indicates whether all resource types in the Region are configured to use longer IDs. This value is only @true@ if all users are configured to use longer IDs for all resources types in the Region.
 --
 -- * 'daifrsStatuses' - Information about each resource's ID format.
 --
@@ -128,7 +128,7 @@ describeAggregateIdFormatResponse pResponseStatus_ =
     }
 
 
--- | Indicates whether all resource types in the region are configured to use longer IDs. This value is only @true@ if all users are configured to use longer IDs for all resources types in the region.
+-- | Indicates whether all resource types in the Region are configured to use longer IDs. This value is only @true@ if all users are configured to use longer IDs for all resources types in the Region.
 daifrsUseLongIdsAggregated :: Lens' DescribeAggregateIdFormatResponse (Maybe Bool)
 daifrsUseLongIdsAggregated = lens _daifrsUseLongIdsAggregated (\ s a -> s{_daifrsUseLongIdsAggregated = a})
 

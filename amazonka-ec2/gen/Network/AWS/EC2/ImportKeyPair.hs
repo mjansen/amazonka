@@ -21,7 +21,7 @@
 -- Imports the public key from an RSA key pair that you created with a third-party tool. Compare this with 'CreateKeyPair' , in which AWS creates the key pair and gives the keys to you (AWS keeps a copy of the public key). With ImportKeyPair, you create the key pair and give AWS just the public key. The private key is never transferred between you and AWS.
 --
 --
--- For more information about key pairs, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html Key Pairs> in the /Amazon Elastic Compute Cloud User Guide/ .
+-- For more information about key pairs, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html Key Pairs> in the /Amazon Elastic Compute Cloud User Guide/ .
 --
 module Network.AWS.EC2.ImportKeyPair
     (
@@ -29,6 +29,7 @@ module Network.AWS.EC2.ImportKeyPair
       importKeyPair
     , ImportKeyPair
     -- * Request Lenses
+    , ikpTagSpecifications
     , ikpDryRun
     , ikpKeyName
     , ikpPublicKeyMaterial
@@ -39,6 +40,8 @@ module Network.AWS.EC2.ImportKeyPair
     -- * Response Lenses
     , ikprsKeyFingerprint
     , ikprsKeyName
+    , ikprsKeyPairId
+    , ikprsTags
     , ikprsResponseStatus
     ) where
 
@@ -49,13 +52,10 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for ImportKeyPair.
---
---
---
--- /See:/ 'importKeyPair' smart constructor.
+-- | /See:/ 'importKeyPair' smart constructor.
 data ImportKeyPair = ImportKeyPair'
-  { _ikpDryRun            :: !(Maybe Bool)
+  { _ikpTagSpecifications :: !(Maybe [TagSpecification])
+  , _ikpDryRun            :: !(Maybe Bool)
   , _ikpKeyName           :: !Text
   , _ikpPublicKeyMaterial :: !Base64
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
@@ -64,6 +64,8 @@ data ImportKeyPair = ImportKeyPair'
 -- | Creates a value of 'ImportKeyPair' with the minimum fields required to make a request.
 --
 -- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'ikpTagSpecifications' - The tags to apply to the imported key pair.
 --
 -- * 'ikpDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
@@ -76,11 +78,16 @@ importKeyPair
     -> ImportKeyPair
 importKeyPair pKeyName_ pPublicKeyMaterial_ =
   ImportKeyPair'
-    { _ikpDryRun = Nothing
+    { _ikpTagSpecifications = Nothing
+    , _ikpDryRun = Nothing
     , _ikpKeyName = pKeyName_
     , _ikpPublicKeyMaterial = _Base64 # pPublicKeyMaterial_
     }
 
+
+-- | The tags to apply to the imported key pair.
+ikpTagSpecifications :: Lens' ImportKeyPair [TagSpecification]
+ikpTagSpecifications = lens _ikpTagSpecifications (\ s a -> s{_ikpTagSpecifications = a}) . _Default . _Coerce
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 ikpDryRun :: Lens' ImportKeyPair (Maybe Bool)
@@ -102,7 +109,11 @@ instance AWSRequest ImportKeyPair where
               (\ s h x ->
                  ImportKeyPairResponse' <$>
                    (x .@? "keyFingerprint") <*> (x .@? "keyName") <*>
-                     (pure (fromEnum s)))
+                     (x .@? "keyPairId")
+                     <*>
+                     (x .@? "tagSet" .!@ mempty >>=
+                        may (parseXMLList "item"))
+                     <*> (pure (fromEnum s)))
 
 instance Hashable ImportKeyPair where
 
@@ -119,17 +130,18 @@ instance ToQuery ImportKeyPair where
           = mconcat
               ["Action" =: ("ImportKeyPair" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
+               toQuery
+                 (toQueryList "TagSpecification" <$>
+                    _ikpTagSpecifications),
                "DryRun" =: _ikpDryRun, "KeyName" =: _ikpKeyName,
                "PublicKeyMaterial" =: _ikpPublicKeyMaterial]
 
--- | Contains the output of ImportKeyPair.
---
---
---
--- /See:/ 'importKeyPairResponse' smart constructor.
+-- | /See:/ 'importKeyPairResponse' smart constructor.
 data ImportKeyPairResponse = ImportKeyPairResponse'
   { _ikprsKeyFingerprint :: !(Maybe Text)
   , _ikprsKeyName        :: !(Maybe Text)
+  , _ikprsKeyPairId      :: !(Maybe Text)
+  , _ikprsTags           :: !(Maybe [Tag])
   , _ikprsResponseStatus :: !Int
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
@@ -142,6 +154,10 @@ data ImportKeyPairResponse = ImportKeyPairResponse'
 --
 -- * 'ikprsKeyName' - The key pair name you provided.
 --
+-- * 'ikprsKeyPairId' - The ID of the resulting key pair.
+--
+-- * 'ikprsTags' - The tags applied to the imported key pair.
+--
 -- * 'ikprsResponseStatus' - -- | The response status code.
 importKeyPairResponse
     :: Int -- ^ 'ikprsResponseStatus'
@@ -150,6 +166,8 @@ importKeyPairResponse pResponseStatus_ =
   ImportKeyPairResponse'
     { _ikprsKeyFingerprint = Nothing
     , _ikprsKeyName = Nothing
+    , _ikprsKeyPairId = Nothing
+    , _ikprsTags = Nothing
     , _ikprsResponseStatus = pResponseStatus_
     }
 
@@ -161,6 +179,14 @@ ikprsKeyFingerprint = lens _ikprsKeyFingerprint (\ s a -> s{_ikprsKeyFingerprint
 -- | The key pair name you provided.
 ikprsKeyName :: Lens' ImportKeyPairResponse (Maybe Text)
 ikprsKeyName = lens _ikprsKeyName (\ s a -> s{_ikprsKeyName = a})
+
+-- | The ID of the resulting key pair.
+ikprsKeyPairId :: Lens' ImportKeyPairResponse (Maybe Text)
+ikprsKeyPairId = lens _ikprsKeyPairId (\ s a -> s{_ikprsKeyPairId = a})
+
+-- | The tags applied to the imported key pair.
+ikprsTags :: Lens' ImportKeyPairResponse [Tag]
+ikprsTags = lens _ikprsTags (\ s a -> s{_ikprsTags = a}) . _Default . _Coerce
 
 -- | -- | The response status code.
 ikprsResponseStatus :: Lens' ImportKeyPairResponse Int

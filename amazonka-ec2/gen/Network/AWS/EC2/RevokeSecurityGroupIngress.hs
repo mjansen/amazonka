@@ -18,7 +18,7 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Removes one or more ingress rules from a security group. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.
+-- Removes the specified ingress rules from a security group. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.
 --
 --
 -- Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code. If the security group rule has a description, you do not have to specify the description to revoke the rule.
@@ -45,6 +45,10 @@ module Network.AWS.EC2.RevokeSecurityGroupIngress
     -- * Destructuring the Response
     , revokeSecurityGroupIngressResponse
     , RevokeSecurityGroupIngressResponse
+    -- * Response Lenses
+    , rsgirsReturn
+    , rsgirsUnknownIPPermissions
+    , rsgirsResponseStatus
     ) where
 
 import Network.AWS.EC2.Types
@@ -54,11 +58,7 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for RevokeSecurityGroupIngress.
---
---
---
--- /See:/ 'revokeSecurityGroupIngress' smart constructor.
+-- | /See:/ 'revokeSecurityGroupIngress' smart constructor.
 data RevokeSecurityGroupIngress = RevokeSecurityGroupIngress'
   { _rsgiFromPort                   :: !(Maybe Int)
   , _rsgiIPPermissions              :: !(Maybe [IPPermission])
@@ -79,7 +79,7 @@ data RevokeSecurityGroupIngress = RevokeSecurityGroupIngress'
 --
 -- * 'rsgiFromPort' - The start of port range for the TCP and UDP protocols, or an ICMP type number. For the ICMP type number, use @-1@ to specify all ICMP types.
 --
--- * 'rsgiIPPermissions' - One or more sets of IP permissions. You can't specify a source security group and a CIDR IP address range in the same set of permissions.
+-- * 'rsgiIPPermissions' - The sets of IP permissions. You can't specify a source security group and a CIDR IP address range in the same set of permissions.
 --
 -- * 'rsgiIPProtocol' - The IP protocol name (@tcp@ , @udp@ , @icmp@ ) or number (see <http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml Protocol Numbers> ). Use @-1@ to specify all.
 --
@@ -117,7 +117,7 @@ revokeSecurityGroupIngress =
 rsgiFromPort :: Lens' RevokeSecurityGroupIngress (Maybe Int)
 rsgiFromPort = lens _rsgiFromPort (\ s a -> s{_rsgiFromPort = a})
 
--- | One or more sets of IP permissions. You can't specify a source security group and a CIDR IP address range in the same set of permissions.
+-- | The sets of IP permissions. You can't specify a source security group and a CIDR IP address range in the same set of permissions.
 rsgiIPPermissions :: Lens' RevokeSecurityGroupIngress [IPPermission]
 rsgiIPPermissions = lens _rsgiIPPermissions (\ s a -> s{_rsgiIPPermissions = a}) . _Default . _Coerce
 
@@ -158,7 +158,13 @@ instance AWSRequest RevokeSecurityGroupIngress where
              RevokeSecurityGroupIngressResponse
         request = postQuery ec2
         response
-          = receiveNull RevokeSecurityGroupIngressResponse'
+          = receiveXML
+              (\ s h x ->
+                 RevokeSecurityGroupIngressResponse' <$>
+                   (x .@? "return") <*>
+                     (x .@? "unknownIpPermissionSet" .!@ mempty >>=
+                        may (parseXMLList "item"))
+                     <*> (pure (fromEnum s)))
 
 instance Hashable RevokeSecurityGroupIngress where
 
@@ -190,17 +196,44 @@ instance ToQuery RevokeSecurityGroupIngress where
                "DryRun" =: _rsgiDryRun]
 
 -- | /See:/ 'revokeSecurityGroupIngressResponse' smart constructor.
-data RevokeSecurityGroupIngressResponse =
-  RevokeSecurityGroupIngressResponse'
-  deriving (Eq, Read, Show, Data, Typeable, Generic)
+data RevokeSecurityGroupIngressResponse = RevokeSecurityGroupIngressResponse'
+  { _rsgirsReturn               :: !(Maybe Bool)
+  , _rsgirsUnknownIPPermissions :: !(Maybe [IPPermission])
+  , _rsgirsResponseStatus       :: !Int
+  } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
 -- | Creates a value of 'RevokeSecurityGroupIngressResponse' with the minimum fields required to make a request.
 --
+-- Use one of the following lenses to modify other fields as desired:
+--
+-- * 'rsgirsReturn' - Returns @true@ if the request succeeds; otherwise, returns an error.
+--
+-- * 'rsgirsUnknownIPPermissions' - The inbound rules that were unknown to the service. In some cases, @unknownIpPermissionSet@ might be in a different format from the request parameter.
+--
+-- * 'rsgirsResponseStatus' - -- | The response status code.
 revokeSecurityGroupIngressResponse
-    :: RevokeSecurityGroupIngressResponse
-revokeSecurityGroupIngressResponse = RevokeSecurityGroupIngressResponse'
+    :: Int -- ^ 'rsgirsResponseStatus'
+    -> RevokeSecurityGroupIngressResponse
+revokeSecurityGroupIngressResponse pResponseStatus_ =
+  RevokeSecurityGroupIngressResponse'
+    { _rsgirsReturn = Nothing
+    , _rsgirsUnknownIPPermissions = Nothing
+    , _rsgirsResponseStatus = pResponseStatus_
+    }
 
+
+-- | Returns @true@ if the request succeeds; otherwise, returns an error.
+rsgirsReturn :: Lens' RevokeSecurityGroupIngressResponse (Maybe Bool)
+rsgirsReturn = lens _rsgirsReturn (\ s a -> s{_rsgirsReturn = a})
+
+-- | The inbound rules that were unknown to the service. In some cases, @unknownIpPermissionSet@ might be in a different format from the request parameter.
+rsgirsUnknownIPPermissions :: Lens' RevokeSecurityGroupIngressResponse [IPPermission]
+rsgirsUnknownIPPermissions = lens _rsgirsUnknownIPPermissions (\ s a -> s{_rsgirsUnknownIPPermissions = a}) . _Default . _Coerce
+
+-- | -- | The response status code.
+rsgirsResponseStatus :: Lens' RevokeSecurityGroupIngressResponse Int
+rsgirsResponseStatus = lens _rsgirsResponseStatus (\ s a -> s{_rsgirsResponseStatus = a})
 
 instance NFData RevokeSecurityGroupIngressResponse
          where

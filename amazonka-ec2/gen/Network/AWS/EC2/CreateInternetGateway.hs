@@ -18,10 +18,10 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Creates an Internet gateway for use with a VPC. After creating the Internet gateway, you attach it to a VPC using 'AttachInternetGateway' .
+-- Creates an internet gateway for use with a VPC. After creating the internet gateway, you attach it to a VPC using 'AttachInternetGateway' .
 --
 --
--- For more information about your VPC and Internet gateway, see the <http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/ Amazon Virtual Private Cloud User Guide> .
+-- For more information about your VPC and internet gateway, see the <https://docs.aws.amazon.com/vpc/latest/userguide/ Amazon Virtual Private Cloud User Guide> .
 --
 module Network.AWS.EC2.CreateInternetGateway
     (
@@ -29,6 +29,7 @@ module Network.AWS.EC2.CreateInternetGateway
       createInternetGateway
     , CreateInternetGateway
     -- * Request Lenses
+    , cigTagSpecifications
     , cigDryRun
 
     -- * Destructuring the Response
@@ -46,13 +47,10 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for CreateInternetGateway.
---
---
---
--- /See:/ 'createInternetGateway' smart constructor.
-newtype CreateInternetGateway = CreateInternetGateway'
-  { _cigDryRun :: Maybe Bool
+-- | /See:/ 'createInternetGateway' smart constructor.
+data CreateInternetGateway = CreateInternetGateway'
+  { _cigTagSpecifications :: !(Maybe [TagSpecification])
+  , _cigDryRun            :: !(Maybe Bool)
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -60,11 +58,18 @@ newtype CreateInternetGateway = CreateInternetGateway'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
+-- * 'cigTagSpecifications' - The tags to assign to the internet gateway.
+--
 -- * 'cigDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 createInternetGateway
     :: CreateInternetGateway
-createInternetGateway = CreateInternetGateway' {_cigDryRun = Nothing}
+createInternetGateway =
+  CreateInternetGateway' {_cigTagSpecifications = Nothing, _cigDryRun = Nothing}
 
+
+-- | The tags to assign to the internet gateway.
+cigTagSpecifications :: Lens' CreateInternetGateway [TagSpecification]
+cigTagSpecifications = lens _cigTagSpecifications (\ s a -> s{_cigTagSpecifications = a}) . _Default . _Coerce
 
 -- | Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 cigDryRun :: Lens' CreateInternetGateway (Maybe Bool)
@@ -95,13 +100,12 @@ instance ToQuery CreateInternetGateway where
           = mconcat
               ["Action" =: ("CreateInternetGateway" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
+               toQuery
+                 (toQueryList "TagSpecification" <$>
+                    _cigTagSpecifications),
                "DryRun" =: _cigDryRun]
 
--- | Contains the output of CreateInternetGateway.
---
---
---
--- /See:/ 'createInternetGatewayResponse' smart constructor.
+-- | /See:/ 'createInternetGatewayResponse' smart constructor.
 data CreateInternetGatewayResponse = CreateInternetGatewayResponse'
   { _cigrsInternetGateway :: !(Maybe InternetGateway)
   , _cigrsResponseStatus  :: !Int
@@ -112,7 +116,7 @@ data CreateInternetGatewayResponse = CreateInternetGatewayResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'cigrsInternetGateway' - Information about the Internet gateway.
+-- * 'cigrsInternetGateway' - Information about the internet gateway.
 --
 -- * 'cigrsResponseStatus' - -- | The response status code.
 createInternetGatewayResponse
@@ -123,7 +127,7 @@ createInternetGatewayResponse pResponseStatus_ =
     {_cigrsInternetGateway = Nothing, _cigrsResponseStatus = pResponseStatus_}
 
 
--- | Information about the Internet gateway.
+-- | Information about the internet gateway.
 cigrsInternetGateway :: Lens' CreateInternetGatewayResponse (Maybe InternetGateway)
 cigrsInternetGateway = lens _cigrsInternetGateway (\ s a -> s{_cigrsInternetGateway = a})
 

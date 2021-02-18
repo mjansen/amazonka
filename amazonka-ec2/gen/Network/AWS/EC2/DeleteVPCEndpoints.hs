@@ -18,7 +18,27 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Deletes one or more specified VPC endpoints. Deleting a gateway endpoint also deletes the endpoint routes in the route tables that were associated with the endpoint. Deleting an interface endpoint deletes the endpoint network interfaces.
+-- Deletes one or more specified VPC endpoints. You can delete any of the following types of VPC endpoints.
+--
+--
+--     * Gateway endpoint,
+--
+--     * Gateway Load Balancer endpoint,
+--
+--     * Interface endpoint
+--
+--
+--
+-- The following rules apply when you delete a VPC endpoint:
+--
+--     * When you delete a gateway endpoint, we delete the endpoint routes in the route tables that are associated with the endpoint.
+--
+--     * When you delete a Gateway Load Balancer endpoint, we delete the endpoint network interfaces.
+--
+-- You can only delete Gateway Load Balancer endpoints when the routes that are associated with the endpoint are deleted.
+--
+--     * When you delete an interface endpoint, we delete the endpoint network interfaces.
+--
 --
 --
 module Network.AWS.EC2.DeleteVPCEndpoints

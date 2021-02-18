@@ -21,6 +21,8 @@
 -- Describes one or more of your VPC endpoints.
 --
 --
+--
+-- This operation returns paginated results.
 module Network.AWS.EC2.DescribeVPCEndpoints
     (
     -- * Creating a Request
@@ -45,6 +47,7 @@ module Network.AWS.EC2.DescribeVPCEndpoints
 import Network.AWS.EC2.Types
 import Network.AWS.EC2.Types.Product
 import Network.AWS.Lens
+import Network.AWS.Pager
 import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
@@ -67,7 +70,7 @@ data DescribeVPCEndpoints = DescribeVPCEndpoints'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'dvpceFilters' - One or more filters.     * @service-name@ : The name of the service.     * @vpc-id@ : The ID of the VPC in which the endpoint resides.     * @vpc-endpoint-id@ : The ID of the endpoint.     * @vpc-endpoint-state@ : The state of the endpoint. (@pending@ | @available@ | @deleting@ | @deleted@ )
+-- * 'dvpceFilters' - One or more filters.     * @service-name@ - The name of the service.     * @vpc-id@ - The ID of the VPC in which the endpoint resides.     * @vpc-endpoint-id@ - The ID of the endpoint.     * @vpc-endpoint-state@ - The state of the endpoint (@pendingAcceptance@ | @pending@ | @available@ | @deleting@ | @deleted@ | @rejected@ | @failed@ ).     * @vpc-endpoint-type@ - The type of VPC endpoint (@Interface@ | @Gateway@ | @GatewayLoadBalancer@ ).     * @tag@ :<key> - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key @Owner@ and the value @TeamA@ , specify @tag:Owner@ for the filter name and @TeamA@ for the filter value.     * @tag-key@ - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.
 --
 -- * 'dvpceNextToken' - The token for the next set of items to return. (You received this token from a prior call.)
 --
@@ -75,7 +78,7 @@ data DescribeVPCEndpoints = DescribeVPCEndpoints'
 --
 -- * 'dvpceDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'dvpceMaxResults' - The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results. Constraint: If the value is greater than 1000, we return only 1000 items.
+-- * 'dvpceMaxResults' - The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results. Constraint: If the value is greater than 1,000, we return only 1,000 items.
 describeVPCEndpoints
     :: DescribeVPCEndpoints
 describeVPCEndpoints =
@@ -88,7 +91,7 @@ describeVPCEndpoints =
     }
 
 
--- | One or more filters.     * @service-name@ : The name of the service.     * @vpc-id@ : The ID of the VPC in which the endpoint resides.     * @vpc-endpoint-id@ : The ID of the endpoint.     * @vpc-endpoint-state@ : The state of the endpoint. (@pending@ | @available@ | @deleting@ | @deleted@ )
+-- | One or more filters.     * @service-name@ - The name of the service.     * @vpc-id@ - The ID of the VPC in which the endpoint resides.     * @vpc-endpoint-id@ - The ID of the endpoint.     * @vpc-endpoint-state@ - The state of the endpoint (@pendingAcceptance@ | @pending@ | @available@ | @deleting@ | @deleted@ | @rejected@ | @failed@ ).     * @vpc-endpoint-type@ - The type of VPC endpoint (@Interface@ | @Gateway@ | @GatewayLoadBalancer@ ).     * @tag@ :<key> - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key @Owner@ and the value @TeamA@ , specify @tag:Owner@ for the filter name and @TeamA@ for the filter value.     * @tag-key@ - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.
 dvpceFilters :: Lens' DescribeVPCEndpoints [Filter]
 dvpceFilters = lens _dvpceFilters (\ s a -> s{_dvpceFilters = a}) . _Default . _Coerce
 
@@ -104,9 +107,16 @@ dvpceVPCEndpointIds = lens _dvpceVPCEndpointIds (\ s a -> s{_dvpceVPCEndpointIds
 dvpceDryRun :: Lens' DescribeVPCEndpoints (Maybe Bool)
 dvpceDryRun = lens _dvpceDryRun (\ s a -> s{_dvpceDryRun = a})
 
--- | The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results. Constraint: If the value is greater than 1000, we return only 1000 items.
+-- | The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results. Constraint: If the value is greater than 1,000, we return only 1,000 items.
 dvpceMaxResults :: Lens' DescribeVPCEndpoints (Maybe Int)
 dvpceMaxResults = lens _dvpceMaxResults (\ s a -> s{_dvpceMaxResults = a})
+
+instance AWSPager DescribeVPCEndpoints where
+        page rq rs
+          | stop (rs ^. dvpcersNextToken) = Nothing
+          | stop (rs ^. dvpcersVPCEndpoints) = Nothing
+          | otherwise =
+            Just $ rq & dvpceNextToken .~ rs ^. dvpcersNextToken
 
 instance AWSRequest DescribeVPCEndpoints where
         type Rs DescribeVPCEndpoints =

@@ -21,6 +21,10 @@
 -- Describes the events for the specified EC2 Fleet during the specified time.
 --
 --
+-- EC2 Fleet events are delayed by up to 30 seconds before they can be described. This ensures that you can query by the last evaluated time and not miss a recorded event. EC2 Fleet events are available for 48 hours.
+--
+-- For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet.html#monitor-ec2-fleet Monitoring your EC2 Fleet> in the /Amazon EC2 User Guide/ .
+--
 module Network.AWS.EC2.DescribeFleetHistory
     (
     -- * Creating a Request

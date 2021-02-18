@@ -163,7 +163,7 @@ data DescribeImageAttributeResponse = DescribeImageAttributeResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'diarsLaunchPermissions' - One or more launch permissions.
+-- * 'diarsLaunchPermissions' - The launch permissions.
 --
 -- * 'diarsRAMDiskId' - The RAM disk ID.
 --
@@ -173,11 +173,11 @@ data DescribeImageAttributeResponse = DescribeImageAttributeResponse'
 --
 -- * 'diarsImageId' - The ID of the AMI.
 --
--- * 'diarsProductCodes' - One or more product codes.
+-- * 'diarsProductCodes' - The product codes.
 --
 -- * 'diarsDescription' - A description for the AMI.
 --
--- * 'diarsBlockDeviceMappings' - One or more block device mapping entries.
+-- * 'diarsBlockDeviceMappings' - The block device mapping entries.
 --
 -- * 'diarsResponseStatus' - -- | The response status code.
 describeImageAttributeResponse
@@ -197,7 +197,7 @@ describeImageAttributeResponse pResponseStatus_ =
     }
 
 
--- | One or more launch permissions.
+-- | The launch permissions.
 diarsLaunchPermissions :: Lens' DescribeImageAttributeResponse [LaunchPermission]
 diarsLaunchPermissions = lens _diarsLaunchPermissions (\ s a -> s{_diarsLaunchPermissions = a}) . _Default . _Coerce
 
@@ -217,7 +217,7 @@ diarsSRIOVNetSupport = lens _diarsSRIOVNetSupport (\ s a -> s{_diarsSRIOVNetSupp
 diarsImageId :: Lens' DescribeImageAttributeResponse (Maybe Text)
 diarsImageId = lens _diarsImageId (\ s a -> s{_diarsImageId = a})
 
--- | One or more product codes.
+-- | The product codes.
 diarsProductCodes :: Lens' DescribeImageAttributeResponse [ProductCode]
 diarsProductCodes = lens _diarsProductCodes (\ s a -> s{_diarsProductCodes = a}) . _Default . _Coerce
 
@@ -225,7 +225,7 @@ diarsProductCodes = lens _diarsProductCodes (\ s a -> s{_diarsProductCodes = a})
 diarsDescription :: Lens' DescribeImageAttributeResponse (Maybe AttributeValue)
 diarsDescription = lens _diarsDescription (\ s a -> s{_diarsDescription = a})
 
--- | One or more block device mapping entries.
+-- | The block device mapping entries.
 diarsBlockDeviceMappings :: Lens' DescribeImageAttributeResponse [BlockDeviceMapping]
 diarsBlockDeviceMappings = lens _diarsBlockDeviceMappings (\ s a -> s{_diarsBlockDeviceMappings = a}) . _Default . _Coerce
 

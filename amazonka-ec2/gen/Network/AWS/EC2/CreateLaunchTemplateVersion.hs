@@ -23,6 +23,8 @@
 --
 -- Launch template versions are numbered in the order in which they are created. You cannot specify, change, or replace the numbering of launch template versions.
 --
+-- For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html#manage-launch-template-versions Managing launch template versions> in the /Amazon Elastic Compute Cloud User Guide/ .
+--
 module Network.AWS.EC2.CreateLaunchTemplateVersion
     (
     -- * Creating a Request
@@ -42,6 +44,7 @@ module Network.AWS.EC2.CreateLaunchTemplateVersion
     , CreateLaunchTemplateVersionResponse
     -- * Response Lenses
     , cltvrsLaunchTemplateVersion
+    , cltvrsWarning
     , cltvrsResponseStatus
     ) where
 
@@ -70,13 +73,13 @@ data CreateLaunchTemplateVersion = CreateLaunchTemplateVersion'
 --
 -- * 'cltvLaunchTemplateName' - The name of the launch template. You must specify either the launch template ID or launch template name in the request.
 --
--- * 'cltvClientToken' - Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html Ensuring Idempotency> .
+-- * 'cltvClientToken' - Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html Ensuring Idempotency> . Constraint: Maximum 128 ASCII characters.
 --
 -- * 'cltvLaunchTemplateId' - The ID of the launch template. You must specify either the launch template ID or launch template name in the request.
 --
 -- * 'cltvVersionDescription' - A description for the version of the launch template.
 --
--- * 'cltvSourceVersion' - The version number of the launch template version on which to base the new version. The new version inherits the same launch parameters as the source version, except for parameters that you specify in LaunchTemplateData.
+-- * 'cltvSourceVersion' - The version number of the launch template version on which to base the new version. The new version inherits the same launch parameters as the source version, except for parameters that you specify in @LaunchTemplateData@ . Snapshots applied to the block device mapping are ignored when creating a new version unless they are explicitly included.
 --
 -- * 'cltvDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
@@ -100,7 +103,7 @@ createLaunchTemplateVersion pLaunchTemplateData_ =
 cltvLaunchTemplateName :: Lens' CreateLaunchTemplateVersion (Maybe Text)
 cltvLaunchTemplateName = lens _cltvLaunchTemplateName (\ s a -> s{_cltvLaunchTemplateName = a})
 
--- | Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html Ensuring Idempotency> .
+-- | Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html Ensuring Idempotency> . Constraint: Maximum 128 ASCII characters.
 cltvClientToken :: Lens' CreateLaunchTemplateVersion (Maybe Text)
 cltvClientToken = lens _cltvClientToken (\ s a -> s{_cltvClientToken = a})
 
@@ -112,7 +115,7 @@ cltvLaunchTemplateId = lens _cltvLaunchTemplateId (\ s a -> s{_cltvLaunchTemplat
 cltvVersionDescription :: Lens' CreateLaunchTemplateVersion (Maybe Text)
 cltvVersionDescription = lens _cltvVersionDescription (\ s a -> s{_cltvVersionDescription = a})
 
--- | The version number of the launch template version on which to base the new version. The new version inherits the same launch parameters as the source version, except for parameters that you specify in LaunchTemplateData.
+-- | The version number of the launch template version on which to base the new version. The new version inherits the same launch parameters as the source version, except for parameters that you specify in @LaunchTemplateData@ . Snapshots applied to the block device mapping are ignored when creating a new version unless they are explicitly included.
 cltvSourceVersion :: Lens' CreateLaunchTemplateVersion (Maybe Text)
 cltvSourceVersion = lens _cltvSourceVersion (\ s a -> s{_cltvSourceVersion = a})
 
@@ -132,8 +135,8 @@ instance AWSRequest CreateLaunchTemplateVersion where
           = receiveXML
               (\ s h x ->
                  CreateLaunchTemplateVersionResponse' <$>
-                   (x .@? "launchTemplateVersion") <*>
-                     (pure (fromEnum s)))
+                   (x .@? "launchTemplateVersion") <*> (x .@? "warning")
+                     <*> (pure (fromEnum s)))
 
 instance Hashable CreateLaunchTemplateVersion where
 
@@ -162,6 +165,7 @@ instance ToQuery CreateLaunchTemplateVersion where
 -- | /See:/ 'createLaunchTemplateVersionResponse' smart constructor.
 data CreateLaunchTemplateVersionResponse = CreateLaunchTemplateVersionResponse'
   { _cltvrsLaunchTemplateVersion :: !(Maybe LaunchTemplateVersion)
+  , _cltvrsWarning               :: !(Maybe ValidationWarning)
   , _cltvrsResponseStatus        :: !Int
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
@@ -172,6 +176,8 @@ data CreateLaunchTemplateVersionResponse = CreateLaunchTemplateVersionResponse'
 --
 -- * 'cltvrsLaunchTemplateVersion' - Information about the launch template version.
 --
+-- * 'cltvrsWarning' - If the new version of the launch template contains parameters or parameter combinations that are not valid, an error code and an error message are returned for each issue that's found.
+--
 -- * 'cltvrsResponseStatus' - -- | The response status code.
 createLaunchTemplateVersionResponse
     :: Int -- ^ 'cltvrsResponseStatus'
@@ -179,6 +185,7 @@ createLaunchTemplateVersionResponse
 createLaunchTemplateVersionResponse pResponseStatus_ =
   CreateLaunchTemplateVersionResponse'
     { _cltvrsLaunchTemplateVersion = Nothing
+    , _cltvrsWarning = Nothing
     , _cltvrsResponseStatus = pResponseStatus_
     }
 
@@ -186,6 +193,10 @@ createLaunchTemplateVersionResponse pResponseStatus_ =
 -- | Information about the launch template version.
 cltvrsLaunchTemplateVersion :: Lens' CreateLaunchTemplateVersionResponse (Maybe LaunchTemplateVersion)
 cltvrsLaunchTemplateVersion = lens _cltvrsLaunchTemplateVersion (\ s a -> s{_cltvrsLaunchTemplateVersion = a})
+
+-- | If the new version of the launch template contains parameters or parameter combinations that are not valid, an error code and an error message are returned for each issue that's found.
+cltvrsWarning :: Lens' CreateLaunchTemplateVersionResponse (Maybe ValidationWarning)
+cltvrsWarning = lens _cltvrsWarning (\ s a -> s{_cltvrsWarning = a})
 
 -- | -- | The response status code.
 cltvrsResponseStatus :: Lens' CreateLaunchTemplateVersionResponse Int

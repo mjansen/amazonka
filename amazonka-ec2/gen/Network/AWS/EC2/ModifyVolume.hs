@@ -18,12 +18,16 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- You can modify several parameters of an existing EBS volume, including volume size, volume type, and IOPS capacity. If your EBS volume is attached to a current-generation EC2 instance type, you may be able to apply these changes without stopping the instance or detaching the volume from it. For more information about modifying an EBS volume running Linux, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html Modifying the Size, IOPS, or Type of an EBS Volume on Linux> . For more information about modifying an EBS volume running Windows, see <http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html Modifying the Size, IOPS, or Type of an EBS Volume on Windows> .
+-- You can modify several parameters of an existing EBS volume, including volume size, volume type, and IOPS capacity. If your EBS volume is attached to a current-generation EC2 instance type, you might be able to apply these changes without stopping the instance or detaching the volume from it. For more information about modifying an EBS volume running Linux, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html Modifying the size, IOPS, or type of an EBS volume on Linux> . For more information about modifying an EBS volume running Windows, see <https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html Modifying the size, IOPS, or type of an EBS volume on Windows> .
 --
 --
--- When you complete a resize operation on your volume, you need to extend the volume's file-system size to take advantage of the new storage capacity. For information about extending a Linux file system, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#recognize-expanded-volume-linux Extending a Linux File System> . For information about extending a Windows file system, see <http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html#recognize-expanded-volume-windows Extending a Windows File System> .
+-- When you complete a resize operation on your volume, you need to extend the volume's file-system size to take advantage of the new storage capacity. For information about extending a Linux file system, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#recognize-expanded-volume-linux Extending a Linux file system> . For information about extending a Windows file system, see <https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html#recognize-expanded-volume-windows Extending a Windows file system> .
 --
--- You can use CloudWatch Events to check the status of a modification to an EBS volume. For information about CloudWatch Events, see the <http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ Amazon CloudWatch Events User Guide> . You can also track the status of a modification using the 'DescribeVolumesModifications' API. For information about tracking status changes using either method, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#monitoring_mods Monitoring Volume Modifications> .
+-- You can use CloudWatch Events to check the status of a modification to an EBS volume. For information about CloudWatch Events, see the <https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ Amazon CloudWatch Events User Guide> . You can also track the status of a modification using 'DescribeVolumesModifications' . For information about tracking status changes using either method, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#monitoring_mods Monitoring volume modifications> .
+--
+-- With previous-generation instance types, resizing an EBS volume might require detaching and reattaching the volume or stopping and restarting the instance. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modify-volume.html Amazon EBS Elastic Volumes> (Linux) or <https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-modify-volume.html Amazon EBS Elastic Volumes> (Windows).
+--
+-- If you reach the maximum volume modification rate per volume limit, you will need to wait at least six hours before applying further modifications to the affected EBS volume.
 --
 module Network.AWS.EC2.ModifyVolume
     (
@@ -31,6 +35,8 @@ module Network.AWS.EC2.ModifyVolume
       modifyVolume
     , ModifyVolume
     -- * Request Lenses
+    , mvMultiAttachEnabled
+    , mvThroughput
     , mvSize
     , mvIOPS
     , mvVolumeType
@@ -54,11 +60,13 @@ import Network.AWS.Response
 
 -- | /See:/ 'modifyVolume' smart constructor.
 data ModifyVolume = ModifyVolume'
-  { _mvSize       :: !(Maybe Int)
-  , _mvIOPS       :: !(Maybe Int)
-  , _mvVolumeType :: !(Maybe VolumeType)
-  , _mvDryRun     :: !(Maybe Bool)
-  , _mvVolumeId   :: !Text
+  { _mvMultiAttachEnabled :: !(Maybe Bool)
+  , _mvThroughput         :: !(Maybe Int)
+  , _mvSize               :: !(Maybe Int)
+  , _mvIOPS               :: !(Maybe Int)
+  , _mvVolumeType         :: !(Maybe VolumeType)
+  , _mvDryRun             :: !(Maybe Bool)
+  , _mvVolumeId           :: !Text
   } deriving (Eq, Read, Show, Data, Typeable, Generic)
 
 
@@ -66,11 +74,15 @@ data ModifyVolume = ModifyVolume'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'mvSize' - Target size in GiB of the volume to be modified. Target volume size must be greater than or equal to than the existing size of the volume. For information about available EBS volume sizes, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html> . Default: If no size is specified, the existing size is retained.
+-- * 'mvMultiAttachEnabled' - Specifies whether to enable Amazon EBS Multi-Attach. If you enable Multi-Attach, you can attach the volume to up to 16 <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances Nitro-based instances> in the same Availability Zone. This parameter is supported with @io1@ and @io2@ volumes only. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volumes-multi.html Amazon EBS Multi-Attach> in the /Amazon Elastic Compute Cloud User Guide/ .
 --
--- * 'mvIOPS' - Target IOPS rate of the volume to be modified. Only valid for Provisioned IOPS SSD (@io1@ ) volumes. For more information about @io1@ IOPS configuration, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html#EBSVolumeTypes_piops http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html#EBSVolumeTypes_piops> . Default: If no IOPS value is specified, the existing value is retained.
+-- * 'mvThroughput' - The target throughput of the volume, in MiB/s. This parameter is valid only for @gp3@ volumes. The maximum value is 1,000. Default: If no throughput value is specified, the existing value is retained. Valid Range: Minimum value of 125. Maximum value of 1000.
 --
--- * 'mvVolumeType' - Target EBS volume type of the volume to be modified The API does not support modifications for volume type @standard@ . You also cannot change the type of a volume to @standard@ .  Default: If no type is specified, the existing type is retained.
+-- * 'mvSize' - The target size of the volume, in GiB. The target volume size must be greater than or equal to the existing size of the volume. The following are the supported volumes sizes for each volume type:     * @gp2@ and @gp3@ : 1-16,384     * @io1@ and @io2@ : 4-16,384     * @st1@ and @sc1@ : 125-16,384     * @standard@ : 1-1,024 Default: If no size is specified, the existing size is retained.
+--
+-- * 'mvIOPS' - The target IOPS rate of the volume. This parameter is valid only for @gp3@ , @io1@ , and @io2@ volumes. The following are the supported values for each volume type:     * @gp3@ : 3,000-16,000 IOPS     * @io1@ : 100-64,000 IOPS     * @io2@ : 100-64,000 IOPS Default: If no IOPS value is specified, the existing value is retained.
+--
+-- * 'mvVolumeType' - The target EBS volume type of the volume. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html Amazon EBS volume types> in the /Amazon Elastic Compute Cloud User Guide/ . Default: If no type is specified, the existing type is retained.
 --
 -- * 'mvDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
@@ -80,7 +92,9 @@ modifyVolume
     -> ModifyVolume
 modifyVolume pVolumeId_ =
   ModifyVolume'
-    { _mvSize = Nothing
+    { _mvMultiAttachEnabled = Nothing
+    , _mvThroughput = Nothing
+    , _mvSize = Nothing
     , _mvIOPS = Nothing
     , _mvVolumeType = Nothing
     , _mvDryRun = Nothing
@@ -88,15 +102,23 @@ modifyVolume pVolumeId_ =
     }
 
 
--- | Target size in GiB of the volume to be modified. Target volume size must be greater than or equal to than the existing size of the volume. For information about available EBS volume sizes, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html> . Default: If no size is specified, the existing size is retained.
+-- | Specifies whether to enable Amazon EBS Multi-Attach. If you enable Multi-Attach, you can attach the volume to up to 16 <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances Nitro-based instances> in the same Availability Zone. This parameter is supported with @io1@ and @io2@ volumes only. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volumes-multi.html Amazon EBS Multi-Attach> in the /Amazon Elastic Compute Cloud User Guide/ .
+mvMultiAttachEnabled :: Lens' ModifyVolume (Maybe Bool)
+mvMultiAttachEnabled = lens _mvMultiAttachEnabled (\ s a -> s{_mvMultiAttachEnabled = a})
+
+-- | The target throughput of the volume, in MiB/s. This parameter is valid only for @gp3@ volumes. The maximum value is 1,000. Default: If no throughput value is specified, the existing value is retained. Valid Range: Minimum value of 125. Maximum value of 1000.
+mvThroughput :: Lens' ModifyVolume (Maybe Int)
+mvThroughput = lens _mvThroughput (\ s a -> s{_mvThroughput = a})
+
+-- | The target size of the volume, in GiB. The target volume size must be greater than or equal to the existing size of the volume. The following are the supported volumes sizes for each volume type:     * @gp2@ and @gp3@ : 1-16,384     * @io1@ and @io2@ : 4-16,384     * @st1@ and @sc1@ : 125-16,384     * @standard@ : 1-1,024 Default: If no size is specified, the existing size is retained.
 mvSize :: Lens' ModifyVolume (Maybe Int)
 mvSize = lens _mvSize (\ s a -> s{_mvSize = a})
 
--- | Target IOPS rate of the volume to be modified. Only valid for Provisioned IOPS SSD (@io1@ ) volumes. For more information about @io1@ IOPS configuration, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html#EBSVolumeTypes_piops http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html#EBSVolumeTypes_piops> . Default: If no IOPS value is specified, the existing value is retained.
+-- | The target IOPS rate of the volume. This parameter is valid only for @gp3@ , @io1@ , and @io2@ volumes. The following are the supported values for each volume type:     * @gp3@ : 3,000-16,000 IOPS     * @io1@ : 100-64,000 IOPS     * @io2@ : 100-64,000 IOPS Default: If no IOPS value is specified, the existing value is retained.
 mvIOPS :: Lens' ModifyVolume (Maybe Int)
 mvIOPS = lens _mvIOPS (\ s a -> s{_mvIOPS = a})
 
--- | Target EBS volume type of the volume to be modified The API does not support modifications for volume type @standard@ . You also cannot change the type of a volume to @standard@ .  Default: If no type is specified, the existing type is retained.
+-- | The target EBS volume type of the volume. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html Amazon EBS volume types> in the /Amazon Elastic Compute Cloud User Guide/ . Default: If no type is specified, the existing type is retained.
 mvVolumeType :: Lens' ModifyVolume (Maybe VolumeType)
 mvVolumeType = lens _mvVolumeType (\ s a -> s{_mvVolumeType = a})
 
@@ -132,9 +154,10 @@ instance ToQuery ModifyVolume where
           = mconcat
               ["Action" =: ("ModifyVolume" :: ByteString),
                "Version" =: ("2016-11-15" :: ByteString),
-               "Size" =: _mvSize, "Iops" =: _mvIOPS,
-               "VolumeType" =: _mvVolumeType, "DryRun" =: _mvDryRun,
-               "VolumeId" =: _mvVolumeId]
+               "MultiAttachEnabled" =: _mvMultiAttachEnabled,
+               "Throughput" =: _mvThroughput, "Size" =: _mvSize,
+               "Iops" =: _mvIOPS, "VolumeType" =: _mvVolumeType,
+               "DryRun" =: _mvDryRun, "VolumeId" =: _mvVolumeId]
 
 -- | /See:/ 'modifyVolumeResponse' smart constructor.
 data ModifyVolumeResponse = ModifyVolumeResponse'
@@ -147,7 +170,7 @@ data ModifyVolumeResponse = ModifyVolumeResponse'
 --
 -- Use one of the following lenses to modify other fields as desired:
 --
--- * 'mvrsVolumeModification' - A 'VolumeModification' object.
+-- * 'mvrsVolumeModification' - Information about the volume modification.
 --
 -- * 'mvrsResponseStatus' - -- | The response status code.
 modifyVolumeResponse
@@ -158,7 +181,7 @@ modifyVolumeResponse pResponseStatus_ =
     {_mvrsVolumeModification = Nothing, _mvrsResponseStatus = pResponseStatus_}
 
 
--- | A 'VolumeModification' object.
+-- | Information about the volume modification.
 mvrsVolumeModification :: Lens' ModifyVolumeResponse (Maybe VolumeModification)
 mvrsVolumeModification = lens _mvrsVolumeModification (\ s a -> s{_mvrsVolumeModification = a})
 

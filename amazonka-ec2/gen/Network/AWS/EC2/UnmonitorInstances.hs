@@ -18,7 +18,7 @@
 -- Stability   : auto-generated
 -- Portability : non-portable (GHC extensions)
 --
--- Disables detailed monitoring for a running instance. For more information, see <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html Monitoring Your Instances and Volumes> in the /Amazon Elastic Compute Cloud User Guide/ .
+-- Disables detailed monitoring for a running instance. For more information, see <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html Monitoring your instances and volumes> in the /Amazon EC2 User Guide/ .
 --
 --
 module Network.AWS.EC2.UnmonitorInstances
@@ -45,11 +45,7 @@ import Network.AWS.Prelude
 import Network.AWS.Request
 import Network.AWS.Response
 
--- | Contains the parameters for UnmonitorInstances.
---
---
---
--- /See:/ 'unmonitorInstances' smart constructor.
+-- | /See:/ 'unmonitorInstances' smart constructor.
 data UnmonitorInstances = UnmonitorInstances'
   { _uiDryRun      :: !(Maybe Bool)
   , _uiInstanceIds :: ![Text]
@@ -62,7 +58,7 @@ data UnmonitorInstances = UnmonitorInstances'
 --
 -- * 'uiDryRun' - Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is @DryRunOperation@ . Otherwise, it is @UnauthorizedOperation@ .
 --
--- * 'uiInstanceIds' - One or more instance IDs.
+-- * 'uiInstanceIds' - The IDs of the instances.
 unmonitorInstances
     :: UnmonitorInstances
 unmonitorInstances =
@@ -73,7 +69,7 @@ unmonitorInstances =
 uiDryRun :: Lens' UnmonitorInstances (Maybe Bool)
 uiDryRun = lens _uiDryRun (\ s a -> s{_uiDryRun = a})
 
--- | One or more instance IDs.
+-- | The IDs of the instances.
 uiInstanceIds :: Lens' UnmonitorInstances [Text]
 uiInstanceIds = lens _uiInstanceIds (\ s a -> s{_uiInstanceIds = a}) . _Coerce
 
@@ -107,11 +103,7 @@ instance ToQuery UnmonitorInstances where
                "DryRun" =: _uiDryRun,
                toQueryList "InstanceId" _uiInstanceIds]
 
--- | Contains the output of UnmonitorInstances.
---
---
---
--- /See:/ 'unmonitorInstancesResponse' smart constructor.
+-- | /See:/ 'unmonitorInstancesResponse' smart constructor.
 data UnmonitorInstancesResponse = UnmonitorInstancesResponse'
   { _uirsInstanceMonitorings :: !(Maybe [InstanceMonitoring])
   , _uirsResponseStatus      :: !Int
